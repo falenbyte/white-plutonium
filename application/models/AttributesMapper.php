@@ -27,7 +27,7 @@ class Application_Model_AttributesMapper {
 	
 	public function getByCategoryID($catID) {
 		if(preg_match('/[0-9]+/', $catID)) {
-			$attributesList = $this -> db -> fetchNum('SELECT attID FROM categories_attributes WHERE catID = ?', $catID);
+			$attributesList = $this -> db -> fetchCol('SELECT attID FROM categories_attributes WHERE catID = ?', $catID);
 			$result = $this -> db -> fetchAssoc('SELECT * FROM attributes WHERE ID IN (?)', implode(',', $attributesList));
 			foreach($result as $row) {
 				$attributes[$row['ID']] = new Application_Model_Attribute($row);
