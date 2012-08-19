@@ -1,10 +1,6 @@
 <?php
 
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
-
-	protected function _initProduction() {
-		Zend_Controller_Response_Abstract::renderExceptions(false);
-	}
 	
 	protected function _initDB() {
 		//Globalny dostêp do bazy danych
