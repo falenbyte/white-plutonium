@@ -20,14 +20,14 @@ class Application_Model_Attribute extends Application_Model_AbstractDataStorage 
 	
 	public function validateValue($value) {
 		switch($this -> data['type']) {
-			case 0:
-				return (is_integer($value) && $value >= $this -> data['min'] && $value <= $this -> data['max']);
-			case 1:
-				return is_string($value);
-			case 2:
-				return array_key_exists($calue, $this -> data['options']);
-			case 3:
-				return ($value === 0 || $value === 1);
+			case '0':
+				return (preg_match('/[0-9]+/', $value) && intval($value) >= intval($this -> data['min']) && intval($value) <= intval($this -> data['max']));
+			case '1':
+				return true;
+			case '2':
+				return array_key_exists($value, $this -> data['options']);
+			case '3':
+				return ($value === '0' || $value === '1');
 		}
 	}
 
