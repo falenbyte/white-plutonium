@@ -40,6 +40,10 @@
         <modelFile modelName="SearchFilters"/>
         <modelFile modelName="Attribute"/>
         <modelFile modelName="Category"/>
+        <modelFile modelName="CategoriesMapper"/>
+        <modelFile modelName="AttributesMapper"/>
+        <modelFile modelName="AbstractDataStorage"/>
+        <modelFile modelName="AnnouncementsMapper"/>
       </modelsDirectory>
       <modulesDirectory enabled="false"/>
       <viewsDirectory>
