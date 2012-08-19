@@ -12,7 +12,7 @@ class Application_Model_AttributesMapper {
 		$result = $this -> db -> fetchAssoc('SELECT * FROM attributes');
 		foreach($result as $row) {
 			$attributes[$row['ID']] = new Application_Model_Attribute($row);
-			if($row['type'] == 2) {
+			if($row['type'] == '2') {
 				$optionsList[] = $row['ID'];
 			}
 		}
@@ -31,7 +31,7 @@ class Application_Model_AttributesMapper {
 			$result = $this -> db -> fetchAssoc('SELECT * FROM attributes WHERE ID IN (?)', implode(',', $attributesList));
 			foreach($result as $row) {
 				$attributes[$row['ID']] = new Application_Model_Attribute($row);
-				if($row['type'] == 2) {
+				if($row['type'] == '2') {
 					$optionsList[] = $row['ID'];
 				}
 			}
@@ -51,7 +51,7 @@ class Application_Model_AttributesMapper {
 		if(preg_match('/[0-9]+/', $catID)) {
 			$result = $this -> db -> fetchAssoc('SELECT * FROM attributes WHERE ID = ?', $attID);
 			$attribute = new Application_Model_Attribute($result);
-			if($row['type'] == 2) {
+			if($row['type'] == '2') {
 					$options = $this -> db -> fetchAssoc('SELECT * FROM attributes_options WHERE attID = ?', $attID);
 					foreach($options as $option) {
 						$attribute[$option['attID']] -> addOption($option['ID'], $option['name']);

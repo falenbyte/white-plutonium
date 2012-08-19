@@ -28,6 +28,8 @@ class Application_Model_Attribute extends Application_Model_AbstractDataStorage 
 				return array_key_exists($value, $this -> data['options']);
 			case '3':
 				return ($value === '0' || $value === '1');
+			case '4':
+				return (is_numeric($value) && floatval($value) >= floatval($this -> data['min']) && floatval($value) <= floatval($this -> data['max']));
 		}
 	}
 
