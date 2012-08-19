@@ -8,7 +8,7 @@ class Application_Model_SearchFilters
 		
 		public function __construct()
 			{
-				$_filters = array();
+				$this->_filters = array();
 			}
 		
 		public function addFilter($type, $value)
