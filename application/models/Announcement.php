@@ -3,7 +3,7 @@
 class Application_Model_Announcement extends Application_Model_AbstractDataStorage {
 
 	protected function initVariableList() {
-		$this -> variablesList = array('ID', 'userID', 'catID', 'title', 'content', 'date', 'expires');
+		$this -> variablesList = array('ID', 'userID', 'catID', 'title', 'content', 'date', 'expires', 'attributes', 'images');
 	}
 	
 	public function getCategory() {
