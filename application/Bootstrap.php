@@ -2,10 +2,13 @@
 
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 
-	protected function _initDB() {
-		//Globalny dostêp do bazy danych
-		$dbConfig = new Zend_Config_Ini('local_database_config.ini');
-		Zend_Registry::set('db', Zend_Db::factory($dbConfig -> database));
+	protected function _initProduction() {
+		Zend_Controller_Response_Abstract::renderExceptions(false);
 	}
 	
+	protected function _initDB() {
+		//Globalny dostêp do bazy danych
+		$dbConfig = new Zend_Config_Ini('../application/local_database_config.ini', 'database_config');
+		Zend_Registry::set('db', Zend_Db::factory($dbConfig -> database));
+	}
 }
