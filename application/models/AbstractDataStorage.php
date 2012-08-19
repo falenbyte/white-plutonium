@@ -2,7 +2,7 @@
 
 abstract class Application_Model_AbstractDataStorage {
 
-	private $data;
+	protected $data;
 	protected $variablesList;
 	
 	final public function __construct($init = null) {

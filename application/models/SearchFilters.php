@@ -13,10 +13,7 @@ class Application_Model_SearchFilters
 		
 		public function addFilter($type, $value)
 			{
-				if($type != 'catID'
-					&& $type != 'userID'
-					&& $type != 'attribute'
-					&& $type != 'keywords')
+				if(in_array($type,  array('catID', 'userID', 'attribute', 'keywords')))
 					throw new Exception('Unknown filter type: ' . $type);
 				
 				$fun = '_add' . ucfirst($type);
