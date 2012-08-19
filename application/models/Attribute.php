@@ -3,7 +3,7 @@
 class Application_Model_Attribute extends Application_Model_AbstractDataStorage {
 	
 	protected function initVariableList() {
-		$this -> variablesList = array('ID', 'name', 'type', 'options', 'unit', 'min', 'max');
+		$this -> variablesList = array('ID|r', 'name', 'type', 'options|r', 'unit', 'min', 'max');
 	}
 	
 	public function addOption($id, $name) {
