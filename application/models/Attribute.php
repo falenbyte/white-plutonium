@@ -32,5 +32,20 @@ class Application_Model_Attribute extends Application_Model_AbstractDataStorage 
 				return (is_numeric($value) && floatval($value) >= floatval($this -> data['min']) && floatval($value) <= floatval($this -> data['max']));
 		}
 	}
+	
+	public function getTypeString() {
+		switch($this -> data['type']) {
+			case '0':
+				return 'int';
+			case '1':
+				return 'text';
+			case '2':
+				return 'int';
+			case '3':
+				return 'int';
+			case '4':
+				return 'float';
+		}
+	}
 
 }

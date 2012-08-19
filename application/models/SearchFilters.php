@@ -33,8 +33,6 @@ class Application_Model_SearchFilters
 					$this->_filters['catID'] = $value;
 				else
 					throw new Exception('Supplied category ID is invalid.');	
-				
-				return $this;
 			}
 		
 		private function _addUserID($value)
@@ -43,8 +41,6 @@ class Application_Model_SearchFilters
 					$this->_filters['userID'] = $value;
 				else
 					throw new Exception('Supplied user ID is invalid.');
-				
-				return $this;
 			}
 		
 		private function _addAttribute($value)
@@ -68,15 +64,11 @@ class Application_Model_SearchFilters
 				}
 				
 				$this->_filters['attributes'][$value['ID']] = $value['values'];
-				
-				return $this;
 			}
 			
 		private function _addKeywords($value)
 			{
 				$this->filters['keywords'] = $value;
-				
-				return $this;
 			}
 	}
 
