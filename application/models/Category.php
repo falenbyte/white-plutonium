@@ -8,7 +8,7 @@ class Application_Model_Category extends Application_Model_AbstractDataStorage {
 	
 	public function getAttributes() {
 		$mapper = new Application_Model_AttributesMapper();
-		return $mapper -> getByCategory($this -> data['ID']);
+		return $mapper -> getByCategoryID($this -> data['ID']);
 	}
 
 }
