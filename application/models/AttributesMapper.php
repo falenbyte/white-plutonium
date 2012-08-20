@@ -49,12 +49,12 @@ class Application_Model_AttributesMapper {
 	
 	public function getByID($attID) {
 		if(preg_match('/[0-9]+/', $attID)) {
-			$result = $this -> db -> fetchAssoc('SELECT * FROM attributes WHERE ID = ?', $attID);
-			$attribute = new Application_Model_Attribute($result);
+			$row = $this -> db -> fetchRow('SELECT * FROM attributes WHERE ID = ?', $attID, Zend_Db::FETCH_ASSOC);
+			$attribute = new Application_Model_Attribute($row);
 			if($row['type'] == '2') {
 					$options = $this -> db -> fetchAssoc('SELECT * FROM attributes_options WHERE attID = ?', $attID);
 					foreach($options as $option) {
-						$attribute[$option['attID']] -> addOption($option['ID'], $option['name']);
+						$attribute -> addOption($option['ID'], $option['name']);
 					}
 			}
 			return $attribute;
