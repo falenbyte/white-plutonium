@@ -35,12 +35,12 @@ class Application_Model_AnnouncementsMapper
 				$result = $this->_db->fetchAll($filters->getQueryString(), Zend_Db::FETCH_ASSOC);
 				
 				$attMapper = new Application_Model_AttributesMapper();
+				$attDefs = $attMapper->getAll();
 				
 				foreach($result as $row)
 				{
 					$ann = new Application_Model_Announcement($row);
 					
-					$attDefs = $attMapper->getByCategoryID($ann->catID);
 					$attValues = $this->_db->fetchAll('SELECT attID, intValue, textValue, floatValue FROM attributes_values WHERE annID = ?',
 						$ann->ID, Zend_Db::FETCH_ASSOC);
 					
