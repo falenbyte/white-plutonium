@@ -20,13 +20,13 @@
 	<title>Ogłoszenia - <?php echo $this->siteTitle; ?></title>
 	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('css/main.css'); ?>" />
 	
-	<?php foreach($this->stylesheets as $stylesheet): ?>
+	<?php if(is_array($this -> stylesheets)): foreach($this->stylesheets as $stylesheet): ?>
 	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('css/' . $stylesheet); ?>" />
-	<?php endforeach; ?>
+	<?php endforeach; endif; ?>
 	
-	<?php foreach($this->scripts as $script): ?>
+	<?php if(is_array($this -> scripts)): foreach($this->scripts as $script): ?>
 	<script type="text/javascript" src="<?php echo $this->baseUrl('js/' . $script); ?>"></script>
-	<?php endforeach; ?>
+	<?php endforeach; endif; ?>
 </head>
 
 <body>
@@ -38,9 +38,9 @@
 			<li class="f_left"><a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'create')); ?>">Dodaj ogłoszenie</a></li>
 			
 			
-			<?php foreach($this->userMenu as $menuItem): ?>
+			<?php if(is_array($this -> userMenu)): foreach($this->userMenu as $menuItem): ?>
 			<li class="f_right"><a href="<?php echo $this->url(array('controller'=>$menuItem['controller'], 'action'=>$menuItem['action'])); ?>"><?php echo $menuItem['name']; ?></a></li>
-			<?php endforeach; ?>
+			<?php endforeach; endif; ?>
 		</ul>
 	</div>
 
