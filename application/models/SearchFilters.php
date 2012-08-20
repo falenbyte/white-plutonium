@@ -5,15 +5,13 @@
 class Application_Model_SearchFilters
 	{
 		private $_filters;
+		private $_limit;
+		private $_offset;
+		private $_order;
 		
 		public function __construct()
 			{
 				$this->_filters = array();
-			}
-		
-		public function getFiltersArray()
-			{
-				return $this->filters;
 			}
 		
 		public function addFilter($type, $value)
@@ -25,6 +23,56 @@ class Application_Model_SearchFilters
 				$this->$fun($value);
 				
 				return $this;
+			}
+		
+		public function getFiltersArray()
+			{
+				return $this->filters;
+			}
+		
+		public function setLimit($limit)
+			{
+				if(!preg_match('/[0-9]+/', $limit))
+					throw new Exception('Supplied limit is invalid.');
+				
+				$this->_limit = $limit;
+				return $this;
+			}
+		
+		public function setOffset($offset)
+			{
+				if(!preg_match('/[0-9]+/', $offset))
+					throw new Exception('Supplied offset is invalid.');
+				
+				$this->_offset = $offset;
+				return $this;
+			}
+		
+		public function getLimit()
+			{
+				return $this->_limit;
+			}
+		
+		public function getOffset()
+			{
+				return $this->_offset;
+			}
+		
+		public function setOrder($value, $dir)
+			{
+				if($value !== 'date' && $value !== 'expires' && !preg_match('/[0-9]+/', $value))
+					throw new Exception('Invalid sorting value: ' . $value);
+				
+				if($dir !== 'asc' && $dir != 'desc')
+					throw new Exception('Invalid sorting direction: ' . $dir);
+				
+				$_order = array('value'=>$value, 'direction'=>$dir);
+				return $this;
+			}
+		
+		public function getOrder()
+			{
+				return $this->_order;
 			}
 		
 		private function _addCatID($value)
@@ -68,7 +116,7 @@ class Application_Model_SearchFilters
 			
 		private function _addKeywords($value)
 			{
-				$this->filters['keywords'] = $value;
+				$this->filters['keywords'] = explode(' ', $value);
 			}
 	}
 
