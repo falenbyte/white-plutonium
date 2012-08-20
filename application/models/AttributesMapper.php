@@ -59,7 +59,7 @@ class Application_Model_AttributesMapper {
 			}
 			return $attribute;
 		} else {
-			throw new Exception('Supplied category ID is invalid.');
+			throw new Exception('Supplied attribute ID is invalid.');
 		}
 	}
 	
