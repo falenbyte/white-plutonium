@@ -1,5 +1,6 @@
 <!--
 	Elementy layoutu (właściwości obiektu view):
+		- userModel - dostepny w kazdym kontrolerze aby wyswietlic linki w zaleznosci od stanu zalogowania
 		- siteTitle - tytuł strony, dodawany po myślniku do "Ogłoszenia" (np. "Ogłoszenia - konto użytkownika")
 		- stylesheets - tablica nazw dodatkowych plików css (muszą być w folderze public/css), potrzebnych danemu widokowi (np. array('account.css', 'foo.css'))
 		- scripts - jak wyżej, tyle że pliki z kodem JavaScript. Muszą być w folderze public/js
@@ -37,7 +38,14 @@
 			<li class="f_left"><a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'index')); ?>">Strona główna</a></li>
 			<li class="f_left"><a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'create')); ?>">Dodaj ogłoszenie</a></li>
 			
-			
+			<?php if($this -> userModel -> isLoggedIn()): ?>
+			<li class="f_right">[<a href="<?php echo $this->url(array('controller'=>'account', 'action'=>'logout')); ?>">Wyloguj</a>]</li>
+			<li class="f_right"><a href="<?php echo $this->url(array('controller'=>'account', 'action'=>'index')); ?>">Panel użytkownika</a></li>
+			<li class="f_right">Witaj, <?php echo $this -> userModel -> getUsername(); ?></li>
+			<?php else: ?>
+			<li class="f_right"><a href="<?php echo $this->url(array('controller'=>'account', 'action'=>'register')); ?>">Rejestracja</a></li>
+			<li class="f_right"><a href="<?php echo $this->url(array('controller'=>'account', 'action'=>'login')); ?>">Logowanie</a></li>
+			<?php endif;?>
 			<?php if(is_array($this -> userMenu)): foreach($this->userMenu as $menuItem): ?>
 			<li class="f_right"><a href="<?php echo $this->url(array('controller'=>$menuItem['controller'], 'action'=>$menuItem['action'])); ?>"><?php echo $menuItem['name']; ?></a></li>
 			<?php endforeach; endif; ?>

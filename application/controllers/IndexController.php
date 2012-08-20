@@ -1,11 +1,11 @@
 <?php
 
-class IndexController extends Zend_Controller_Action
+class IndexController extends Application_Model_ControllerAbstract
 {
 
     public function init()
     {
-        /* Initialize action controller here */
+    	parent::init();
     }
 
     public function indexAction()

@@ -1,11 +1,11 @@
 <?php
 
-class WatchlistController extends Zend_Controller_Action
+class WatchlistController extends Application_Model_ControllerAbstract
 {
 
     public function init()
     {
-        /* Initialize action controller here */
+        parent::init();
     }
 
     public function indexAction()

@@ -1,11 +1,11 @@
 <?php
 
-class SearchController extends Zend_Controller_Action
+class SearchController extends Application_Model_ControllerAbstract
 {
 
     public function init()
     {
-        /* Initialize action controller here */
+        parent::init();
     }
 
     public function indexAction()
