@@ -1,0 +1,148 @@
+@font-face { font-family: PTSans; src: url('../fonts/PT.ttf'); }
+@font-face { font-family: PTSansCapt; font-weight: bold; src: url('../fonts/PTcaptB.ttf'); }
+
+*
+	{
+		margin: 0;
+		padding: 0;
+	}
+
+body
+	{
+		font-family: PTSans;
+		font-size: 15px;
+		color: rgb(60, 60, 60);
+	}
+
+a
+	{
+		text-decoration: none;
+		color: rgb(60, 60, 60);
+	}
+
+a:hover
+	{
+		text-decoration: underline;
+	}
+
+a:visited
+	{
+		color: rgb(60, 60, 60);
+	}
+
+#site_title
+	{
+		margin: 20px 0 20px 0;
+		
+		font-family: PTSansCapt;
+		font-weight: bold;
+		font-size: 50px;
+		
+		text-align: center;
+		text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.2);
+	}
+
+#site_title a:hover
+	{
+		text-decoration: none;
+	}
+
+#top_menu
+	{
+		margin: auto;
+		width: 1000px;
+	}
+
+#top_menu ul
+	{
+		float: left;
+		width: 100%;
+		list-style: none;
+		
+		background-color: rgb(220, 220, 220);
+		border: 1px solid rgb(200, 200, 200);
+		border-radius: 10px;
+		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+	}
+
+#top_menu li
+	{
+		padding: 10px;
+	}
+
+li.f_left
+	{
+		float: left;
+	}
+
+li.f_right
+	{
+		float: right;
+	}
+
+#main
+	{
+		width: 1000px;
+		margin: auto;
+		padding-top: 10px;
+		clear: both;
+	}
+
+#sidebar
+	{
+		float: left;
+		width: 245px;
+		
+		background-color: rgb(220, 220, 220);
+		border: 1px solid rgb(200, 200, 200);
+		border-radius: 10px;
+		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+	}
+
+#sidebar h1
+	{
+		margin: 0;
+		padding: 10px 0 10px 0;
+		
+		font-size: 25px;
+		font-family: PTSansCapt;
+		font-weight: bold;
+		text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.2);
+		
+		text-align: center;
+		
+		background-color: rgb(200, 200, 200);
+		border-top-left-radius: 10px;
+		border-top-right-radius: 10px;
+	}
+
+#sidebar_content
+	{
+		padding: 10px;
+	}
+
+#main_content
+	{
+		float: right;
+		width: 725px;
+		padding: 10px;
+		overflow: hidden;
+	}
+
+#footer
+	{
+		clear: both;
+		padding-top: 10px;
+		margin-bottom: 10px;
+	}
+
+#footer_content
+	{
+		padding: 10px;
+		
+		background-color: rgb(220, 220, 220);
+		border: 1px solid rgb(200, 200, 200);
+		border-radius: 10px;
+		text-align: center;
+		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+	}

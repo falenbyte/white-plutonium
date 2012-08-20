@@ -1,1 +1,61 @@
-<?php echo $this->layout()->content; ?>
+<!--
+	Elementy layoutu (właściwości obiektu view):
+		- siteTitle - tytuł strony, dodawany po myślniku do "Ogłoszenia" (np. "Ogłoszenia - konto użytkownika")
+		- stylesheets - tablica nazw dodatkowych plików css (muszą być w folderze public/css), potrzebnych danemu widokowi (np. array('account.css', 'foo.css'))
+		- scripts - jak wyżej, tyle że pliki z kodem JavaScript. Muszą być w folderze public/js
+		- userMenu - menu użytkownika (po prawej stronie górnego paska). W przypadku bycia niezalogowanym powinno zawierać linki do strony logowania
+			i rejestracji. Zalogowanemu użytkownikowi należy udostępnić zaś łącze do strony konta oraz opcję wylogowania.
+			Jest to tablica tablic postaci: array('name'=>'nazwa_elementu_menu', 'controller'=>'nazwa_kontrolera', 'action'=>'akcja_kontrolera')
+		- sidebarContent - treść do wyświetlenia w sidebarze (pod napisem szukaj, co determinuje zastosowanie tej części strony)
+		- footerContent - treść do wyświetlenia w stopce (nie mam jeszcze pomysłu co powinno się tam znaleźć :>)
+		
+		Prócz tego oczywiście wyświetlana jest zawartość widoku.
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>Ogłoszenia - <?php echo $this->siteTitle; ?></title>
+	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('css/main.css'); ?>" />
+	
+	<?php foreach($this->stylesheets as $stylesheet): ?>
+	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('css/' . $stylesheet); ?>" />
+	<?php endforeach; ?>
+	
+	<?php foreach($this->scripts as $script): ?>
+	<script type="text/javascript" src="<?php echo $this->baseUrl('js/' . $script); ?>"></script>
+	<?php endforeach; ?>
+</head>
+
+<body>
+	<div id="site_title"><a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'index')); ?>">Ogłoszenia</a></div>
+	
+	<div id="top_menu">
+		<ul>
+			<li class="f_left"><a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'index')); ?>">Strona główna</a></li>
+			<li class="f_left"><a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'create')); ?>">Dodaj ogłoszenie</a></li>
+			
+			
+			<?php foreach($this->userMenu as $menuItem): ?>
+			<li class="f_right"><a href="<?php echo $this->url(array('controller'=>$menuItem['controller'], 'action'=>$menuItem['action'])); ?>"><?php echo $menuItem['name']; ?></a></li>
+			<?php endforeach; ?>
+		</ul>
+	</div>
+
+	<div id="main">
+		<div id="sidebar">
+			<h1>Szukaj</h1>
+			<div id="sidebar_content"><?php echo $this->sidebarContent; ?></div>
+		</div>
+		
+		<div id="main_content"><?php echo $this->layout()->content; ?></div>
+		
+		<div id="footer">
+			<div id="footer_content"><?php echo $this->footerContent; ?></div>
+		</div>
+	</div>
+</body>
+
+</html>
