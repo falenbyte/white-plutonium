@@ -23,7 +23,7 @@ class Application_Model_Attribute extends Application_Model_AbstractDataStorage 
 			case '0':
 				return (preg_match('/[0-9]+/', $value) && intval($value) >= intval($this -> data['min']) && intval($value) <= intval($this -> data['max']));
 			case '1':
-				return true;
+				return is_string($value);
 			case '2':
 				return array_key_exists($value, $this -> data['options']);
 			case '3':
