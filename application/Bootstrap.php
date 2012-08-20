@@ -2,8 +2,13 @@
 
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 
-	protected function _initSystem() {
+	protected function _initConfiguration() {
 		error_reporting(E_ALL ^ E_NOTICE);
+	}
+	
+	protected function _initSession() {
+		Zend_Session::setOptions(array('strict' => true));
+		Zend_Session::start();
 	}
 	
 	protected function _initDB() {
