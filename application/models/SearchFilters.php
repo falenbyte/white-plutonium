@@ -258,12 +258,17 @@ class Application_Model_SearchFilters
 						$whereStrs[] = ' userID = ' . $this->_filters['userID'];
 				}
 				
-				$kwordBegin = ($orderStr == 2 ? 'announcements.title' : 'title') . ' LIKE ';
-				foreach($this->_filters['keywords'] as $kword)
-					$kwords[] = $kwordBegin . $kword;
-				$whereStrs[] = ' (' . implode(' OR ', $kwords) . ')';
+				if(isset($this->_filters['keywords']))
+				{
+					$kwordBegin = ($orderStr == 2 ? 'announcements.title' : 'title') . ' LIKE ';
+					foreach($this->_filters['keywords'] as $kword)
+						$kwords[] = $kwordBegin . $kword;
+					$whereStrs[] = ' (' . implode(' OR ', $kwords) . ')';
+				}
 				
-				$finalStr .= ($orderFlag == 2 ? ' AND' : ' WHERE') . implode(' AND', $whereStrs);
+				if(is_array($whereStrs))
+					$finalStr .= ($orderFlag == 2 ? ' AND' : ' WHERE') . implode(' AND', $whereStrs);
+				
 				$finalStr .= $orderStr . ' LIMIT ' . $this->_offset . ', ' . $this->_limit;
 				
 				return $finalStr;
