@@ -37,7 +37,7 @@ class Application_Model_SearchFilters
 		
 		public function setLimit($limit)
 			{
-				if(!preg_match('/[0-9]+/', $limit))
+				if(!preg_match('/^[0-9]+$/', $limit))
 					throw new Exception('Supplied limit is invalid.');
 				
 				$this->_limit = $limit;
@@ -46,7 +46,7 @@ class Application_Model_SearchFilters
 		
 		public function setOffset($offset)
 			{
-				if(!preg_match('/[0-9]+/', $offset))
+				if(!preg_match('/^[0-9]+$/', $offset))
 					throw new Exception('Supplied offset is invalid.');
 				
 				$this->_offset = $offset;
@@ -65,7 +65,7 @@ class Application_Model_SearchFilters
 		
 		public function setOrder($value, $dir)
 			{
-				if(!in_array($value, array('date', 'expires')) && !preg_match('/[0-9]+/', $value))
+				if(!in_array($value, array('date', 'expires')) && !preg_match('/^[0-9]+$/', $value))
 					throw new Exception('Invalid sorting value: ' . $value);
 				
 				if($dir !== 'asc' && $dir != 'desc')
@@ -82,7 +82,7 @@ class Application_Model_SearchFilters
 		
 		private function _addCatID($value)
 			{
-				if(preg_match('/[0-9]+/', $value))
+				if(preg_match('/^[0-9]+$/', $value))
 					$this->_filters['catID'] = $value;
 				else
 					throw new Exception('Supplied category ID is invalid.');	
@@ -90,7 +90,7 @@ class Application_Model_SearchFilters
 		
 		private function _addUserID($value)
 			{
-				if(preg_match('/[0-9]+/', $value))
+				if(preg_match('/^[0-9]+$/', $value))
 					$this->_filters['userID'] = $value;
 				else
 					throw new Exception('Supplied user ID is invalid.');
@@ -107,7 +107,7 @@ class Application_Model_SearchFilters
 				if(!is_array($value))
 					throw new Exception('The value for attribute filter must be an array.');
 				
-				if(!isset($value['ID']) || !preg_match('/[0-9]+/', $value['ID']))
+				if(!isset($value['ID']) || !preg_match('/^[0-9]+$/', $value['ID']))
 					throw new Exception('Attribute ID not supplied or invalid.');
 				
 				if(!isset($value['values']) || !is_array($value['values']))
@@ -154,7 +154,7 @@ class Application_Model_SearchFilters
 					
 					if(is_array($this->_order))
 					{
-						if(preg_match('/[0-9]+/', $this->_order['value']))
+						if(preg_match('/^[0-9]+$/', $this->_order['value']))
 							$orderFlag = (array_key_exists($this->_order['value'], $attDefs) ? 2 : 0);
 						else
 							$orderFlag = 1;
@@ -165,7 +165,7 @@ class Application_Model_SearchFilters
 				else
 				{
 					$attFlag = false;
-					$orderFlag = (is_array($this->_order) && !preg_match('/[0-9]+/', $this->_order['value']) ? 1 : 0);
+					$orderFlag = (is_array($this->_order) && !preg_match('/^[0-9]+$/', $this->_order['value']) ? 1 : 0);
 				}
 				
 				if($attFlag)

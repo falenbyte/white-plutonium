@@ -26,7 +26,7 @@ class Application_Model_AttributesMapper {
 	}
 	
 	public function getByCategoryID($catID) {
-		if(preg_match('/[0-9]+/', $catID)) {
+		if(preg_match('/^[0-9]+$/', $catID)) {
 			$attributesList = $this -> db -> fetchCol('SELECT attID FROM categories_attributes WHERE catID = ?', $catID);
 			$result = $this -> db -> fetchAssoc('SELECT * FROM attributes WHERE ID IN (?)', implode(',', $attributesList));
 			foreach($result as $row) {
@@ -48,7 +48,7 @@ class Application_Model_AttributesMapper {
 	}
 	
 	public function getByID($attID) {
-		if(preg_match('/[0-9]+/', $attID)) {
+		if(preg_match('/^[0-9]+$/', $attID)) {
 			$row = $this -> db -> fetchRow('SELECT * FROM attributes WHERE ID = ?', $attID, Zend_Db::FETCH_ASSOC);
 			$attribute = new Application_Model_Attribute($row);
 			if($row['type'] == '2') {

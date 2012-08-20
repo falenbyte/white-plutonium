@@ -17,7 +17,7 @@ class Application_Model_CategoriesMapper {
 	}
 
 	public function getByID($catID) {
-		if(preg_match('/[0-9]+/', $catID)) {
+		if(preg_match('/^[0-9]+$/', $catID)) {
 			$result = $this -> db -> fetchRow('SELECT * FROM categories WHERE ID = ?', $catID, Zend_Db::FETCH_ASSOC);
 			return new Application_Model_Category($result);
 		} else {
@@ -26,7 +26,7 @@ class Application_Model_CategoriesMapper {
 	}
 
 	public function getChildren($catID) {
-		if(preg_match('/[0-9]+/', $catID)) {
+		if(preg_match('/^[0-9]+$/', $catID)) {
 			$result = $this -> db -> fetchAssoc('SELECT * FROM categories WHERE parentID = ?', $catID);
 			foreach($result as $row) {
 				$categories[$row['ID']] = new Application_Model_Category($row);

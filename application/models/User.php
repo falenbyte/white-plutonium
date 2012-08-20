@@ -21,7 +21,7 @@ class Application_Model_User {
 		if($this -> session -> auth) { //Je¿eli juz zalogowany to po co znowu logowac?
 			throw new Exception('User is already logged in');
 		}
-		if(!preg_match('/[a-zA-Z0-9_]+/', $username)) {
+		if(!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
 			throw new Exception('Username contains forbidden characters');
 		}
 		$userData = $this -> db -> fetchRow('SELECT * FROM users WHERE username = ?', $username, Zend_Db::FETCH_ASSOC);
@@ -60,10 +60,10 @@ class Application_Model_User {
 		if($this -> session -> auth) { //Je¿eli zalogowany nie tworzymy konta
 			throw new Exception('User is logged in');
 		}
-		if(!preg_match('/[a-zA-Z0-9_]+/', $username)) {
+		if(!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
 			throw new Exception('Username contains forbidden characters.');
 		}
-		if(!preg_match('/[a-zA-Z0-9_\-\.\+]+@[a-zA-Z0-9\.]+\.[a-zA-Z]{2,}/', $email)) {
+		if(!preg_match('/^[a-zA-Z0-9_\-\.\+]+@[a-zA-Z0-9\.]+\.[a-zA-Z]{2,}$/', $email)) {
 			throw new Exception('Supplied email is invalid.');
 		}
 		//Sprawdz czy juz takie username jest zajete
@@ -95,7 +95,7 @@ class Application_Model_User {
 	}
 
 	public function changeLostPassword($key, $newPassword) {
-		if(!preg_match('/[a-zA-Z0-9]{32}/', $key)) {
+		if(!preg_match('/^[a-zA-Z0-9]{32}$/', $key)) {
 			throw new Exception('Supplied key is invalid.');
 		}
 		$keyData = $this -> db -> fetchRow('SELECT * FROM lost_password_keys WHERE key = ?', $key, Zend_Db::FETCH_ASSOC);
@@ -110,7 +110,7 @@ class Application_Model_User {
 	}
 
 	public function requestLostPasswordKey($username) {
-		if(!preg_match('/[a-zA-Z0-9_]+/', $username)) {
+		if(!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
 			throw new Exception('Username contains forbidden characters.');
 		}
 		$userData = $this -> db -> fetchRow('SELECT * FROM users WHERE username = ?', $username, Zend_Db::FETCH_ASSOC);

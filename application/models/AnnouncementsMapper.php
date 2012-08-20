@@ -11,7 +11,7 @@ class Application_Model_AnnouncementsMapper
 		
 		public function getByID($id)
 			{
-				if(!preg_match('/[0-9]+/', $id))
+				if(!preg_match('/^[0-9]+$/', $id))
 					throw new Exception('Invalid announcement ID.');
 				
 				$ann = new Application_Model_Announcement($this->_db->fetchRow('SELECT * FROM announcements WHERE ID = ?', $id, Zend_Db::FETCH_ASSOC));
