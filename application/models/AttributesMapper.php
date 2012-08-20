@@ -48,7 +48,7 @@ class Application_Model_AttributesMapper {
 	}
 	
 	public function getByID($attID) {
-		if(preg_match('/[0-9]+/', $catID)) {
+		if(preg_match('/[0-9]+/', $attID)) {
 			$result = $this -> db -> fetchAssoc('SELECT * FROM attributes WHERE ID = ?', $attID);
 			$attribute = new Application_Model_Attribute($result);
 			if($row['type'] == '2') {
