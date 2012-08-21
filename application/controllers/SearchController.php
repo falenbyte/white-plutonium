@@ -1,11 +1,11 @@
 <?php
 
-class SearchController extends Application_Model_ControllerAbstract
+class SearchController
 {
 
     public function init()
     {
-        parent::init();
+        /* Initialize action controller here */
     }
 
     public function indexAction()

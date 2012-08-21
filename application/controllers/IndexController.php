@@ -1,11 +1,11 @@
 <?php
 
-class IndexController extends Application_Model_ControllerAbstract
+class IndexController
 {
 
     public function init()
     {
-    	parent::init();
+        /* Initialize action controller here */
     }
 
     public function indexAction()

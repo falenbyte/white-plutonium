@@ -1,11 +1,12 @@
 <?php
 
-class AccountController extends Application_Model_ControllerAbstract {
-	
-	public function init() {
-		parent::init();
-	}
+class AccountController {
 
+	public function init()
+    {
+        /* Initialize action controller here */
+    }
+	
 	public function indexAction() {
 		
 	}

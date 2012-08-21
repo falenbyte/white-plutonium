@@ -1,11 +1,11 @@
 <?php
 
-class AnnouncementController extends Application_Model_ControllerAbstract
+class AnnouncementController
 {
 
     public function init()
     {
-        parent::init();
+        /* Initialize action controller here */
     }
 
     public function indexAction()

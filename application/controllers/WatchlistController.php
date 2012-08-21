@@ -1,11 +1,11 @@
 <?php
 
-class WatchlistController extends Application_Model_ControllerAbstract
+class WatchlistController
 {
 
     public function init()
     {
-        parent::init();
+        /* Initialize action controller here */
     }
 
     public function indexAction()
