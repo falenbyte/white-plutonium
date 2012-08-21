@@ -9,7 +9,7 @@ class AccountController  extends Zend_Controller_Action{
     }
 	
 	public function indexAction() {
-		if($this -> user -> isLoggedIn()) {
+		if(!$this -> user -> isLoggedIn()) {
 			$this -> _redirect('account/login');
 		}
 	}
