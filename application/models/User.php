@@ -12,43 +12,45 @@ class Application_Model_User {
 		if(!isset($this -> session -> auth)) {
 			$this -> session -> auth = false;
 		}
-		if($this -> session -> auth) {
-			$this -> updateLastSeen();
-		}
+		$this -> updateLastSeen();
 	}
 
 	public function login($username, $password) {
-		if($this -> session -> auth) { //Jeøeli juz zalogowany to po co znowu logowac?
-			throw new Exception('User is already logged in');
-		}
+		if($this -> session -> auth) return; //Ju≈º zalogowany
 		if(!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
 			throw new Exception('Username contains forbidden characters');
 		}
 		$userData = $this -> db -> fetchRow('SELECT * FROM users WHERE username = ?', $username, Zend_Db::FETCH_ASSOC);
-		if($userData === false || $userData['password'] != $this -> makePasswordHash($password, $userData['salt'])) {
-			$this -> session -> auth = false;
-			return false;
-			
-		} else {
+		if($userData === false) {
+			throw new Exception('User does not exists.');
+		}
+		if($userData['password'] == $this -> makePasswordHash($password, $userData['salt'])) {
+			Zend_Session::rememberMe(864000); //10 dni
 			$this -> session -> auth = true;
 			$this -> session -> userID = $userData['ID'];
 			$this -> session -> username = $userData['username'];
-			$this -> session -> setExpirationSeconds(60 * 60 * 24 * 10);
 			$this -> updateLastSeen();
-			return true;
+		} else {
+			$this -> session -> auth = false;
+			throw new Exception('Password is invalid.');
 		}
 	}
 
 	public function logout() {
-		$this -> session -> auth = false;
+		$this -> session -> unsetAll();
 	}
 
 	public function updateLastSeen() {
-		$this -> db -> update('users', array('last_seen' => time()), 'ID = ' . $this -> session -> userID);
+		if($this -> session -> auth) {
+			if($_SESSION['__ZF']['UserData']['ENT'] - time() < 259200) { //Sesja wyga≈õnie za mniej niz 3 dni
+				Zend_Session::rememberMe(864000);
+			}
+			$this -> db -> update('users', array('last_seen' => time()), 'ID = ' . $this -> session -> userID);
+		}
 	}
 
 	private function makePasswordHash($password, $salt) {
-		return md5($password.$salt);
+		return md5($password . $salt);
 	}
 	
 	private function generateSalt() {
@@ -57,7 +59,7 @@ class Application_Model_User {
 	}
 
 	public function register($username, $password, $email) {
-		if($this -> session -> auth) { //Jeøeli zalogowany nie tworzymy konta
+		if($this -> session -> auth) { //Je≈ºeli zalogowany nie tworzymy konta
 			throw new Exception('User is logged in');
 		}
 		if(!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {

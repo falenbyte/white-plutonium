@@ -1,0 +1,13 @@
+<div id="view-content">
+	<?php
+		$username = new Zend_Form_Element_Text('username');
+		$username -> setLabel('Login:');
+		$password = new Zend_Form_Element_Password('password');
+		$password -> setLabel('Hasło:');
+		$form = new Zend_Form();
+		$form -> setAction('/account/login') -> setMethod('post');
+		$form -> addElement($username) -> addElement($password) -> addElement('submit', 'Zaloguj');
+		if(isset($this -> authMessage)) echo $this -> authMessage;
+		echo $form -> render();
+	?>
+</div>

@@ -2,18 +2,27 @@
 
 class AccountController  extends Zend_Controller_Action{
 
-	public function init()
-    {
-        /* Initialize action controller here */
+	private $user;
+	
+	public function init() {
+		$this -> user = Zend_Registry::get('userModel');
     }
 	
 	public function indexAction() {
-		
+		if(!$this -> user -> isLoggedIn()) {
+			$this -> _redirect('account/login');
+		}
 	}
 
 	public function loginAction() {
-		Zend_Registry::get('userModel') -> login('user1', 'password1');
-		$this -> _redirect('index');
+		if(isset($_POST['username']) && isset($_POST['password'])) {
+			try {
+				$this -> user -> login($_POST['username'], $_POST['password']);
+				$this -> _redirect('index');
+			} catch(Exception $e) {
+				$this -> view -> authMessage = $e -> getMessage();
+			}
+		}
 	}
 
 	public function logoutAction() {
