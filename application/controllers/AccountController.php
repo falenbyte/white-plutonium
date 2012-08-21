@@ -57,9 +57,9 @@ class AccountController  extends Zend_Controller_Action{
 		if(!$this -> user -> isLoggedIn()) {
 			$this -> _redirect('account/login');
 		}
-		if(isset($_POST['oldPassword']) && isset($_POST['newPassword'])) {
+		if(isset($_POST['old_password']) && isset($_POST['new_password']) && isset($_POST['new_password_confirm'])) {
 			try {
-				$this -> user -> changePassword($_POST['oldPassword'], $_POST['newPassword']);
+				$this -> user -> changePassword($_POST['old_password'], $_POST['new_password']);
 			} catch(Exception $e) {
 				$this -> view -> message = $e -> getMessage();
 			}

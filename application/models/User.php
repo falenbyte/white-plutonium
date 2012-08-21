@@ -103,7 +103,7 @@ class Application_Model_User {
 		if(!preg_match('/^[a-zA-Z0-9]{32}$/', $key)) {
 			throw new Exception('Supplied key is invalid.');
 		}
-		$keyData = $this -> db -> fetchRow('SELECT * FROM lost_password_keys WHERE key = ?', $key, Zend_Db::FETCH_ASSOC);
+		$keyData = $this -> db -> fetchRow('SELECT * FROM lost_password_keys WHERE `key` = ?', $key, Zend_Db::FETCH_ASSOC);
 		if($keyData === false) {
 			throw new Exception('Supplied key is not in database');
 		}
@@ -112,6 +112,7 @@ class Application_Model_User {
 		}
 		$userData = $this -> db -> fetchRow('SELECT * FROM users WHERE ID = ?', $keyData['userID'], Zend_Db::FETCH_ASSOC);
 		$this -> db -> update('users', array('password' => $this -> makePasswordHash($newPassword, $userData['salt'])), 'ID = ' . $keyData['userID']);
+		$this -> db -> delete('lost_password_keys', '`key` = "' . $key .'"');
 	}
 
 	public function requestLostPasswordKey($username) {
