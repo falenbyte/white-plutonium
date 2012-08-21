@@ -15,23 +15,25 @@ class Application_Model_User {
 		$this -> updateLastSeen();
 	}
 
-	public function login($username, $password) {
+	public function login($username, $password, $persistent = false) {
 		if($this -> session -> auth) return; //Już zalogowany
 		if(!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
 			throw new Exception('Username contains forbidden characters');
 		}
 		$userData = $this -> db -> fetchRow('SELECT * FROM users WHERE username = ?', $username, Zend_Db::FETCH_ASSOC);
+		//Czy taki użytkownik istnieje?
 		if($userData === false) {
 			throw new Exception('User does not exists.');
 		}
 		if($userData['password'] == $this -> makePasswordHash($password, $userData['salt'])) {
-			Zend_Session::rememberMe(864000); //10 dni
+			//Czas sesji: 7 dni (zapamiętany) / 2 godziny (nie zapamiętany)
+			Zend_Session::rememberMe(($persistent === '1') ? 604800 : 7200);
 			$this -> session -> auth = true;
 			$this -> session -> userID = $userData['ID'];
 			$this -> session -> username = $userData['username'];
+			$this -> session -> keepMeLoggedIn = ($persistent === '1');
 			$this -> updateLastSeen();
 		} else {
-			$this -> session -> auth = false;
 			throw new Exception('Password is invalid.');
 		}
 	}
@@ -42,8 +44,9 @@ class Application_Model_User {
 
 	public function updateLastSeen() {
 		if($this -> session -> auth) {
-			if($_SESSION['__ZF']['UserData']['ENT'] - time() < 259200) { //Sesja wygaśnie za mniej niz 3 dni
-				Zend_Session::rememberMe(864000);
+			//Czy sesja wygaśnie za mniej niz 5 dni (zapamiętany) / 1 godzinę (nie zapamiętany)
+			if($_SESSION['__ZF']['UserData']['ENT'] - time() < ($this -> session -> keepMeLoggedIn ? 450000 : 3600)) {
+				Zend_Session::rememberMe($this -> session -> keepMeLoggedIn ? 604800 : 7200);
 			}
 			$this -> db -> update('users', array('last_seen' => time()), 'ID = ' . $this -> session -> userID);
 		}

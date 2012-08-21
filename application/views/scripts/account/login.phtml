@@ -1,13 +1,20 @@
 <div id="view-content">
 	<?php
+		if(isset($this -> message)) echo $this -> message;
 		$username = new Zend_Form_Element_Text('username');
 		$username -> setLabel('Login:');
 		$password = new Zend_Form_Element_Password('password');
 		$password -> setLabel('Hasło:');
+		$checkbox = new Zend_Form_Element_Checkbox('keepMeLoggedIn');
+		$checkbox -> setLabel('Zapamiętaj mnie');
+		$submit = new Zend_Form_Element_Submit('submit', 'Zaloguj');
 		$form = new Zend_Form();
 		$form -> setAction('/account/login') -> setMethod('post');
-		$form -> addElement($username) -> addElement($password) -> addElement('submit', 'Zaloguj');
-		if(isset($this -> authMessage)) echo $this -> authMessage;
+		$form -> addElement($username);
+		$form -> addElement($password);
+		$form -> addElement($checkbox);
+		$form -> addElement($submit);
 		echo $form -> render();
 	?>
+	<a href="<?php echo $this -> url(array('controller' => 'account', 'action' => 'lost_password')); ?>">Zapomniałem hasła</a>
 </div>

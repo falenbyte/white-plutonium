@@ -1,0 +1,23 @@
+<div id="view-content">
+	<?php
+		if(isset($this -> message)) echo $this -> message;
+		if($this -> showForm) {
+			$username = new Zend_Form_Element_Text('username');
+			$username -> setLabel('Login:');
+			$email = new Zend_Form_Element_Text('email');
+			$email -> setLabel('Email:');
+			$password = new Zend_Form_Element_Password('password');
+			$password -> setLabel('Hasło:');
+			$passwordConfirm = new Zend_Form_Element_Password('password_confirm');
+			$passwordConfirm -> setLabel('Potwierdz:');
+			$form = new Zend_Form();
+			$form -> setAction('/account/register') -> setMethod('post');
+			$form -> addElement($username);
+			$form -> addElement($email);
+			$form -> addElement($password);
+			$form -> addElement($passwordConfirm);
+			$form -> addElement('submit', 'Zarejestruj');
+			echo $form -> render();
+		}
+	?>
+</div>
