@@ -1,6 +1,6 @@
 <?php
 
-class SearchController
+class SearchController extends Zend_Controller_Action
 {
 
     public function init()

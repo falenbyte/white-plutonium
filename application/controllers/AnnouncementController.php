@@ -1,6 +1,6 @@
 <?php
 
-class AnnouncementController
+class AnnouncementController extends Zend_Controller_Action
 {
 
     public function init()

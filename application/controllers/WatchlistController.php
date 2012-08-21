@@ -1,6 +1,6 @@
 <?php
 
-class WatchlistController
+class WatchlistController extends Zend_Controller_Action
 {
 
     public function init()
