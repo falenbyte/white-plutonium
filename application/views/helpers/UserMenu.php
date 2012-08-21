@@ -10,7 +10,7 @@ class Zend_View_Helper_UserMenu extends Zend_View_Helper_Abstract
 						$this->view->url(array('controller'=>'account', 'action'=>'index')),
 						Zend_Registry::get('userModel')->getUsername());
 				else
-					return return sprintf('<li class="f_right"><a href="%s">Logowanie</a></li><li class="f_right"><a href="%s">Rejestracja</a></li>',
+					return sprintf('<li class="f_right"><a href="%s">Logowanie</a></li><li class="f_right"><a href="%s">Rejestracja</a></li>',
 						$this->view->url(array('controller'=>'account', 'action'=>'login')),
 						$this->view->url(array('controller'=>'account', 'action'=>'register')));
 			}
