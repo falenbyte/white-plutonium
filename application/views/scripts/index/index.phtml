@@ -1,4 +1,26 @@
-<br /><br />
 <div id="view-content">
-	<p>View script for controller <b>Index</b> and script/action name <b>index</b></p>
+	<style type="text/css">
+		.treeBox {
+			padding: 10px;
+			margin: 5px;
+			float: left;
+			width: 180px;
+			border: 1px solid black;
+			border-radius: 5px;
+		}
+		
+		.boxList {
+			margin-left: 20px;
+		}
+	</style>
+	<?php foreach($this -> mainCategories as $mainCategory): ?>
+		<div class="treeBox">
+		<a href="<?php echo $this->url(array('controller'=>'search')) . '?cat=' . $mainCategory -> ID; ?>"><?php echo $mainCategory -> name; ?></a>
+		<ul class="boxList">
+		<?php if(is_array($this -> subCategories[$mainCategory -> ID])):
+			foreach($this -> subCategories[$mainCategory -> ID] as $category): ?>
+			<li><a href="<?php echo $this->url(array('controller'=>'search')) . '?cat=' . $category -> ID; ?>"><?php echo $category -> name; ?></a></li>
+		<?php endforeach; endif; ?>
+		</ul></div>
+	<?php endforeach; ?>
 </div>

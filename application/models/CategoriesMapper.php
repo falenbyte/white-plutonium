@@ -15,6 +15,14 @@ class Application_Model_CategoriesMapper {
 		}
 		return $categories;
 	}
+	
+	public function getMain() {
+		$result = $this -> db -> fetchAssoc('SELECT * FROM categories WHERE parentID IS null');
+		foreach($result as $row) {
+			$categories[$row['ID']] = new Application_Model_Category($row);
+		}
+		return $categories;
+	}
 
 	public function getByID($catID) {
 		if(preg_match('/^[0-9]+$/', $catID)) {
