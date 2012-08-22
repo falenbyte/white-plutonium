@@ -184,13 +184,13 @@ class Application_Model_SearchFilters
 						//throw new Exception('Attribute value invalid: ' . $attValue);
 						return;
 					
-					if($att->type === '0' || $att->type === '4')
+					if($att->type == '0' || $att->type == '4')
 					{
 						if($key !== 'min' && $key !== 'max')
 							//throw new Exception('Invalid key in filter values array: ' . $key);
 							return;
 					}
-					else if($att->type === '1')
+					else if($att->type == '1')
 						$attValue = $this->_db->quote($attValue);
 				}
 				

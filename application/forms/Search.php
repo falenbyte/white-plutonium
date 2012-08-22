@@ -82,7 +82,7 @@ class Application_Form_Search
 							print_r($label, true), print_r($name, true),
 							print_r($type, true), print_r($value, true), print_r($options, true));
 						$elStr = sprintf('%s: <select name="%s">', $label, $name);
-						$elStr .= '<option value="all"' . ($value === 'all' ? ' selected' : '') . '>Wszystkie</option>';
+						$elStr .= '<option value="all"' . ($value == 'all' ? ' selected' : '') . '>Wszystkie</option>';
 						foreach($options as $ckey => $cat)
 						{
 							if(is_null($cat->parentID))
@@ -92,17 +92,13 @@ class Application_Form_Search
 									($ckey == $value ? ' selected' : ''),
 									$cat->name);
 								
-								//echo '$ckey === $value: ' . var_dump(($ckey === $value));
-								var_dump($ckey);
-								var_dump($value);
-								
 								foreach($options as $chckey => $chcat)
 								{
-									if($chcat->parentID === $ckey)
+									if($chcat->parentID == $ckey)
 									{
 										$elStr .= sprintf('<option value="%s"%s>%s</option>',
 											$chckey,
-											($chckey === $value ? ' selected' : ''),
+											($chckey == $value ? ' selected' : ''),
 											'&gt&gt' . $chcat->name);
 									}
 								}
@@ -142,7 +138,7 @@ class Application_Form_Search
 						$elStr = sprintf('<input name="%s" type="checkbox" value="1" id="%s"%s /><label for="%s">%s</label>',
 							$name,
 							'check' . $name,
-							($value === '1' ? ' checked' : ''),
+							($value == '1' ? ' checked' : ''),
 							'check' . $name,
 							$label);
 						break;
@@ -153,7 +149,7 @@ class Application_Form_Search
 						{
 							$elStr .= sprintf('<option value="%s"%s>%s</option>',
 								$okey,
-								($okey === $value ? ' selected' : ''),
+								($okey == $value ? ' selected' : ''),
 								$oname);
 						}
 						$elStr .= '</select>';
