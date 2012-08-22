@@ -327,10 +327,6 @@ class Application_Model_SearchFilters
 				
 				$finalStr .= $orderStr . ' LIMIT ' . $this->_offset . ', ' . $this->_limit;
 				
-				var_dump($attFlag);
-				var_dump($orderFlag);
-				var_dump($this->_order);
-				
 				return $finalStr;
 			}
 	}
