@@ -50,8 +50,8 @@ class Application_Form_Search
 						}
 					}
 				}
-				
-				$this->_addElement('Ogłoszeń na stronę', 'per_page', 'select', (isset($params['per_page']) ? $params['per_page'] : Zend_Registry::get('options')['defaultAnnsPerPage']), array('25'=>'25', '50'=>'50', '100'=>'100'))
+				$options = Zend_Registry::get('options');
+				$this->_addElement('Ogłoszeń na stronę', 'per_page', 'select', (isset($params['per_page']) ? $params['per_page'] : $options['defaultAnnsPerPage']), array('25'=>'25', '50'=>'50', '100'=>'100'))
 						->_addElement('', 'send', 'submit', 'Szukaj');
 			}
 		

@@ -10,8 +10,9 @@ class Application_Model_SearchFilters
 		
 		public function __construct(array $params = NULL)
 			{
+				$options = Zend_Registry::get('options');
 				$this->_filters = array();
-				$this->_limit = Zend_Registry::get('options')['defaultAnnsPerPage'];
+				$this->_limit = $options['defaultAnnsPerPage'];
 				$this->_offset = '0';
 				$this->_order = array('value'=>'date', 'direction'=>'desc');
 				$this->_db = Zend_Registry::get('db');
