@@ -1,6 +1,6 @@
 <?php
 
-// getter i setter z kontrol¹ dostêpu do zmiennych
+// prosty getter i setter
 
 abstract class Application_Model_AbstractDataStorage {
 
@@ -18,7 +18,7 @@ abstract class Application_Model_AbstractDataStorage {
 		}
 	}
 	
-	// funkcja inicjalizuj¹ca listê dostêpow¹ do zmiennych
+	// funkcja inicjalizujÄ…ca listÄ™ dostÄ™powÄ… do zmiennych
 	abstract protected function initVariableList();
 	
 	final public function __get($name) {
