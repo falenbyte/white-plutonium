@@ -1,0 +1,19 @@
+<div id="view-content">
+	<?php
+		if(isset($this -> message)) echo $this -> message;
+		if(!$this -> onlyMessage) {
+			$form = new Zend_Form();
+			$form -> setAction('/announcement/create');
+			$form -> setMethod('post');
+			$title = new Zend_Form_Element_Text('title');
+			$title -> setLabel('Tytuł:');
+			$form -> addElement($title);
+			$content = new Zend_Form_Element_Textarea('content');
+			$content -> setLabel('Treść:');
+			$content -> setAttribs(array('rows' => '15', 'cols' => '60'));
+			$form -> addElement($content);
+			$form -> addElement('submit', 'Dodaj');
+			echo $form -> render();
+		}
+	?>
+</div>

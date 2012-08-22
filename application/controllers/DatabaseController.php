@@ -29,7 +29,7 @@ class DatabaseController extends Zend_Controller_Action
     	$list[] = array('attributes', array('null', '"Kolor"', '1', '""', 'null', 'null')); //2
     	$list[] = array('attributes', array('null', '"Model"', '2', '""', 'null', 'null')); //3
     	$list[] = array('attributes', array('null', '"MaSuperHiperFunkcje?"', '3', '""', 'null', 'null')); //4
-    	$list[] = array('attributes', array('null', '"Cena"', '4', '"z≥"', '0', '100')); //5
+    	$list[] = array('attributes', array('null', '"Cena"', '4', '"z≈Ç"', '0', '100')); //5
     	
     	//categories_attributes
     	$list[] = array('categories_attributes', array('1', '1'));

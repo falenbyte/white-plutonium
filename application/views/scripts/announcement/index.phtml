@@ -1,4 +1,17 @@
-<br /><br />
 <div id="view-content">
-	<p>View script for controller <b>Announcement</b> and script/action name <b>index</b></p>
+	<?php echo $this -> message; ?>
+	<?php if(!$this -> onlyMessage): ?>
+		<div>
+			<?php echo $this -> announcement -> title; ?><br>
+			-----------------<br>
+			<?php echo $this -> announcement -> content; ?><br>
+			--------------<br>
+			by user with id: <?php echo $this -> announcement -> userID; ?>
+			<?php echo date('d-m-Y H:i:s', $this -> announcement -> date); ?><br>
+			<?php if(is_array($this -> announcement -> images)):
+			foreach($this -> announcement -> images as $image): ?>
+				<img src="/images/<?php echo $image; ?>">
+			<?php endforeach; endif; ?>
+		</div>
+	<?php endif; ?>
 </div>

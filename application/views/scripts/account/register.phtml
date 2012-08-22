@@ -1,7 +1,7 @@
 <div id="view-content">
 	<?php
 		if(isset($this -> message)) echo $this -> message;
-		if($this -> showForm) {
+		if(!$this -> onlyMessage) {
 			$username = new Zend_Form_Element_Text('username');
 			$username -> setLabel('Login:');
 			$email = new Zend_Form_Element_Text('email');

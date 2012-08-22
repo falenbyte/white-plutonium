@@ -38,6 +38,7 @@ class AccountController  extends Zend_Controller_Action{
 		if($this -> user -> isLoggedIn()) {
 			$this -> _redirect('index');
 		}
+		$this -> view -> onlyMessage = false;
 		if(isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['password_confirm'])) {
 			if($_POST['password'] != $_POST['password_confirm']) {
 				$this -> view -> message = 'Passwords do not match';
@@ -46,12 +47,11 @@ class AccountController  extends Zend_Controller_Action{
 			try {
 				$this -> user -> register($_POST['username'], $_POST['password'], $_POST['email']);
 				$this -> view -> message = 'Account created';
-				$this -> view -> showForm = false;
+				$this -> view -> onlyMessage = true;
 			} catch(Exception $e) {
 				$this -> view -> message = $e -> getMessage();
 			}
 		}
-		$this -> view -> showForm = true;
 	}
 
 	public function changepasswordAction() { //change_password
