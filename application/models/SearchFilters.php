@@ -103,7 +103,7 @@ class Application_Model_SearchFilters
 			}
 		
 		public function setOrder($value, $dir)
-			{
+			{	
 				if(!in_array($value, array('date', 'expires')))
 				{
 					if(!preg_match('/^[0-9]+$/', $value))
@@ -124,7 +124,7 @@ class Application_Model_SearchFilters
 					//throw new Exception('Invalid sorting direction: ' . $dir);
 					return;
 				
-				$_order = array('value'=>$value, 'direction'=>$dir);
+				$this->_order = array('value'=>$value, 'direction'=>$dir);
 				return $this;
 			}
 		
@@ -178,7 +178,7 @@ class Application_Model_SearchFilters
 					//throw new Exception('Attribute doesn\'t exist: ' . $value['ID']);
 					return;
 				
-				foreach($value['values'] as $key => $attValue)
+				foreach($value['values'] as $key => &$attValue)
 				{
 					if(!$att->validateValue($attValue))
 						//throw new Exception('Attribute value invalid: ' . $attValue);
@@ -326,6 +326,10 @@ class Application_Model_SearchFilters
 					$finalStr .= ($orderFlag == 2 ? ' AND' : ' WHERE') . implode(' AND', $whereStrs);
 				
 				$finalStr .= $orderStr . ' LIMIT ' . $this->_offset . ', ' . $this->_limit;
+				
+				var_dump($attFlag);
+				var_dump($orderFlag);
+				var_dump($this->_order);
 				
 				return $finalStr;
 			}

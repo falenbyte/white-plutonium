@@ -9,7 +9,7 @@
 		$checkbox -> setLabel('Zapamiętaj mnie');
 		$submit = new Zend_Form_Element_Submit('submit', 'Zaloguj');
 		$form = new Zend_Form();
-		$form -> setAction('/account/login') -> setMethod('post');
+		$form -> setAction($this->url(array('controller'=>'account', 'action'=>'login'))) -> setMethod('post');
 		$form -> addElement($username);
 		$form -> addElement($password);
 		$form -> addElement($checkbox);

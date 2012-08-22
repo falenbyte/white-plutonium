@@ -11,7 +11,7 @@
 			$passwordConfirm = new Zend_Form_Element_Password('password_confirm');
 			$passwordConfirm -> setLabel('Potwierdz:');
 			$form = new Zend_Form();
-			$form -> setAction('/account/register') -> setMethod('post');
+			$form -> setAction($this->url(array('controller'=>'account', 'action'=>'register'))) -> setMethod('post');
 			$form -> addElement($username);
 			$form -> addElement($email);
 			$form -> addElement($password);
