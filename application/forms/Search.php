@@ -57,9 +57,9 @@ class Application_Form_Search
 		
 		public function render($action)
 			{
-				return '<form action="' . $action . '" method="GET">' .
-					implode('<br />', $this->_elements) .
-					'</form>';
+				return '<form action="' . $action . '" method="GET"><div>' .
+					implode('</div><div>', $this->_elements) .
+					'</div></form>';
 			}
 		
 		// type: category, text, minmax(tablica), select, multiselect (tablica), checkbox, hidden, submit
