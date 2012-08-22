@@ -201,7 +201,7 @@ class Application_Model_SearchFilters
 			{
 				$kwords = explode(' ', $value);
 				
-				foreach($kwords as $kword)
+				foreach($kwords as &$kword)
 					$kword = $this->_db->quote('%' . $kword . '%');
 				
 				$this->_filters['keywords'] = $kwords;

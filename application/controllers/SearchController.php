@@ -31,8 +31,8 @@ class SearchController extends Zend_Controller_Action
 			$this->view->message = print_r($filters->getQueryString(), true) . "\n\n";
 		$annMapper = new Application_Model_AnnouncementsMapper();
 		
-		//$this->view->anns = $annMapper->getByFilters($filters);
-			//$this->view->message .= print_r($this->view->anns, true) . "\n\n";
+		$this->view->anns = $annMapper->getByFilters($filters);
+			$this->view->message .= print_r($this->view->anns, true) . "\n\n";
 		
 		try
 		{
