@@ -36,7 +36,7 @@ class SearchController extends Zend_Controller_Action
 		
 		try
 		{
-			//$this->view->searchForm = new Application_Form_Search($params);
+			$this->view->searchForm = new Application_Form_Search($params);
 		}
 		catch (Exception $e)
 		{
