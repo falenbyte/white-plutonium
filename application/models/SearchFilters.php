@@ -1,7 +1,5 @@
 <?php
 
-// TODO: konstruowanie na podstawie formularza wyszukiwania
-
 class Application_Model_SearchFilters
 	{
 		private $_filters;
@@ -10,13 +8,51 @@ class Application_Model_SearchFilters
 		private $_order;
 		private $_db;
 		
-		public function __construct()
+		public function __construct(array $params = NULL)
 			{
 				$this->_filters = array();
-				$this->_limit = 0;
-				$this->_offset = 0;
-				$this->_order = NULL;
+				$this->_limit = Zend_Registry::get('options')['defaultAnnsPerPage'];
+				$this->_offset = '0';
+				$this->_order = array('value'=>'date', 'direction'=>'desc');
 				$this->_db = Zend_Registry::get('db');
+				
+				if(!is_null($params))
+				{
+					foreach($params as $name => $value)
+					{
+						switch($name)
+						{
+							case 'cat':
+								$this->_addCatID($value);
+								break;
+							
+							case 'keywords':
+								$this->_addKeywords($value);
+								break;
+							
+							case 'order_by':
+								$this->setOrder($value, (isset($params['dir']) ? $params['dir'] : 'desc'));
+								break;
+							
+							case 'page':
+								if(preg_match('/^[0-9]+$/', $value) && intval($value) > 0)
+									$page = $value;
+								break;
+							
+							case 'per_page':
+								$this->setLimit($value);
+								break;
+							
+							default:
+								if(preg_match('/^[0-9]+$/', $name))
+									$this->_addAttribute(array('ID'=>$name, 'values'=>$value));
+								break;
+						}
+					}
+				}
+				
+				if(isset($page))
+					$this->_offset = strval((intval($page) - 1) * intval($this->_limit));
 			}
 		
 		public function addFilter($type, $value)
@@ -38,7 +74,8 @@ class Application_Model_SearchFilters
 		public function setLimit($limit)
 			{
 				if(!preg_match('/^[0-9]+$/', $limit))
-					throw new Exception('Supplied limit is invalid.');
+					//throw new Exception('Supplied limit is invalid.');
+					return;
 				
 				$this->_limit = $limit;
 				return $this;
@@ -47,7 +84,8 @@ class Application_Model_SearchFilters
 		public function setOffset($offset)
 			{
 				if(!preg_match('/^[0-9]+$/', $offset))
-					throw new Exception('Supplied offset is invalid.');
+					//throw new Exception('Supplied offset is invalid.');
+					return;
 				
 				$this->_offset = $offset;
 				return $this;
@@ -65,11 +103,25 @@ class Application_Model_SearchFilters
 		
 		public function setOrder($value, $dir)
 			{
-				if(!in_array($value, array('date', 'expires')) && !preg_match('/^[0-9]+$/', $value))
-					throw new Exception('Invalid sorting value: ' . $value);
+				if(!in_array($value, array('date', 'expires')))
+				{
+					if(!preg_match('/^[0-9]+$/', $value))
+						//throw new Exception('Invalid sorting value: ' . $value);
+						return;
+					else
+					{
+						$mapper = new Application_Model_AttributesMapper();
+						$att = $mapper->getByID($value);
+						
+						if(is_null($att->ID))
+							//throw new Exception('Attribute doesn\'t exist: ' . $value['ID']);
+							return;
+					}
+				}
 				
-				if($dir !== 'asc' && $dir != 'desc')
-					throw new Exception('Invalid sorting direction: ' . $dir);
+				if(!in_array($dir, array('asc', 'desc')))
+					//throw new Exception('Invalid sorting direction: ' . $dir);
+					return;
 				
 				$_order = array('value'=>$value, 'direction'=>$dir);
 				return $this;
@@ -85,7 +137,8 @@ class Application_Model_SearchFilters
 				if(preg_match('/^[0-9]+$/', $value))
 					$this->_filters['catID'] = $value;
 				else
-					throw new Exception('Supplied category ID is invalid.');	
+					//throw new Exception('Supplied category ID is invalid.');	
+					return;
 			}
 		
 		private function _addUserID($value)
@@ -93,7 +146,8 @@ class Application_Model_SearchFilters
 				if(preg_match('/^[0-9]+$/', $value))
 					$this->_filters['userID'] = $value;
 				else
-					throw new Exception('Supplied user ID is invalid.');
+					//throw new Exception('Supplied user ID is invalid.');
+					return;
 			}
 		
 		// $value['values']:
@@ -105,26 +159,35 @@ class Application_Model_SearchFilters
 		private function _addAttribute($value)
 			{
 				if(!is_array($value))
-					throw new Exception('The value for attribute filter must be an array.');
+					//throw new Exception('The value for attribute filter must be an array.');
+					return;
 				
 				if(!isset($value['ID']) || !preg_match('/^[0-9]+$/', $value['ID']))
-					throw new Exception('Attribute ID not supplied or invalid.');
+					//throw new Exception('Attribute ID not supplied or invalid.');
+					return;
 				
 				if(!isset($value['values']) || !is_array($value['values']))
-					throw new Exception('Attribute values not supplied or invalid.');
+					//throw new Exception('Attribute values not supplied or invalid.');
+					return;
 				
 				$mapper = new Application_Model_AttributesMapper();
 				$att = $mapper->getByID($value['ID']);
 				
+				if(is_null($att->ID))
+					//throw new Exception('Attribute doesn\'t exist: ' . $value['ID']);
+					return;
+				
 				foreach($value['values'] as $key => $attValue)
 				{
 					if(!$att->validateValue($attValue))
-						throw new Exception('Attribute value invalid: ' . $attValue);
+						//throw new Exception('Attribute value invalid: ' . $attValue);
+						return;
 					
 					if($att->type === '0' || $att->type === '4')
 					{
 						if($key !== 'min' && $key !== 'max')
-							throw new Exception('Invalid key in filter values array: ' . $key);
+							//throw new Exception('Invalid key in filter values array: ' . $key);
+							return;
 					}
 					else if($att->type === '1')
 						$attValue = $this->_db->quote($attValue);
@@ -145,27 +208,22 @@ class Application_Model_SearchFilters
 		
 		public function getQueryString()
 			{
-				if(isset($this->_filters['catID']))
+				$catMapper = new Application_Model_CategoriesMapper();
+				
+				if(isset($this->_filters['catID']) && !is_null($catMapper->getByID($this->_filters['catID'])->parentID))
 				{
-					$catMapper = new Application_Model_CategoriesMapper();
-					$attDefs = $catMapper->getByID($this->_filters['catID'])->getAttributes();
-					
+					$attDefs = $catMapper->getByID($this->_filters['catID'])->getAttributes();	
 					$attFlag = isset($this->_filters['attributes']);
 					
-					if(is_array($this->_order))
-					{
-						if(preg_match('/^[0-9]+$/', $this->_order['value']))
-							$orderFlag = (array_key_exists($this->_order['value'], $attDefs) ? 2 : 0);
-						else
-							$orderFlag = 1;
-					}
+					if(preg_match('/^[0-9]+$/', $this->_order['value']))
+						$orderFlag = (array_key_exists($this->_order['value'], $attDefs) ? 2 : 0);
 					else
-						$orderFlag = 0;
+						$orderFlag = 1;
 				}
 				else
 				{
 					$attFlag = false;
-					$orderFlag = (is_array($this->_order) && !preg_match('/^[0-9]+$/', $this->_order['value']) ? 1 : 0);
+					$orderFlag = (preg_match('/^[0-9]+$/', $this->_order['value']) ? 0 : 1);
 				}
 				
 				if($attFlag)
@@ -191,12 +249,9 @@ class Application_Model_SearchFilters
 								break;
 							
 							case '1':
-								$caseStr .= 'textValue IN(' . implode(', ', $val) . ')';
-								break;
-							
 							case '2':
 							case '3':
-								$caseStr .= 'intValue IN(' . implode(', ', $val) . ')';
+								$caseStr .= $attDefs[$id]->getTypeString() . 'Value IN(' . implode(', ', $val) . ')';
 								break;
 							
 							case '4':

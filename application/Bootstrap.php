@@ -6,6 +6,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		error_reporting(E_ALL ^ E_NOTICE);
 	}
 	
+	protected function _initOptions() {
+		Zend_Registry::set('options', $this->getOption('my'));
+	}
+	
 	protected function _initSession() {
 		Zend_Session::start();
 	}

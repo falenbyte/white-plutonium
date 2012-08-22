@@ -21,7 +21,9 @@ class Application_Model_AnnouncementsMapper
 					$ann->ID, Zend_Db::FETCH_ASSOC);
 				
 				foreach($attValues as $att)
-					$ann->attributes[$att['attID']] = $att[$attDefs[$att['attID']]->getTypeString() . 'Value'];
+					$attributes[$att['attID']] = $att[$attDefs[$att['attID']]->getTypeString() . 'Value'];
+				
+				$ann->attributes = $attributes;
 				
 				$ann->images = $this->_db->fetchPairs('SELECT images.ID, images.name FROM images ' .
 					'JOIN announcement_images ON (images.ID = announcement_images.imgID) WHERE announcement_images.annID = ?',
@@ -45,7 +47,9 @@ class Application_Model_AnnouncementsMapper
 						$ann->ID, Zend_Db::FETCH_ASSOC);
 					
 					foreach($attValues as $att)
-						$ann->attributes[$att['attID']] = $att[$attDefs[$att['attID']]->getTypeString() . 'Value'];
+						$attributes[$att['attID']] = $att[$attDefs[$att['attID']]->getTypeString() . 'Value'];
+					
+					$ann->attributes = $attributes;
 					
 					$ann->images = $this->_db->fetchPairs('SELECT images.ID, images.name FROM images ' .
 						'JOIN announcement_images ON (images.ID = announcement_images.imgID) WHERE announcement_images.annID = ?',
