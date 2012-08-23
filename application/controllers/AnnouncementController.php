@@ -17,7 +17,8 @@ class AnnouncementController extends Zend_Controller_Action {
 	}
     
     public function createAction() {
-    	if(isset($_POST['title'], $_POST['content'], $_POST['category_id'])) {
+    	$this -> view -> selectCategory = (!isset($_GET['category_id']));	
+    	if(isset($_POST['title'], $_POST['content'])) {
     		try {
     			$ann = new Application_Model_Announcement();
     			$ann -> ID = null;
