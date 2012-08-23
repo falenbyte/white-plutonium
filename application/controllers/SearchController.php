@@ -31,6 +31,8 @@ class SearchController extends Zend_Controller_Action
 		$filters = new Application_Model_SearchFilters($params);
 		$annMapper = new Application_Model_AnnouncementsMapper();
 		$this->view->anns = $annMapper->getByFilters($filters);
+		
+		$this->view->message = $filters->getQueryString();
     }
 
 
