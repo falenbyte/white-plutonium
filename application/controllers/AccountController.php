@@ -99,7 +99,8 @@ class AccountController  extends Zend_Controller_Action{
 		}
 		if(isset($_POST['username'])) {
 			try {
-				echo $this -> user -> requestLostPasswordKey($_POST['username']);
+				$this -> view -> key = $this -> user -> requestLostPasswordKey($_POST['username']);
+				echo 'Klucz wysyłany jest pocztą polską i magicznie znajdu się tam ten sam link co tutaj nad napisem.';
 				//TODO: send it via email
 			} catch(Exception $e) {
 				$this -> view -> message = $e -> getMessage();

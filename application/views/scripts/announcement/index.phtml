@@ -6,7 +6,7 @@
 			-----------------<br>
 			<?php echo $this -> announcement -> content; ?><br>
 			--------------<br>
-			by user with id: <?php echo $this -> announcement -> userID; ?>
+			by user with id: <?php echo $this -> announcement -> userID === null ? 'Anonymous' : $this -> announcement -> userID; ?>
 			<?php echo date('d-m-Y H:i:s', $this -> announcement -> date); ?><br>
 			<?php if(is_array($this -> announcement -> images)):
 			foreach($this -> announcement -> images as $image): ?>
