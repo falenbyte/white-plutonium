@@ -83,8 +83,33 @@ class Application_Model_User {
 		}
 		//Wszystko ok? to rejestrujemy
 		$salt = $this -> generateSalt();
-		$queryData = array($username, md5($password.$salt), $salt, $email, time(), time());
-		$this -> db -> query('INSERT INTO users VALUES(null, ?, ?, ?, ?, ?, ?)', $queryData);
+		$queryData = array($username, md5($password.$salt), $salt, $email, time(), time(), 0);
+		$this -> db -> query('INSERT INTO users VALUES(null, ?, ?, ?, ?, ?, ?, ?)', $queryData);
+		$userID = $this -> db -> lastInsertId();
+		$activationKey = $this -> generateSalt();
+		$queryData = array($userID, $activationKey, time()+(60*60*24));
+		$this -> db -> query('INSERT INTO user_activation_keys VALUES(null, ?, ?, ?)', $queryData);
+		//send email
+		$mail = new Zend_Mail();
+		$mail->setBodyText('To activate account go to /account/activate?key=' . $activationKey);
+		$mail->setFrom(Zend_Registry::get('email_sender'), 'Sender');
+		$mail->addTo($email, 'Recipient');
+		$mail->setSubject('Activation key');
+		$mail->send();
+	}
+	
+	public function activateAccount($key) {
+		if(!preg_match('/^[a-zA-Z0-9]{32}$/', $key)) {
+			throw new Exception('Supplied key is invalid.');
+		}
+		$keyData = $this -> db -> fetchRow('SELECT * FROM user_activation_keys WHERE key = ?', $key, Zend_Db::FETCH_ASSOC);
+		if($keyData === false) {
+			throw new Exception('Supplied key is not in database');
+		}
+		if($keyData['expires'] < time()) {
+			throw new Exception('Supplied key expired.');
+		}
+		
 	}
 
 	public function changePassword($oldPassword, $newPassword) {
@@ -123,10 +148,18 @@ class Application_Model_User {
 		if($userData === false) {
 			throw new Exception('No such username in database.');
 		}
+		if($userData['activatedFlag'] === '0') {
+			throw new Exception('You have not activated this account yet');
+		}
 		$key = $this -> generateSalt();
 		$queryData = array($userData['ID'], $key, time() + (60 * 60 * 24));
 		$this -> db -> query('INSERT INTO lost_password_keys VALUES(null, ?, ?, ?)', $queryData);
-		return $key;
+		$mail = new Zend_Mail();
+		$mail->setBodyText('To change password go to /account/change_lost_password?key=' . $key);
+		$mail->setFrom(Zend_Registry::get('email_sender'), 'Sender');
+		$mail->addTo($userData['email'], 'Recipient');
+		$mail->setSubject('Activation key');
+		$mail->send();
 	}
 
 	public function isLoggedIn() {

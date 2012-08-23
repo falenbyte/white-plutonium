@@ -53,6 +53,19 @@ class AccountController  extends Zend_Controller_Action{
 			}
 		}
 	}
+	
+	public function activateAction() {
+		if(!isset($_GET['key']) && preg_match('/^[a-zA-Z0-9]{32}$/')) {
+			$this -> view -> message = 'Missing or wrong activation key!';
+			return;
+		}
+		try {
+			$this -> user -> activateAccount($_GET['key']);
+			$this -> view -> message = 'Account activated';
+		} catch(Exception $e) {
+			$this -> view -> message = $e -> getMessage();
+		}
+	}
 
 	public function changepasswordAction() { //change_password
 		if(!$this -> user -> isLoggedIn()) {
@@ -100,8 +113,7 @@ class AccountController  extends Zend_Controller_Action{
 		if(isset($_POST['username'])) {
 			try {
 				$this -> view -> key = $this -> user -> requestLostPasswordKey($_POST['username']);
-				echo 'Klucz wysyłany jest pocztą polską i magicznie znajdu się tam ten sam link co tutaj nad napisem.';
-				//TODO: send it via email
+				$this -> view -> message = 'Klucz został wysłany.';
 			} catch(Exception $e) {
 				$this -> view -> message = $e -> getMessage();
 			}

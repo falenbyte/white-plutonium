@@ -28,5 +28,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		//Globalny dostęp do obiektu z danymi zalogowanego użytkownika
 		Zend_Registry::set('userModel', new Application_Model_User());
 	}
+	
+	protected function _initEmail() {
+		$emailConfig = new Zend_Config_Ini('../application/local_email_config.ini', 'email_config');
+		$mailTransport = new Zend_Mail_Transport_Sendmail($emailConfig -> server, $emailConfig -> config);
+		Zend_Mail::setDefaultTransport($mailTransport);
+		Zend_Registry::set('email_sender', $emailConfig -> sender);
+	}
 
 }
