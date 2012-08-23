@@ -167,7 +167,7 @@ class Application_Model_SearchFilters
 					//throw new Exception('Attribute ID not supplied or invalid.');
 					return;
 				
-				if(!isset($value['values']) || !is_array($value['values']))
+				if(!isset($value['values']) || !is_array($value['values']) || count($value['values']) == 0)
 					//throw new Exception('Attribute values not supplied or invalid.');
 					return;
 				
@@ -186,7 +186,7 @@ class Application_Model_SearchFilters
 					
 					if($att->type == '0' || $att->type == '4')
 					{
-						if($key !== 'min' && $key !== 'max')
+						if($key != 'min' && $key != 'max')
 							//throw new Exception('Invalid key in filter values array: ' . $key);
 							return;
 					}
@@ -279,10 +279,10 @@ class Application_Model_SearchFilters
 						'WHERE catID = ' . $this->_filters['catID'] .
 						(isset($this->_filters['userID']) ? ' AND userID = ' . $this->_filters['userID'] : '');
 					
-					$selectStr = 'SELECT annID, SUM(fulfilled) FROM (' . $selectStr . ') GROUP BY annID ' .
+					$selectStr = 'SELECT annID, SUM(fulfilled) FROM (' . $selectStr . ') AS table1 GROUP BY annID ' .
 						'HAVING SUM(fulfilled) = ' . count($this->_filters['attributes']);
 					
-					$selectStr = 'SELECT annID FROM (' . $selectStr . ')';
+					$selectStr = 'SELECT annID FROM (' . $selectStr . ') AS table2';
 				}
 				
 				if($orderFlag == 0 || $orderFlag == 1)

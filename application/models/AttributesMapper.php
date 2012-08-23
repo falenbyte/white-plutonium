@@ -19,7 +19,7 @@ class Application_Model_AttributesMapper {
 		if(isset($optionsList)) {
 			$options = $this -> db -> fetchAssoc('SELECT * FROM attributes_options WHERE attID IN (?)', implode(',', $optionsList));
 			foreach($options as $option) {
-				$attributes[$option['attID']] -> addOption($option['ID'], $option['name']);
+				$attributes[$option['attID']] -> addOption($option['ID'], $option['option']);
 			}
 		}
 		return $attributes;
@@ -54,7 +54,7 @@ class Application_Model_AttributesMapper {
 			if($row['type'] == '2') {
 					$options = $this -> db -> fetchAssoc('SELECT * FROM attributes_options WHERE attID = ?', $attID);
 					foreach($options as $option) {
-						$attribute -> addOption($option['ID'], $option['name']);
+						$attribute -> addOption($option['ID'], $option['option']);
 					}
 			}
 			return $attribute;

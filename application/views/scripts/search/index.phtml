@@ -1,6 +1,5 @@
-<pre>
 <?php
-	//$this->sidebarContent = $this->searchForm->render($this->url(array('controller'=>'search', 'action'=>'index')));
+	if(isset($this->searchForm))
+		$this->sidebarContent = $this->searchForm->render($this->url(array('controller'=>'search', 'action'=>'index')));
 	echo $this->message;
 ?>
-</pre>
