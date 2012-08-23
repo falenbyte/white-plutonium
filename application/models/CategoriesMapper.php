@@ -16,6 +16,14 @@ class Application_Model_CategoriesMapper {
 		return $categories;
 	}
 	
+	public function getAllSubCategories() {
+		$result = $this -> db -> fetchAssoc('SELECT * FROM categories WHERE parentID IS NOT NULL');
+		foreach($result as $row) {
+			$categories[$row['ID']] = new Application_Model_Category($row);
+		}
+		return $categories;
+	}
+	
 	public function getMain() {
 		$result = $this -> db -> fetchAssoc('SELECT * FROM categories WHERE parentID IS null');
 		foreach($result as $row) {

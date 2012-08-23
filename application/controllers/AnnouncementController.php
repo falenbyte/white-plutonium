@@ -17,7 +17,24 @@ class AnnouncementController extends Zend_Controller_Action {
 	}
     
     public function createAction() {
-    	
+    	if(isset($_POST['title'], $_POST['content'], $_POST['category_id'])) {
+    		try {
+    			$ann = new Application_Model_Announcement();
+    			$ann -> ID = null;
+    			$ann -> title = $_POST['title'];
+    			$ann -> content = $_POST['content'];
+    			$ann -> catID = $_POST['category_id'];
+    			$ann -> userID = Zend_Registry::get('userModel') -> getUserID();
+    			$mapper = new Application_Model_AnnouncementsMapper();
+    			$mapper -> save($ann);
+    			$this -> view -> message = "Announcement created.";
+    			$this -> view -> onlyMessage = true;
+    		} catch(Exception $e) {
+    			$this -> view -> message = $e -> getMessage();
+    		}
+    	}
+    	$mapper = new Application_Model_CategoriesMapper();
+    	$this -> view -> categories = $mapper -> getAllSubCategories();
     }
     
     public function editAction() {

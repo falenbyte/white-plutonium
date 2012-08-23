@@ -12,6 +12,12 @@
 			$content -> setLabel('Treść:');
 			$content -> setAttribs(array('rows' => '15', 'cols' => '60'));
 			$form -> addElement($content);
+			$categoryList = new Zend_Form_Element_Select('category_id');
+			$categoryList -> setLabel('Kategoria:');
+			foreach($this -> categories as $category) {
+				$categoryList -> addMultiOption($category -> ID, $category -> name);
+			}
+			$form -> addElement($categoryList);
 			$form -> addElement('submit', 'Dodaj');
 			echo $form -> render();
 		}
