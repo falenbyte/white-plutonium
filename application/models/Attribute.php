@@ -7,7 +7,6 @@ class Application_Model_Attribute extends Application_Model_AbstractDataStorage 
 	}
 	
 	public function addOption($id, $name) {
-		var_dump($name);
 		if(preg_match('/^[0-9]+$/', $id)) {
 			if(preg_match('/^[a-zA-Z0-9(), ]+$/', $name)) {
 				$this -> data['options'][$id] = $name;
