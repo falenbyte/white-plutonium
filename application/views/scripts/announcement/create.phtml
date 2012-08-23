@@ -3,7 +3,7 @@
 		if(isset($this -> message)) echo $this -> message;
 		if(!$this -> onlyMessage) {
 			$form = new Zend_Form();
-			$form -> setAction('/announcement/create');
+			$form -> setAction($this->url(array('controller'=>'announcement', 'action'=>'create')));
 			$form -> setMethod('post');
 			$title = new Zend_Form_Element_Text('title');
 			$title -> setLabel('Tytuł:');

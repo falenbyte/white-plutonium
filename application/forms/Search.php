@@ -34,7 +34,7 @@ class Application_Form_Search
 								break;
 							
 							case '2':
-								$this->_addElement($att->name, $id, 'multiselect', (isset($params[$id]) && is_array($params[$id]) ? $params[$id] : array()), $att->options);
+								$this->_addElement($att->name, $id, 'multiselect', (isset($params[$id]) && is_array($params[$id]) ? $params[$id] : array('0')), array_merge(array('0'=>'Brak'), $att->options));
 								break;
 							
 							case '3':
