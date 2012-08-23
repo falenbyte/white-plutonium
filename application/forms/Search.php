@@ -78,9 +78,6 @@ class Application_Form_Search
 						break;
 					
 					case 'category':
-						echo sprintf('dodaje category. <br />label: %s <br />name: %s <br />type: %s <br />value: %s <br />options:<pre> %s</pre>',
-							print_r($label, true), print_r($name, true),
-							print_r($type, true), print_r($value, true), print_r($options, true));
 						$elStr = sprintf('%s: <select name="%s">', $label, $name);
 						$elStr .= '<option value="all"' . ($value == 'all' ? ' selected' : '') . '>Wszystkie</option>';
 						foreach($options as $ckey => $cat)
