@@ -5,7 +5,7 @@ class Application_Form_Search
 		protected $_elements;
 		protected $_catMapper;
 		
-		public function __construct(array $params)
+		public function __construct(array $params, $basic = false)
 			{
 				$this->_catMapper = new Application_Model_CategoriesMapper();
 				
@@ -13,13 +13,16 @@ class Application_Form_Search
 				
 				if(!isset($params['cat'])
 					|| !preg_match('/^[0-9]+$/', $params['cat'])
-					|| is_null($this->_catMapper->getByID($params['cat'])->parentID))
-					$this->_addElement('Kategoria', 'cat', 'category', (isset($params['cat']) ? $params['cat'] : 'all'), $this->_catMapper->getAll());
+					|| is_null($this->_catMapper->getByID($params['cat'])->parentID)
+					|| $basic)
+					$this->_addElement('Kategoria', 'cat', 'category', (isset($params['cat']) ? $params['cat'] : 'all'), $this->_catMapper->getAll())
+						->_addElement('', 'form_type', 'hidden', 'basic');
 				else
 				{
 					$atts = $this->_catMapper->getByID($params['cat'])->getAttributes();
 					
-					$this->_addElement('Kategoria', 'cat', 'hidden', $params['cat']);
+					$this->_addElement('', 'cat', 'hidden', $params['cat'])
+						->_addElement('', 'form_type', 'hidden', 'spec');
 					
 					foreach($atts as $id => $att)
 					{
