@@ -26,19 +26,15 @@ class Application_Model_AttributesMapper {
 	}
 	
 	public function getByCategoryID($catID) {
-		echo 'attributesMapper::getByCategoryID ' .  print_r($catID, true) . '<br />';
 		if(preg_match('/^[0-9]+$/', $catID)) {
 			$attributesList = $this -> db -> fetchCol('SELECT attID FROM categories_attributes WHERE catID = ?', $catID);
-			echo 'attributesList: ' . print_r($attributesList, true) . '<br />';
 			$result = $this -> db -> fetchAll('SELECT * FROM attributes WHERE ID IN (' . implode(',', $attributesList) . ')', null, Zend_Db::FETCH_ASSOC);
-			echo 'result: <pre>' . print_r($result, true) . '</pre><br />';
 			foreach($result as $row) {
 				$attributes[$row['ID']] = new Application_Model_Attribute($row);
 				if($row['type'] == '2') {
 					$optionsList[] = $row['ID'];
 				}
 			}
-			echo 'optionsList: <pre>' . print_r($optionsList, true) . '</pre><br />';
 			if(isset($optionsList)) {
 				$options = $this -> db -> fetchAssoc('SELECT * FROM attributes_options WHERE attID IN (?)', implode(',', $optionsList));
 				foreach($options as $option) {
