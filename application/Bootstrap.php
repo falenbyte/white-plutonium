@@ -31,9 +31,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 	
 	protected function _initEmail() {
 		$emailConfig = new Zend_Config_Ini('../application/local_email_config.ini', 'email_config');
-		$mailTransport = new Zend_Mail_Transport_Sendmail($emailConfig -> server, $emailConfig -> config);
+		$mailTransport = new Zend_Mail_Transport_Smtp($emailConfig -> server, $emailConfig -> config -> toArray());
 		Zend_Mail::setDefaultTransport($mailTransport);
-		Zend_Registry::set('email_sender', $emailConfig -> sender);
+		Zend_Mail::setDefaultFrom($emailConfig -> sender);
 	}
 
 }

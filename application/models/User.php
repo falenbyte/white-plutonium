@@ -92,7 +92,6 @@ class Application_Model_User {
 		//send email
 		$mail = new Zend_Mail();
 		$mail->setBodyText('To activate account go to /account/activate?key=' . $activationKey);
-		$mail->setFrom(Zend_Registry::get('email_sender'), 'Sender');
 		$mail->addTo($email, 'Recipient');
 		$mail->setSubject('Activation key');
 		$mail->send();
@@ -156,7 +155,6 @@ class Application_Model_User {
 		$this -> db -> query('INSERT INTO lost_password_keys VALUES(null, ?, ?, ?)', $queryData);
 		$mail = new Zend_Mail();
 		$mail->setBodyText('To change password go to /account/change_lost_password?key=' . $key);
-		$mail->setFrom(Zend_Registry::get('email_sender'), 'Sender');
 		$mail->addTo($userData['email'], 'Recipient');
 		$mail->setSubject('Activation key');
 		$mail->send();
