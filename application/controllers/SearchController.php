@@ -26,21 +26,22 @@ class SearchController extends Zend_Controller_Action
 			else if($value === '')
 				unset($params[$key]);
 		}
-
-		$filters = new Application_Model_SearchFilters($params);
-			$this->view->message = print_r($filters->getQueryString(), true) . "\n\n";
-		$annMapper = new Application_Model_AnnouncementsMapper();
-		
-		$this->view->anns = $annMapper->getByFilters($filters);
-			$this->view->message .= print_r($this->view->anns, true) . "\n\n";
 		
 		try
 		{
-			$this->view->searchForm = new Application_Form_Search($params);
+			$filters = new Application_Model_SearchFilters($params);
+				$this->view->message = print_r($filters->getQueryString(), true) . "\n\n";
+			
+			//$annMapper = new Application_Model_AnnouncementsMapper();
+			
+			//$this->view->anns = $annMapper->getByFilters($filters);
+				//$this->view->message .= print_r($this->view->anns, true) . "\n\n";
+			
+			//$this->view->searchForm = new Application_Form_Search($params);
 		}
 		catch (Exception $e)
 		{
-			echo $e->getMessage();
+			$this->view->message = $e->getMessage();
 		}
     }
 
