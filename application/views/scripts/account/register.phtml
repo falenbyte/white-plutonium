@@ -9,7 +9,7 @@
 			$password = new Zend_Form_Element_Password('password');
 			$password -> setLabel('Hasło:');
 			$passwordConfirm = new Zend_Form_Element_Password('password_confirm');
-			$passwordConfirm -> setLabel('Potwierdz:');
+			$passwordConfirm -> setLabel('Potwierdź:');
 			$form = new Zend_Form();
 			$form -> setAction($this->url(array('controller'=>'account', 'action'=>'register'))) -> setMethod('post');
 			$form -> addElement($username);
