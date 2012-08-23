@@ -53,6 +53,19 @@ a:visited
 		width: 1000px;
 	}
 
+#top_menu a
+	{
+		text-decoration: none;
+		padding: 5px;
+	}
+
+#top_menu a:hover
+	{
+		background-color: rgb(200, 200, 200);
+		border-radius: 5px;
+		color: rgb(245, 245, 245);
+	}
+
 #top_menu ul
 	{
 		float: left;
@@ -67,7 +80,7 @@ a:visited
 
 #top_menu li
 	{
-		padding: 10px;
+		padding: 10px 5px 10px 5px;
 	}
 
 li.f_left
