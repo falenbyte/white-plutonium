@@ -9,10 +9,10 @@ class AccountController  extends Zend_Controller_Action{
     }
 	
 	public function indexAction() {
-		if($this -> user -> isLoggedIn()) {
-			$this -> _redirect('search?user_id=' . $this -> user -> getUserID());
+		if(!$this -> user -> isLoggedIn()) {
+			$this -> _redirect('account/login');
 		}
-		$this -> _redirect('account/login');
+		$this -> view -> userID = $this -> user -> getUserID();
 	}
 
 	public function loginAction() {

@@ -1,4 +1,6 @@
-<br /><br />
 <div id="view-content">
-	<p>View script for controller <b>Account</b> and script/action name <b>index</b></p>
+	<ul>
+		<li><a href="<?php echo $this -> url(array('controller' => 'search')) . '?user_id=' . $this -> userID; ?>">Moje ogłoszenia</a></li>
+		<li><a href="<?php echo $this -> url(array('controller' => 'account', 'action' => 'change_password')); ?>">Zmień hasło</a></li>
+	</ul>
 </div>
