@@ -6,7 +6,7 @@
 		<p class="content"><?php echo $this -> announcement -> content; ?></p>
 		
 		<?php foreach($this->announcement->attributes as $akey => $aval): ?>
-		<?php echo $this->attributes[$akey]->getString($aval); ?><br />
+		<?php echo $this->attributes[$akey]->getTypeString($aval); ?><br />
 		<?php endforeach; ?>
 		
 		<div class="images">
