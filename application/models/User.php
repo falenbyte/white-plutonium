@@ -25,6 +25,9 @@ class Application_Model_User {
 		if($userData === false) {
 			throw new Exception('User does not exists.');
 		}
+		if($userData['activatedFlag'] === '0') {
+			throw new Exception('User have not activated his yet.');
+		}
 		if($userData['password'] == $this -> makePasswordHash($password, $userData['salt'])) {
 			//Czas sesji: 7 dni (zapamiętany) / 2 godziny (nie zapamiętany)
 			Zend_Session::rememberMe(($persistent === '1') ? 604800 : 7200);
@@ -101,14 +104,15 @@ class Application_Model_User {
 		if(!preg_match('/^[a-zA-Z0-9]{32}$/', $key)) {
 			throw new Exception('Supplied key is invalid.');
 		}
-		$keyData = $this -> db -> fetchRow('SELECT * FROM user_activation_keys WHERE key = ?', $key, Zend_Db::FETCH_ASSOC);
+		$keyData = $this -> db -> fetchRow('SELECT * FROM user_activation_keys WHERE `key` = ?', $key, Zend_Db::FETCH_ASSOC);
 		if($keyData === false) {
 			throw new Exception('Supplied key is not in database');
 		}
 		if($keyData['expires'] < time()) {
 			throw new Exception('Supplied key expired.');
 		}
-		
+		$this -> db -> update('users', array('activatedFlag' => 1), 'ID = ' . $keyData['userID']);
+		$this -> db -> delete('user_activation_keys', 'ID = ' . $keyData['userID']);
 	}
 
 	public function changePassword($oldPassword, $newPassword) {
