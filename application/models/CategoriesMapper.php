@@ -24,7 +24,7 @@ class Application_Model_CategoriesMapper {
 	}
 
 	public function getByID($catID) {
-		if(preg_match('/^[0-9]+$/', $catID)) {
+		if(!preg_match('/^[0-9]+$/', $catID)) {
 			throw new Exception('Supplied category ID is invalid.');
 		}
 		$result = $this -> _db -> fetchRow('SELECT * FROM categories WHERE ID = ?', $catID, Zend_Db::FETCH_ASSOC);
@@ -32,7 +32,7 @@ class Application_Model_CategoriesMapper {
 	}
 
 	public function getChildren($catID) {
-		if(preg_match('/^[0-9]+$/', $catID)) {
+		if(!preg_match('/^[0-9]+$/', $catID)) {
 			throw new Exception('Supplied category ID is invalid.');
 		}
 		$result = $this -> _db -> fetchAll('SELECT * FROM categories WHERE parentID = ?', $catID, Zend_Db::FETCH_ASSOC);

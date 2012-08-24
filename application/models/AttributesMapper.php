@@ -26,7 +26,7 @@ class Application_Model_AttributesMapper {
 	}
 
 	public function getByCategoryID($catID) {
-		if(preg_match('/^[0-9]+$/', $catID)) {
+		if(!preg_match('/^[0-9]+$/', $catID)) {
 			throw new Exception('Supplied category ID is invalid.');
 		}
 		$attributesList = $this -> _db -> fetchCol('SELECT attID FROM categories_attributes WHERE catID = ?', $catID);
@@ -47,7 +47,7 @@ class Application_Model_AttributesMapper {
 	}
 
 	public function getByID($attID) {
-		if(preg_match('/^[0-9]+$/', $attID)) {
+		if(!preg_match('/^[0-9]+$/', $attID)) {
 			throw new Exception('Supplied attribute ID is invalid.');
 		}
 		$row = $this -> _db -> fetchRow('SELECT * FROM attributes WHERE ID = ?', $attID, Zend_Db::FETCH_ASSOC);
