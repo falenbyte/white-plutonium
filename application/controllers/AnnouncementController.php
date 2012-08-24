@@ -22,13 +22,13 @@ class AnnouncementController extends Zend_Controller_Action {
     
     public function createAction() {
     	$this -> view -> selectCategory = (!isset($_GET['category_id']));
-    	if(isset($_POST['title'], $_POST['content'])) {
+    	if(isset($_POST['title'], $_POST['content'], $_GET['category_id'])) {
     		try {
     			$ann = new Application_Model_Announcement();
     			$ann -> ID = null;
     			$ann -> title = $_POST['title'];
     			$ann -> content = $_POST['content'];
-    			$ann -> catID = $_POST['category_id'];
+    			$ann -> catID = $_GET['category_id'];
     			$ann -> userID = Zend_Registry::get('userModel') -> getUserID();
     			$mapper = new Application_Model_AnnouncementsMapper();
     			$mapper -> save($ann);

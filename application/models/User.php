@@ -16,7 +16,6 @@ class Application_Model_User {
 	}
 
 	public function login($username, $password, $persistent = false) {
-		if($this -> session -> auth) return; //Już zalogowany
 		if(!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
 			throw new Exception('Username contains forbidden characters');
 		}
@@ -26,7 +25,7 @@ class Application_Model_User {
 			throw new Exception('User does not exists.');
 		}
 		if($userData['activatedFlag'] === '0') {
-			throw new Exception('User have not activated his yet.');
+			throw new Exception('You have not activated this account yet.');
 		}
 		if($userData['password'] == $this -> makePasswordHash($password, $userData['salt'])) {
 			//Czas sesji: 7 dni (zapamiętany) / 2 godziny (nie zapamiętany)
@@ -66,7 +65,7 @@ class Application_Model_User {
 
 	public function register($username, $password, $email) {
 		if($this -> session -> auth) { //Jeżeli zalogowany nie tworzymy konta
-			throw new Exception('User is logged in');
+			throw new Exception('You are already logged in.');
 		}
 		if(!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
 			throw new Exception('Username contains forbidden characters.');
@@ -160,7 +159,7 @@ class Application_Model_User {
 		$mail = new Zend_Mail();
 		$mail->setBodyText('To change password go to /account/change_lost_password?key=' . $key);
 		$mail->addTo($userData['email'], 'Recipient');
-		$mail->setSubject('Activation key');
+		$mail->setSubject('Password reset key');
 		$mail->send();
 	}
 

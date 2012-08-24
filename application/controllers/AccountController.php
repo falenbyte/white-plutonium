@@ -19,7 +19,7 @@ class AccountController  extends Zend_Controller_Action{
 		if($this -> user -> isLoggedIn()) {
 			$this -> _redirect('index');
 		}
-		if(isset($_POST['username']) && isset($_POST['password'])) {
+		if(isset($_POST['username'], $_POST['password'], $_POST['keepMeLoggedIn'])) {
 			try {
 				$this -> user -> login($_POST['username'], $_POST['password'], $_POST['keepMeLoggedIn']);
 				$this -> _redirect('index');
@@ -30,7 +30,7 @@ class AccountController  extends Zend_Controller_Action{
 	}
 
 	public function logoutAction() {
-		Zend_Registry::get('userModel') -> logout();
+		$this -> user -> logout();
 		$this -> _redirect('index');
 	}
 
@@ -39,15 +39,14 @@ class AccountController  extends Zend_Controller_Action{
 			$this -> _redirect('index');
 		}
 		$this -> view -> onlyMessage = false;
-		if(isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['password_confirm'])) {
-			if($_POST['password'] != $_POST['password_confirm']) {
-				$this -> view -> message = 'Passwords do not match';
-				return;
-			}
+		if(isset($_POST['username'], $_POST['email'], $_POST['password'], $_POST['password_confirm'])) {
 			try {
-				$this -> user -> register($_POST['username'], $_POST['password'], $_POST['email']);
-				$this -> view -> message = 'Account created';
+				if($_POST['password'] != $_POST['password_confirm']) {
+					throw new Exception('Passwords do not match');;
+				}
 				$this -> view -> onlyMessage = true;
+				$this -> user -> register($_POST['username'], $_POST['password'], $_POST['email']);
+				throw new Exception('Account created');
 			} catch(Exception $e) {
 				$this -> view -> message = $e -> getMessage();
 			}
@@ -55,13 +54,12 @@ class AccountController  extends Zend_Controller_Action{
 	}
 	
 	public function activateAction() {
-		if(!isset($_GET['key']) && preg_match('/^[a-zA-Z0-9]{32}$/')) {
-			$this -> view -> message = 'Missing or wrong activation key!';
-			return;
-		}
 		try {
+			if(!isset($_GET['key'])) {
+				throw new Exception('Missing activation key!');
+			}
 			$this -> user -> activateAccount($_GET['key']);
-			$this -> view -> message = 'Account activated';
+			throw new Exception('Account activated');
 		} catch(Exception $e) {
 			$this -> view -> message = $e -> getMessage();
 		}
@@ -71,8 +69,11 @@ class AccountController  extends Zend_Controller_Action{
 		if(!$this -> user -> isLoggedIn()) {
 			$this -> _redirect('account/login');
 		}
-		if(isset($_POST['old_password']) && isset($_POST['new_password']) && isset($_POST['new_password_confirm'])) {
+		if(isset($_POST['old_password'], $_POST['new_password'], $_POST['new_password_confirm'])) {
 			try {
+				if($_POST['new_password'] != $_POST['new_password_confirm']) {
+					throw new Exception('Passwords do not match.');
+				}
 				$this -> user -> changePassword($_POST['old_password'], $_POST['new_password']);
 			} catch(Exception $e) {
 				$this -> view -> message = $e -> getMessage();
@@ -84,26 +85,19 @@ class AccountController  extends Zend_Controller_Action{
 		if($this -> user -> isLoggedIn()) {
 			$this -> _redirect('index');
 		}
-		$this -> view -> displayForm = false;
-		if(!preg_match('/^[a-zA-Z0-9]{32}$/', $_GET['key'])) {
-			$this -> view -> message = 'Invalid key string';
-			return;
-		}
-		if(isset($_POST['newPassword']) && $_POST['newPasswordConfirm']) {
-			if($_POST['newPassword'] != $_POST['newPasswordConfirm']) {
-				$this -> view -> displayForm = true;
-				$this -> view -> message = 'Passwords do not match';
-				return;
-			}
+		$this -> view -> onlyMessage = false;
+		if(isset($_POST['newPassword'], $_POST['newPasswordConfirm'])) {
 			try {
+				if($_POST['newPassword'] != $_POST['newPasswordConfirm']) {
+					throw new Exception('Passwords do not match.');
+				}
+				$this -> view -> onlyMessage = true;
 				$this -> user -> changeLostPassword($_GET['key'], $_POST['newPassword']);
-				$this -> view -> message = "Password has been changed";
+				throw new Exception('Password has been changed.');
 			} catch(Exception $e) {
 				$this -> view -> message = $e -> getMessage();
 			}
-			return;
 		}
-		$this -> view -> displayForm = true;
 	}
 
 	public function lostpasswordAction() { //lost_password
@@ -112,8 +106,8 @@ class AccountController  extends Zend_Controller_Action{
 		}
 		if(isset($_POST['username'])) {
 			try {
-				$this -> view -> key = $this -> user -> requestLostPasswordKey($_POST['username']);
-				$this -> view -> message = 'Klucz został wysłany.';
+				$this -> user -> requestLostPasswordKey($_POST['username']);
+				throw new Exception('Klucz został wysłany.');
 			} catch(Exception $e) {
 				$this -> view -> message = $e -> getMessage();
 			}

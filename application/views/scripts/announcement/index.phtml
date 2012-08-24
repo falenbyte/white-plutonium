@@ -5,9 +5,10 @@
 		<p class="date"><?php echo date('d-m-Y H:i:s', $this -> announcement -> date); ?></p>
 		<p class="content"><?php echo $this -> announcement -> content; ?></p>
 		
-		<?php foreach($this->announcement->attributes as $akey => $aval): ?>
+		<?php if(is_array($this->announcement->attributes)):
+		foreach($this->announcement->attributes as $akey => $aval): ?>
 		<?php echo $this->attributes[$akey]->getString($aval); ?><br />
-		<?php endforeach; ?>
+		<?php endforeach; endif; ?>
 		
 		<div class="images">
 		<?php if(is_array($this -> announcement -> images)):

@@ -4,7 +4,7 @@
 		if(!$this -> onlyMessage) {
 			if($this -> selectCategory) {
 				$form = new Zend_Form();
-				$form -> setAction($this->url(array('controller'=>'announcement', 'action'=>'create')));
+				$form -> setAction($this -> url(array('controller' => 'announcement', 'action' => 'create')));
 				$form -> setMethod('get');
 				$categoryList = new Zend_Form_Element_Select('category_id');
 				$categoryList -> setLabel('Kategoria:');
@@ -15,7 +15,7 @@
 				$form -> addElement('submit', 'Wybierz');
 			} else {
 				$form = new Zend_Form();
-				$form -> setAction($this->url(array('controller'=>'announcement', 'action'=>'create')));
+				$form -> setAction($this -> url(array('controller' => 'announcement', 'action' => 'create')) . '?category_id=' . $_GET['category_id']);
 				$form -> setMethod('post');
 				$title = new Zend_Form_Element_Text('title');
 				$title -> setLabel('Tytuł:');
