@@ -11,7 +11,7 @@ class SearchController extends Zend_Controller_Action
     public function indexAction()
     {
         $this->view->message = '';
-        
+
         $params = ($this->getRequest()->isGet() ? $this->getRequest()->getQuery() : array());
         
         foreach($params as $key => &$value)
@@ -32,7 +32,7 @@ class SearchController extends Zend_Controller_Action
 		$annMapper = new Application_Model_AnnouncementsMapper();
 		$this->view->anns = $annMapper->getByFilters($filters);
 		
-		$this->view->message = $filters->getQueryString();
+		//$this->view->message .= $filters->getQueryString();
     }
 
 

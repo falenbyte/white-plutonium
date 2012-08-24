@@ -15,14 +15,12 @@ class Application_Form_Search
 					|| !preg_match('/^[0-9]+$/', $params['cat'])
 					|| is_null($this->_catMapper->getByID($params['cat'])->parentID)
 					|| $basic)
-					$this->_addElement('Kategoria', 'cat', 'category', (isset($params['cat']) ? $params['cat'] : 'all'), $this->_catMapper->getAll())
-						->_addElement('', 'form_type', 'hidden', 'basic');
+					$this->_addElement('Kategoria', 'cat', 'category', (isset($params['cat']) ? $params['cat'] : 'all'), $this->_catMapper->getAll());
 				else
 				{
 					$atts = $this->_catMapper->getByID($params['cat'])->getAttributes();
 					
-					$this->_addElement('', 'cat', 'hidden', $params['cat'])
-						->_addElement('', 'form_type', 'hidden', 'spec');
+					$this->_addElement('', 'cat', 'hidden', $params['cat']);
 					
 					foreach($atts as $id => $att)
 					{
@@ -55,7 +53,11 @@ class Application_Form_Search
 				}
 				$options = Zend_Registry::get('options');
 				$this->_addElement('Ogłoszeń na stronę', 'per_page', 'select', (isset($params['per_page']) ? $params['per_page'] : $options['defaultAnnsPerPage']), array('25'=>'25', '50'=>'50', '100'=>'100'))
-						->_addElement('', 'send', 'submit', 'Szukaj');
+						->_addElement('', 'send', 'submit', 'Szukaj')
+						->_addElement('', 'form_type', 'hidden', ($basic ? 'basic' : 'spec'));
+				
+				if(isset($params['user_id']))
+					$this->_addElement('', 'user_id', 'hidden', $params['user_id']);
 			}
 		
 		public function render($action)

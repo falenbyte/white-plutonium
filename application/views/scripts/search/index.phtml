@@ -1,7 +1,13 @@
 <?php
 	if(isset($this->message))
 		echo $this->message;
+	
+	$this->stylesheets = array('search.css');
 ?>
+
+<?php if(count($this->anns) == 0): ?>
+Żadne ogłoszenia nie pasują do podanych kryteriów.
+<?php endif; ?>
 
 <?php foreach($this->anns as $announcement): ?>
 <div class="announcement">

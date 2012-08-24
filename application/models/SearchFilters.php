@@ -44,6 +44,9 @@ class Application_Model_SearchFilters
 								$this->setLimit($value);
 								break;
 							
+							case 'user_id':
+								$this->_addUserID($value);
+							
 							default:
 								if(preg_match('/^[0-9]+$/', $name))
 									$this->_addAttribute(array('ID'=>$name, 'values'=>$value));
@@ -212,7 +215,9 @@ class Application_Model_SearchFilters
 				$catMapper = new Application_Model_CategoriesMapper();
 				
 				if(isset($this->_filters['catID']) && !is_null($catMapper->getByID($this->_filters['catID'])->parentID))
-				{
+				{	
+					$categories = array($this->_filters['catID']);
+					
 					$attDefs = $catMapper->getByID($this->_filters['catID'])->getAttributes();	
 					$attFlag = isset($this->_filters['attributes']);
 					
@@ -220,6 +225,18 @@ class Application_Model_SearchFilters
 						$orderFlag = (array_key_exists($this->_order['value'], $attDefs) ? 2 : 0);
 					else
 						$orderFlag = 1;
+				}
+				else if(isset($this->_filters['catID']))
+				{
+					$catChildren = $catMapper->getChildren($this->_filters['catID']);
+					
+					if(is_null($catChildren))
+						$categories = array('0');
+					else
+					{
+						foreach($catChildren as $catChild)
+							$categories[] = $catChild->ID;
+					}
 				}
 				else
 				{
@@ -308,8 +325,8 @@ class Application_Model_SearchFilters
 					$whereStrs[] = ' ID IN(' . $selectStr . ')';
 				else
 				{
-					if(isset($this->_filters['catID']))
-						$whereStrs[] = ' catID = ' . $this->_filters['catID'];
+					if(isset($categories))
+						$whereStrs[] = ' catID IN(' . implode(', ', $categories) . ')';
 					if(isset($this->_filters['userID']))
 						$whereStrs[] = ' userID = ' . $this->_filters['userID'];
 				}
