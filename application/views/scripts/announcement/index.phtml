@@ -19,7 +19,8 @@
 		</div>
 		
 		<?php if($this->announcement->userID == Zend_Registry::get('userModel')->getUserID()): ?>
-		<a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'delete')) . '?id=' . $this->announcement->ID; ?>">Usuń ogłoszenie</a>
+		<a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'edit')) . '?id=' . $this->announcement->ID; ?>">Edytuj</a> |
+		<a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'delete')) . '?id=' . $this->announcement->ID; ?>">Usuń</a>
 		<?php endif; ?>
 		
 <?php endif; ?>
