@@ -72,9 +72,11 @@ class AccountController  extends Zend_Controller_Action{
 		if(isset($_POST['old_password'], $_POST['new_password'], $_POST['new_password_confirm'])) {
 			try {
 				if($_POST['new_password'] != $_POST['new_password_confirm']) {
-					throw new Exception('Passwords do not match.');
+					throw new Exception('New passwords do not match.');
 				}
 				$this -> user -> changePassword($_POST['old_password'], $_POST['new_password']);
+				$this -> user -> logout();
+				$this -> _redirect('account/login');
 			} catch(Exception $e) {
 				$this -> view -> message = $e -> getMessage();
 			}
@@ -86,13 +88,13 @@ class AccountController  extends Zend_Controller_Action{
 			$this -> _redirect('index');
 		}
 		$this -> view -> onlyMessage = false;
-		if(isset($_POST['newPassword'], $_POST['newPasswordConfirm'])) {
+		if(isset($_POST['new_password'], $_POST['new_password_confirm'])) {
 			try {
-				if($_POST['newPassword'] != $_POST['newPasswordConfirm']) {
+				if($_POST['new_password'] != $_POST['new_password_confirm']) {
 					throw new Exception('Passwords do not match.');
 				}
 				$this -> view -> onlyMessage = true;
-				$this -> user -> changeLostPassword($_GET['key'], $_POST['newPassword']);
+				$this -> user -> changeLostPassword($_GET['key'], $_POST['new_password']);
 				throw new Exception('Password has been changed.');
 			} catch(Exception $e) {
 				$this -> view -> message = $e -> getMessage();

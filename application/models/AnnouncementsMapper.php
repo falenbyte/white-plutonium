@@ -76,7 +76,7 @@ class Application_Model_AnnouncementsMapper
 		public function delete($id)
 			{
 				if(!preg_match('/^[0-9]+$/', $id)) {
-					throw new Exception('Invalid Announcement ID');
+					throw new Exception('Invalid Announcement ID.');
 				}
 				$userModel = Zend_Registry::get('userModel');
 				if(!$userModel -> isLoggedIn()) {
