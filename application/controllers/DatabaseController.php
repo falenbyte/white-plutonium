@@ -9,14 +9,14 @@ class DatabaseController extends Zend_Controller_Action
     	
     	//users
     	$user = new Application_Model_User();
-    	$user -> register('user1', 'password1', 'email1@gmail.com');
-    	$user -> register('user2', 'password2', 'email2@gmail.com');
-    	$user -> register('user3', 'password3', 'email3@gmail.com');
+    	$user -> register('user1', 'password1', 'email1@someSrv.com');
+    	$user -> register('user2', 'password2', 'email2@someSrv.com');
+    	$user -> register('user3', 'password3', 'email3@someSrv.com');
     	
     	//lost_keys
-    	$user -> requestLostPasswordKey('user1');
+    	/*$user -> requestLostPasswordKey('user1');
     	$user -> requestLostPasswordKey('user2');
-    	$user -> requestLostPasswordKey('user3');
+    	$user -> requestLostPasswordKey('user3');*/
     	
     	//categories
     	$list[] = array('categories', array('null', 'null', '"testCategory1"'));
