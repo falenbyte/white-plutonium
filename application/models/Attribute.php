@@ -48,7 +48,7 @@ class Application_Model_Attribute extends Application_Model_AbstractDataStorage 
 		}
 	}
 
-	/*public function getString($value) {
+	public function getString($value) {
 		$result = $this->name . ': ';
 		
 		switch($this->data['type'])
@@ -75,6 +75,6 @@ class Application_Model_Attribute extends Application_Model_AbstractDataStorage 
 		}
 		
 		return $result;
-	}*/
+	}
 
 }
