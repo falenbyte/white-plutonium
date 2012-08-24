@@ -10,7 +10,9 @@
 			<?php echo date('d-m-Y H:i:s', $this -> announcement -> date); ?><br>
 			<?php if(is_array($this -> announcement -> images)):
 			foreach($this -> announcement -> images as $image): ?>
-				<img src="/images/<?php echo $image; ?>">
+				<a href="<?php echo $this->baseUrl('imgs/' . $image); ?>">
+				<img src="<?php echo $this->baseUrl('imgs/' . $image); ?>" style="max-width: 250px; max-height: 250px;" />
+				</a>
 			<?php endforeach; endif; ?>
 		</div>
 	<?php endif; ?>

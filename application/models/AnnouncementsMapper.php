@@ -64,14 +64,13 @@ class Application_Model_AnnouncementsMapper
 		public function save(Application_Model_Announcement $ann)
 			{
 				$queryData = array(
-						$ann -> ID === null ? null : $ann -> ID,
 						$ann -> catID,
 						$ann -> userID === false? null : $ann -> userID,
 						$ann -> title,
 						$ann -> content,
 						time(),
 						time()+(60*60*24*7));
-				$this -> _db -> query('INSERT INTO announcements VALUES(?, ?, ?, ?, ?, ?, ?)', $queryData);
+				$this -> _db -> query('INSERT INTO announcements(catID, userID, title, content, date, expires) VALUES(?, ?, ?, ?, ?, ?)', $queryData);
 			}
 		
 		public function delete($id)

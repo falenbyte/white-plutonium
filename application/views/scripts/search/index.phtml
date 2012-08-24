@@ -11,6 +11,7 @@
 
 <?php foreach($this->anns as $announcement): ?>
 <div class="announcement">
+	<img src="<?php echo $this->baseUrl('imgs/' . (count($announcement->images) ? reset($announcement->images) : 'default.png')); ?>" />
 	<h1><a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'index')) . '?id=' . $announcement->ID; ?>"><?php echo $announcement->title; ?></a></h1>
 </div>
 <?php endforeach; ?>
