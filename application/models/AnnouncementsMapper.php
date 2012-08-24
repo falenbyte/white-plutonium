@@ -75,7 +75,19 @@ class Application_Model_AnnouncementsMapper
 		
 		public function delete($id)
 			{
-				
+				if(!preg_match('/^[0-9]+$/', $id)) {
+					throw new Exception('Invalid Announcement ID');
+				}
+				$userModel = Zend_Registry::get('userModel');
+				if(!$userModel -> isLoggedIn()) {
+					throw new Exception('You don\'t have permission to delete that announcement.');
+				}
+				$out = $this -> _db -> delete('announcements', 'ID = ' . $id . ' AND userID = ' . $userModel -> getUserID());
+				if($out == '1') {
+					throw new Exception('Announcement deleted.');
+				} else {
+					throw new Exception('Could not delete announcement.');
+				}
 			}
 	}
 

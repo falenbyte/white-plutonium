@@ -10,6 +10,7 @@ class AnnouncementController extends Zend_Controller_Action {
     	if(!isset($_GET['id']) || !preg_match('/^[0-9]+$/', $_GET['id']) ) {
     		$this -> message = "Missing or wrong ID.";
     		$this -> onlyMessage = true;
+    		return;
     	}
     	$this -> onlyMessage = false;
     	$announcementMapper = new Application_Model_AnnouncementsMapper();
@@ -20,7 +21,7 @@ class AnnouncementController extends Zend_Controller_Action {
 	}
     
     public function createAction() {
-    	$this -> view -> selectCategory = (!isset($_GET['category_id']));	
+    	$this -> view -> selectCategory = (!isset($_GET['category_id']));
     	if(isset($_POST['title'], $_POST['content'])) {
     		try {
     			$ann = new Application_Model_Announcement();
@@ -46,7 +47,15 @@ class AnnouncementController extends Zend_Controller_Action {
     }
     
     public function deleteAction() {
-    	
+    	try {
+    		if(!isset($_GET['id'])) {
+    			throw new Exception('Missing announcemnet ID');
+    		}
+    		$mapper = new Application_Model_AnnouncementsMapper();
+    		$mapper -> delete($_GET['id']);
+    	} catch(Exception $e) {
+    		$this -> view -> message = $e -> getMessage();
+    	}
     }
 
 }
