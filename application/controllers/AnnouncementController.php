@@ -13,14 +13,16 @@ class AnnouncementController extends Zend_Controller_Action {
     	}
     	$this -> onlyMessage = false;
     	$announcementMapper = new Application_Model_AnnouncementsMapper();
-    	$this -> view -> announcement = $announcementMapper -> getByID($_GET['id']); 
+    	$this -> view -> announcement = $announcementMapper -> getByID($_GET['id']);
+    	
+    	$attMapper = new Application_Model_AttributesMapper();
+    	$this->view->attributes = $attMapper->getByCategoryID($this -> view -> announcement->catID);
 	}
     
     public function createAction() {
     	$this -> view -> selectCategory = (!isset($_GET['category_id']));	
     	if(isset($_POST['title'], $_POST['content'])) {
     		try {
-				print_r($_POST);
     			$ann = new Application_Model_Announcement();
     			$ann -> ID = null;
     			$ann -> title = $_POST['title'];

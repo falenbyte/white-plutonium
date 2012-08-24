@@ -13,5 +13,8 @@
 <div class="announcement">
 	<img src="<?php echo $this->baseUrl('imgs/' . (count($announcement->images) ? reset($announcement->images) : 'default.png')); ?>" />
 	<h1><a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'index')) . '?id=' . $announcement->ID; ?>"><?php echo $announcement->title; ?></a></h1>
+	<?php if($announcement->userID == Zend_Registry::get('userModel')->getUserID()): ?>
+	<a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'delete')) . '?id=' . $announcement->ID; ?>">Usuń ogłoszenie</a>
+	<?php endif; ?>
 </div>
 <?php endforeach; ?>

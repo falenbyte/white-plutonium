@@ -48,4 +48,33 @@ class Application_Model_Attribute extends Application_Model_AbstractDataStorage 
 		}
 	}
 
+	/*public function getString($value) {
+		$result = $this->name . ': ';
+		
+		switch($this->data['type'])
+		{
+			case '0':
+				$result .= $value . ' ' . $this->unit;
+				break;
+			
+			case '1':
+				$result .= $value;
+				break;
+			
+			case '2':
+				$result .= $this->options[$value];
+				break;
+			
+			case '3':
+				$result .= ($value == '1' ? 'tak' : 'nie');
+				break;
+			
+			case '4':
+				$result .= $value . ' ' . $this->unit;
+				break;
+		}
+		
+		return $result;
+	}*/
+
 }
