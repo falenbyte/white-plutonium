@@ -65,19 +65,22 @@ class Application_Model_AnnouncementsMapper
 			if(!is_array($list)) {
 				throw new Exception('Wrong parameter.');
 			}
+			if(empty($list)) {
+				return null;
+			}
 			foreach($list as $id) {
 				if(!preg_match('/^[0-9]+$/', $id)) {
 					throw new Exception('One of supplied ID\'s is wrong');
 				}
 			}
-			$result = $this -> _db -> fetchAll('SELECT * FROM announcements WHERE ID IN(' . implode(', ', $list) . ')', null, Zend_Db::FETCH_ASSOC);
+			$result = $this -> _db -> fetchAll('SELECT * FROM announcements WHERE ID IN (' . implode(', ', $list) . ')', null, Zend_Db::FETCH_ASSOC);
 			if($result === false) {
 				return null;
 			}
-			/*foreach($result as $row) {
-				$return[$row['ID']] = $row;
-			}*/
-			return $result;
+			foreach($result as $row) {
+				$return[$row['ID']] = new Application_Model_Announcement($row);
+			}
+			return $return;
 		}
 			
 		public function save(Application_Model_Announcement $ann)

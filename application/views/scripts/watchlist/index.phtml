@@ -1,4 +1,10 @@
-<br /><br />
 <div id="view-content">
-	<p>View script for controller <b>Watchlist</b> and script/action name <b>index</b></p>
+	<?php if(isset($this -> message)) echo $this -> message; ?>
+	<?php if(is_array($this -> announcements)): 
+	foreach($this -> announcements as $ann): ?>
+		<div class="announcement">
+		<h1><a href="<?php echo $this -> url(array('controller' => 'announcement', 'action' => 'index')) . '?id=' . $ann -> ID; ?>"><?php echo $ann -> title; ?></a></h1>
+		<a href="<?php echo $this->url(array('controller' => 'watchlist', 'action' => 'remove')) . '?id=' . $ann -> ID; ?>">Usuń z listy</a>
+		</div>
+	<?php endforeach; endif; ?>
 </div>

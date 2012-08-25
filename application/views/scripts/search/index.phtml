@@ -18,8 +18,9 @@ foreach($this->anns as $announcement): ?>
 		<img src="<?php echo $this->baseUrl('imgs/' . (count($announcement->images) ? reset($announcement->images) : 'default.png')); ?>" />
 	</div></div>
 	<h1><a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'index')) . '?id=' . $announcement->ID; ?>"><?php echo $announcement->title; ?></a></h1>
+	<a href="<?php echo $this -> url(array('controller' => 'watchlist', 'action' => 'add')) . '?id=' . $announcement -> ID; ?>">Dodaj do obserwowanych</a>
 	<?php if($announcement->userID == Zend_Registry::get('userModel')->getUserID()): ?>
-	<a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'edit')) . '?id=' . $announcement->ID; ?>">Edytuj</a> |
+	| <a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'edit')) . '?id=' . $announcement->ID; ?>">Edytuj</a> |
 	<a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'delete')) . '?id=' . $announcement->ID; ?>">Usuń</a>
 	<?php endif; ?>
 </div>

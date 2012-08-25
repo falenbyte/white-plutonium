@@ -19,29 +19,33 @@ class Application_Model_Watchlist {
 			throw new Exception('Wrong parameters.');
 		}
 		$queryData = array($this -> _userID, $offset, $limit);
-		return $this -> _db() -> fetchCol('SELECT annID FROM watchlist WHERE userID = ? LIMIT ?, ?', $queryData);
+		return $this -> _db -> fetchCol('SELECT annID FROM watched WHERE userID = ? LIMIT ?, ?', $queryData);
 	}
 	
 	public function fetchAll() {
-		return $this -> _db() -> fetchCol('SELECT annID FROM watchlist WHERE userID = ?', $this -> _userID);
+		return $this -> _db -> fetchCol('SELECT annID FROM watched WHERE userID = ?', $this -> _userID);
 	}
 	
 	public function add($annID) {
 		if(!preg_match('/^[0-9]+$/', $annID)) {
 			throw new Exception('Wrong announcement ID.');
 		}
-		$result = $this -> _db -> fetchRow('SELECT annID FROM announcements WHERE ID = ?', $annID);
+		$result = $this -> _db -> fetchRow('SELECT ID FROM announcements WHERE ID = ?', $annID);
 		if($result === false) {
 			throw new Exception('Announcement with this ID does not exists.');
 		}
-		$this -> _db -> insert('watchlist', array('annID' => $annID, 'userID' => $this -> _userID));
+		$result = $this -> _db -> fetchRow('SELECT userID FROM watched WHERE annID = ? AND userID = ?', array($annID, $this -> _userID));
+		if($result !== false) {
+			throw new Exception('Announcement is already on your watchlist');
+		}
+		$this -> _db -> insert('watched', array('annID' => $annID, 'userID' => $this -> _userID));
 	}
 	
 	public function remove($annID) {
 		if(!preg_match('/^[0-9]+$/', $annID)) {
 			throw new Exception('Wrong announcement ID.');
 		}
-		$this -> _db -> delete('watchlist', 'annID = ' . $annID . ' AND userID = ' . $this -> _userID);
+		$this -> _db -> delete('watched', 'annID = ' . $annID . ' AND userID = ' . $this -> _userID);
 	}
 	
 }
