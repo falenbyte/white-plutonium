@@ -27,13 +27,14 @@ class Application_Model_User {
 		if($userData['activatedFlag'] === '0') {
 			throw new Exception('You have not activated this account yet.');
 		}
-		if($userData['password'] == $this -> makePasswordHash($password, $userData['salt'])) {
+		if($userData['password'] === $this -> makePasswordHash($password, $userData['salt'])) {
 			//Czas sesji: 7 dni (zapamiętany) / 2 godziny (nie zapamiętany)
 			Zend_Session::rememberMe(($persistent === '1') ? 604800 : 7200);
 			$this -> session -> auth = true;
 			$this -> session -> userID = $userData['ID'];
 			$this -> session -> username = $userData['username'];
 			$this -> session -> keepMeLoggedIn = ($persistent === '1');
+			$this -> session -> admin = (strtolower($username) === 'admin');
 			$this -> updateLastSeen();
 		} else {
 			throw new Exception('Password is invalid.');
@@ -161,6 +162,10 @@ class Application_Model_User {
 		$mail->addTo($userData['email'], 'Recipient');
 		$mail->setSubject('Password reset key');
 		$mail->send();
+	}
+
+	public function isAdmin() {
+		return $this -> session -> admin;
 	}
 
 	public function isLoggedIn() {
