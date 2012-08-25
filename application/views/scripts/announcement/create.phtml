@@ -1,34 +1,98 @@
+<div id="ann_create_content">
 <?php
-/*
-	if(isset($this -> message)) echo $this -> message;
-	if(!$this -> onlyMessage) {
-		if($this -> selectCategory) {
-			$form = new Zend_Form();
-			$form -> setAction($this -> url(array('controller' => 'announcement', 'action' => 'create')));
-			$form -> setMethod('get');
-			$categoryList = new Zend_Form_Element_Select('category_id');
-			$categoryList -> setLabel('Kategoria:');
-			foreach($this -> categories as $category) {
-				$categoryList -> addMultiOption($category -> ID, $category -> name);
-			}
-			$form -> addElement($categoryList);
-			$form -> addElement('submit', 'Wybierz');
-		} else {
-			$form = new Zend_Form();
-			$form -> setAction($this -> url(array('controller' => 'announcement', 'action' => 'create')) . '?category_id=' . $_GET['category_id']);
-			$form -> setMethod('post');
-			$title = new Zend_Form_Element_Text('title');
-			$title -> setLabel('Tytuł:');
-			$form -> addElement($title);
-			$content = new Zend_Form_Element_Textarea('content');
-			$content -> setLabel('Treść:');
-			$content -> setAttribs(array('rows' => '15', 'cols' => '60'));
-			$form -> addElement($content);
-			$form -> addElement('submit', 'Dodaj');
-		}
-		echo $form -> render();
+	$this->stylesheets = array('announcement_create.css');
+
+	echo '<h1>';
+	switch($this->stage)
+	{	
+		case 0:
+			echo 'Krok 1.: wybierz kategorię';
+			break;
+		
+		case 1:
+			echo 'Krok 2.: uzupełnij treść ogłoszenia';
+			break;
+		
+		case 3:
+			echo 'Krok 3.: załaduj zdjęcia';
+			break;
 	}
-*/
+	echo '</h1>';
 ?>
 
-Wybierz kategorię: <select name="catID">
+<form method="post" action="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'create')); ?>">
+	<?php if($this->stage == 0): ?>
+		Wybierz kategorię: <select name="catID">
+		<?php
+			foreach($this->categories as $catid1 => $cat1)
+			{
+				if(is_null($cat1->parentID))
+				{
+					echo '<optgroup label="' . $cat1->name . '">';
+					
+					foreach($this->categories as $catid2 => $cat2)
+					{
+						if($cat2->parentID == $catid1)
+							echo '<option value="' . $catid2 . '">' . $cat2->name . '</option>';
+					}
+					
+					echo '</optgroup>';
+				}
+			}
+		?>
+		</select>
+		<input type="submit" value="Dalej" />
+	<?php endif; ?>
+
+	<?php if($this->stage == 1): ?>
+		Kategoria: <?php echo strtolower($this->category->name); ?>
+		<input type="hidden" name="catID" value="<?php echo $_POST['catID'] ?>" />
+
+		<br /><label for="ann_title">Tytuł ogłoszenia: </label>
+		<input type="text" name="title" id="ann_title" value="<?php echo (isset($_POST['title']) ? $_POST['title'] : '' ); ?>" />
+
+		<br /><label for="ann_content">Treść ogłoszenia:</label>
+		<br /><textarea name="content" rows="15" cols="60" id="ann_content"><?php echo (isset($_POST['content']) ? $_POST['content'] : '' ); ?></textarea>
+
+		<?php
+			foreach($this->attributes as $att)
+			{
+				switch($att->type)
+				{
+					case '0':
+					case '1':
+					case '4':
+						echo '<br /><label for="att' . $att->ID . '">' . $att->name . ': </label>' .
+							'<input type="text" id="att' . $att->ID . '" name="' . $att->ID . '" value="' .
+							(isset($_POST[$att->ID]) ? $_POST[$att->ID] : '' ) . '" />';
+						break;
+					
+					case '2':
+						echo '<br /><label for="att' . $att->ID . '">' . $att->name . ': </label>' .
+							'<select id="att' . $att->ID . '" name="' . $att->ID . '">';
+						foreach($att->options as $oid => $oname)
+							echo '<option value="' . $oid . '"' . 
+								(isset($_POST[$att->ID]) && $_POST[$att->ID] == $oid ? ' selected' : '' ) . '>' .
+								$oname . '</option>';
+						echo '</select>';
+						break;
+					
+					case '3':
+						echo '<br /><input type="checkbox" id="att' . $att->ID . '" value="1" name="' . $att->ID . '"' .
+							(isset($_POST[$att->ID]) ? ' checked' : '') . ' />' .
+							'<label for="att' . $att->ID . '"> ' . $att->name . '</label>';
+						break;
+				}
+			}
+		?>
+
+		<br /><input type="submit" value="Dalej" /><br />
+		
+		<?php foreach($this->messages as $msg) echo $msg . '<br />'; ?>
+	<?php endif; ?>
+	
+	<?php if($this->stage == 2): ?>
+	Stage 2
+	<?php endif; ?>
+</form>
+</div>

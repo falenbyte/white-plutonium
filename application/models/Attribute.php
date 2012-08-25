@@ -8,11 +8,7 @@ class Application_Model_Attribute extends Application_Model_AbstractDataStorage 
 	
 	public function addOption($id, $name) {
 		if(preg_match('/^[0-9]+$/', $id)) {
-			if(preg_match('/^[a-zA-Z0-9\(\), ]+$/', $name)) {
 				$this -> data['options'][$id] = $name;
-			} else {
-				throw new Exception('Trying to add option with wrong name: ' . $name);
-			}
 		} else {
 			throw new Exception('Trying to add option with wrong ID.');
 		}

@@ -25,13 +25,13 @@ class AnnouncementController extends Zend_Controller_Action {
 			$catMapper = new Application_Model_CategoriesMapper();
 			$attMapper = new Application_Model_AttributesMapper();
 			$user = Zend_Registry::get('userModel');
+			$subCats = $catMapper->getAllSubCategories();
 			
 			if(!$user->isLoggedIn())
 				$this->_redirect('account');
 			else if(!isset($_POST['catID'])
-				|| !preg_match('/^[0-9]+$/', $_POST['stage'])
-				|| !in_array($_POST['catID'], (is_array($subCats = $catMapper->getAllSubCategories()) ? $subCats : array()))
-				)
+				|| !preg_match('/^[0-9]+$/', $_POST['catID'])
+				|| is_null($catMapper->getByID($_POST['catID'])->parentID))
 			{
 				$this->view->stage = 0; // wybór kategorii
 				$this->view->categories = $catMapper->getAll();
@@ -68,8 +68,11 @@ class AnnouncementController extends Zend_Controller_Action {
 								if(preg_match('/^[0-9]+$/', $key))
 								{
 									$att = $attMapper->getByID($key);
-									if(($valid = $att->validateValue($value)) == false)
-										messages[] = 'Niepoprawna wartość atrybutu "' . strtolower($att->name) . '".';
+									if($value != '' && !$att->validateValue($value))
+									{
+										$valid = false;
+										$messages[] = 'Niepoprawna wartość atrybutu "' . strtolower($att->name) . '".';
+									}
 								}
 								break;
 						}
@@ -79,9 +82,13 @@ class AnnouncementController extends Zend_Controller_Action {
 				if(!$valid)
 				{
 					$this->view->stage = 1; // ustawianie treści ogłoszenia
+					$this->view->category = $catMapper->getByID($_POST['catID']);
+					$this->view->attributes = $attMapper->getByCategoryID($_POST['catID']);
+					$this->view->messages = $messages;
 				}
 				else
 				{
+					// tutaj jeszcze rozgałęzienie na obrazki oraz zapis i przekierowanie
 					$this->view->stage = 2; // dodawanie obrazków
 				}
 			}
