@@ -85,6 +85,10 @@ class Application_Model_AnnouncementsMapper
 			
 		public function save(Application_Model_Announcement $ann)
 			{
+				$user = Zend_Registry::get('userModel');
+				if(!$user->isLoggedIn())
+					throw new Exception('You cannot create/edit an announcement.');
+				
 				if(!preg_match('/^[0-9]+$/', $ann->ID)
 					|| $ann->ID == 0
 					|| $this->_db->fetchOne('SELECT COUNT(*) FROM announcements WHERE ID = ?', $ann->ID) == 0)
@@ -92,7 +96,6 @@ class Application_Model_AnnouncementsMapper
 				else
 					$createNew = false;
 				
-				$user = Zend_Registry::get('userModel');
 				$attMapper = new Application_Model_AttributesMapper();
 				
 				if($createNew)
@@ -146,6 +149,7 @@ class Application_Model_AnnouncementsMapper
 				
 				$userModel = Zend_Registry::get('userModel');
 				$owner = $this->_db->fetchOne('SELECT userID FROM announcements WHERE ID = ?', $id);
+				
 				if(!$userModel -> isAdmin() && (!$userModel -> isLoggedIn() || $owner != $userModel->getUserID())) {
 					throw new Exception('You don\'t have permission to delete that announcement.');
 				}

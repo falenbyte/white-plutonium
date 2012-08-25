@@ -9,7 +9,7 @@ class SearchController extends Zend_Controller_Action
     }
 
     public function indexAction()
-    {
+    {   
         $this->view->message = '';
 
         $params = ($this->getRequest()->isGet() ? $this->getRequest()->getQuery() : array());

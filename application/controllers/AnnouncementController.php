@@ -23,12 +23,30 @@ class AnnouncementController extends Zend_Controller_Action {
     public function createAction()
 		{
 			$catMapper = new Application_Model_CategoriesMapper();
+			$attMapper = new Application_Model_AttributesMapper();
+			$user = Zend_Registry::get('userModel');
 			
-			if(!isset($_POST['catID'])
+			if(!$user->isLoggedIn())
+				$this->_redirect('account');
+			else if(!isset($_POST['catID'])
 				|| !preg_match('/^[0-9]+$/', $_POST['stage'])
-				|| !in_array( $_POST['catID'], (is_array($subCats = $catMapper->getAllSubCategories()) ? $subCats : array()))
+				|| !in_array($_POST['catID'], (is_array($subCats = $catMapper->getAllSubCategories()) ? $subCats : array()))
 				)
 				$stage = 0;
+			else
+			{
+				$valid = true;
+				
+				foreach($_POST as $key => $value)
+				{
+					switch($key)
+					{
+						//case 'name':
+							
+					}
+				}
+			}
+			
 			
 			/*$this -> view -> selectCategory = (!isset($_GET['category_id']));
 			if(isset($_POST['title'], $_POST['content'], $_GET['category_id'])) {
