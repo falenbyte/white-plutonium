@@ -32,18 +32,57 @@ class AnnouncementController extends Zend_Controller_Action {
 				|| !preg_match('/^[0-9]+$/', $_POST['stage'])
 				|| !in_array($_POST['catID'], (is_array($subCats = $catMapper->getAllSubCategories()) ? $subCats : array()))
 				)
-				$stage = 0;
+			{
+				$this->view->stage = 0; // wybór kategorii
+				$this->view->categories = $catMapper->getAll();
+			}
 			else
 			{
-				$valid = true;
+				$messages = array();
 				
-				foreach($_POST as $key => $value)
+				$valid = (isset($_POST['title']) && isset($_POST['content']));
+				
+				if($valid)
 				{
-					switch($key)
+					foreach($_POST as $key => $value)
 					{
-						//case 'name':
+						switch($key)
+						{
+							case 'title':
+								if($value == '')
+								{
+									$valid = false;
+									$messages[] = 'Musisz podać tytuł ogłoszenia.';
+								}
+								break;
 							
+							case 'content':
+								if($value == '')
+								{
+									$valid = false;
+									$messages[] = 'Musisz podać treść ogłoszenia.';
+								}
+								break;
+							
+							default:
+								if(preg_match('/^[0-9]+$/', $key))
+								{
+									$att = $attMapper->getByID($key);
+									if(($valid = $att->validateValue($value)) == false)
+										messages[] = 'Niepoprawna wartość atrybutu "' . strtolower($att->name) . '".';
+								}
+								break;
+						}
 					}
+				}
+				
+				if(!$valid)
+				{
+					$this->view->stage = 1; // ustawianie treści ogłoszenia
+				}
+				else
+				{
+					$this->view->stage = 2; // dodawanie obrazków
 				}
 			}
 			
