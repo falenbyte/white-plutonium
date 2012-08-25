@@ -20,7 +20,7 @@
 			$captcha -> setFont('arial.ttf');
 			$captchaID = $captcha -> generate();
 			$captchaImage = new Zend_Form_Element_Image('captcha');
-			$captchaImage -> setImage($captcha -> getImgUrl() . $captchaID . '.png');
+			$captchaImage -> setImage($this -> baseUrl($captcha -> getImgUrl() . $captchaID . '.png'));
 			$form -> addElement($captchaImage);
 			$captchaUser = new Zend_Form_Element_Text('captcha_user');
 			$captchaUser -> setLabel('Przepisz z obrazka:');
