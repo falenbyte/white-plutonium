@@ -40,7 +40,7 @@ class Application_Model_AnnouncementsMapper
 				$attDefs = $attMapper->getAll();
 				
 				foreach($result as $row)
-				{
+				{	
 					$ann = new Application_Model_Announcement($row);
 					
 					$attValues = $this->_db->fetchAll('SELECT attID, intValue, textValue, floatValue FROM attributes_values WHERE annID = ?',

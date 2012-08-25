@@ -4,21 +4,24 @@ class Application_Form_Search
 	{
 		protected $_elements;
 		protected $_catMapper;
+		protected $_attMapper;
 		
 		public function __construct(array $params, $basic = false)
 			{
 				$this->_catMapper = new Application_Model_CategoriesMapper();
+				$this->_attMapper = new Application_Model_AttributesMapper();
 				
 				$this->_addElement('Słowa kluczowe', 'keywords', 'text', (isset($params['keywords']) ? $params['keywords'] : ''));
 				
-				if(!isset($params['cat'])
-					|| !preg_match('/^[0-9]+$/', $params['cat'])
-					|| is_null($this->_catMapper->getByID($params['cat'])->parentID)
-					|| $basic)
+				$properChildCategory = (isset($params['cat'])
+					&& preg_match('/^[0-9]+$/', $params['cat'])
+					&& !is_null($this->_catMapper->getByID($params['cat'])->parentID));
+				
+				if(!$properChildCategory || $basic)
 					$this->_addElement('Kategoria', 'cat', 'category', (isset($params['cat']) ? $params['cat'] : 'all'), $this->_catMapper->getAll());
 				else
 				{
-					$atts = $this->_catMapper->getByID($params['cat'])->getAttributes();
+					$atts = $this->_attMapper->getByCategoryID($params['cat']);
 					
 					$this->_addElement('', 'cat', 'hidden', $params['cat']);
 					
@@ -51,10 +54,32 @@ class Application_Form_Search
 						}
 					}
 				}
+				
+				$orderOptions = array();
+				
+				if($properChildCategory)
+				{
+					foreach($atts as $id => $att)
+					{
+						switch($att->type)
+						{
+							case '0':
+							case '4':
+								$orderOptions[$id] = $att->name;
+								break;
+							
+							default:
+								break;
+						}
+					}
+				}
+				
 				$options = Zend_Registry::get('options');
 				$this->_addElement('Ogłoszeń na stronę', 'per_page', 'select', (isset($params['per_page']) ? $params['per_page'] : $options['defaultAnnsPerPage']), array('25'=>'25', '50'=>'50', '100'=>'100'))
-						->_addElement('', 'send', 'submit', 'Szukaj')
-						->_addElement('', 'form_type', 'hidden', ($basic ? 'basic' : 'spec'));
+					->_addElement('Sortuj według', 'order_by', 'select', (isset($params['order_by']) ? $params['order_by'] : 'date'), array_merge(array('date'=>'Data', 'expires'=>'Koniec'), $orderOptions))
+					->_addElement('Jak', 'dir', 'select', (isset($params['dir']) ? $params['dir'] : 'desc'), array('asc'=>'Rosnąco', 'desc'=>'Malejąco'))
+					->_addElement('', 'send', 'submit', 'Szukaj')
+					->_addElement('', 'form_type', 'hidden', ($basic ? 'basic' : 'spec'));
 				
 				if(isset($params['user_id']))
 					$this->_addElement('', 'user_id', 'hidden', $params['user_id']);
