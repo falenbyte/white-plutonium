@@ -5,6 +5,8 @@
 	$this->stylesheets = array('search.css');
 ?>
 
+<?php echo $this->pageSwitcher(); ?>
+
 <?php if(count($this->anns) == 0): ?>
 Żadne ogłoszenia nie pasują do podanych kryteriów.
 <?php endif; ?>
@@ -12,7 +14,9 @@
 <?php if(is_array($this->anns)):
 foreach($this->anns as $announcement): ?>
 <div class="announcement">
-	<img src="<?php echo $this->baseUrl('imgs/' . (count($announcement->images) ? reset($announcement->images) : 'default.png')); ?>" />
+	<div class="ann_img_wrapper"><div class="ann_img">
+		<img src="<?php echo $this->baseUrl('imgs/' . (count($announcement->images) ? reset($announcement->images) : 'default.png')); ?>" />
+	</div></div>
 	<h1><a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'index')) . '?id=' . $announcement->ID; ?>"><?php echo $announcement->title; ?></a></h1>
 	<?php if($announcement->userID == Zend_Registry::get('userModel')->getUserID()): ?>
 	<a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'edit')) . '?id=' . $announcement->ID; ?>">Edytuj</a> |
