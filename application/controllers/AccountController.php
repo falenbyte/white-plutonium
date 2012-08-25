@@ -39,10 +39,14 @@ class AccountController  extends Zend_Controller_Action{
 			$this -> _redirect('index');
 		}
 		$this -> view -> onlyMessage = false;
-		if(isset($_POST['username'], $_POST['email'], $_POST['password'], $_POST['password_confirm'])) {
+		if(isset($_POST['username'], $_POST['email'], $_POST['password'], $_POST['password_confirm'], $_POST['captcha_user'], $_POST['captcha_hash'])) {
 			try {
 				if($_POST['password'] != $_POST['password_confirm']) {
 					throw new Exception('Passwords do not match');;
+				}
+				$captcha = new Zend_Captcha_Image();
+				if(!$captcha -> isValid(array('id' => $_POST['captcha_hash'], 'input' => $_POST['captcha_user']))) {
+					throw new Exception('Wrong captcha');
 				}
 				$this -> view -> onlyMessage = true;
 				$this -> user -> register($_POST['username'], $_POST['password'], $_POST['email']);

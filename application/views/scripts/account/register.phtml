@@ -2,20 +2,32 @@
 	<?php
 		if(isset($this -> message)) echo $this -> message;
 		if(!$this -> onlyMessage) {
-			$username = new Zend_Form_Element_Text('username');
-			$username -> setLabel('Login:');
-			$email = new Zend_Form_Element_Text('email');
-			$email -> setLabel('Email:');
-			$password = new Zend_Form_Element_Password('password');
-			$password -> setLabel('Hasło:');
-			$passwordConfirm = new Zend_Form_Element_Password('password_confirm');
-			$passwordConfirm -> setLabel('Potwierdź:');
 			$form = new Zend_Form();
 			$form -> setAction($this->url(array('controller'=>'account', 'action'=>'register'))) -> setMethod('post');
+			$username = new Zend_Form_Element_Text('username');
+			$username -> setLabel('Login:');
 			$form -> addElement($username);
+			$email = new Zend_Form_Element_Text('email');
+			$email -> setLabel('Email:');
 			$form -> addElement($email);
+			$password = new Zend_Form_Element_Password('password');
+			$password -> setLabel('Hasło:');
 			$form -> addElement($password);
+			$passwordConfirm = new Zend_Form_Element_Password('password_confirm');
+			$passwordConfirm -> setLabel('Potwierdź:');
 			$form -> addElement($passwordConfirm);
+			$captcha = new Zend_Captcha_Image();
+			$captcha -> setFont('arial.ttf');
+			$captchaID = $captcha -> generate();
+			$captchaImage = new Zend_Form_Element_Image('captcha');
+			$captchaImage -> setImage($captcha -> getImgUrl() . $captchaID . '.png');
+			$form -> addElement($captchaImage);
+			$captchaUser = new Zend_Form_Element_Text('captcha_user');
+			$captchaUser -> setLabel('Przepisz z obrazka:');
+			$form -> addElement($captchaUser);
+			$captchaHash = new Zend_Form_Element_Hidden('captcha_hash');
+			$captchaHash -> setValue($captchaID);
+			$form -> addElement($captchaHash);
 			$form -> addElement('submit', 'Zarejestruj');
 			echo $form -> render();
 		}

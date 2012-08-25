@@ -1,2 +1,3 @@
 application/local_db_config.ini
 public/imgs/*.jpg
+public/images/captcha/*.png
