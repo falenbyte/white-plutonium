@@ -80,18 +80,15 @@ class Application_Model_AnnouncementsMapper
 					throw new Exception('Invalid Announcement ID.');
 				}
 				$userModel = Zend_Registry::get('userModel');
-				$owner = $this->_db->fetchOne('SELECT userID FROM announcements WHERE ID = ?', $id);
-				
-				if(!$userModel -> isLoggedIn() || $owner != $userModel->getUserID()) {
+				if(!$userModel -> isLoggedIn()) {
 					throw new Exception('You don\'t have permission to delete that announcement.');
 				}
-				
-				$images = $this->_db->fetchCol('SELECT imgID from announcement_images WHERE annID = ?', $id);
-				if(count($images) > 0)
-				{
-					$this->_db->delete('images', 'ID IN(' . implode(', ', $));
+				$out = $this -> _db -> delete('announcements', 'ID = ' . $id . ' AND userID = ' . $userModel -> getUserID());
+				if($out == '1') {
+					throw new Exception('Announcement deleted.');
+				} else {
+					throw new Exception('Could not delete announcement.');
 				}
-				//$out = $this -> _db -> delete('announcements', 'ID = ' . $id . ' AND userID = ' . $userModel -> getUserID());
 			}
 	}
 
