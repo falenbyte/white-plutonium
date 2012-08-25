@@ -85,15 +85,57 @@ class Application_Model_AnnouncementsMapper
 			
 		public function save(Application_Model_Announcement $ann)
 			{
-				$data = array(
-						'ID' => preg_match('/^[0-9]+$/', $ann -> ID) ? $ann -> ID : null,
-						'catID' => $ann -> catID,
-						'userID' => $ann -> userID === false? null : $ann -> userID,
-						'title' => $ann -> title,
-						'content' =>$ann -> content,
-						'date' => time(),
-						'expires' => time()+(60*60*24*7));
-				$this -> _db -> insert('announcements', $data);
+				if(!preg_match('/^[0-9]+$/', $ann->ID)
+					|| $ann->ID == 0
+					|| $this->_db->fetchOne('SELECT COUNT(*) FROM announcements WHERE ID = ?', $ann->ID) == 0)
+					$createNew = true;
+				else
+					$createNew = false;
+				
+				$user = Zend_Registry::get('userModel');
+				$attMapper = new Application_Model_AttributesMapper();
+				
+				if($createNew)
+				{
+					$this->_db->insert('announcements',
+						array(
+							'catID' => $ann -> catID,
+							'userID' => $ann->userID,
+							'title' => $ann -> title,
+							'content' => $ann -> content,
+							'date' => time(),
+							'expires' => time()+(60*60*24*7);
+						));
+					
+					$newID = $this->_db->lastInsertId('announcements', 'ID');
+					
+					foreach($ann->attributes as $key => $att)
+						$this->_db->insert('attributes_values', array('annID' => $newID, ($attMapper->getByID($key)->getTypeString() . 'Value') => $att));
+					
+					foreach($ann->images as $key => $img)
+						$this->_db->insert('announcement_images', array('annID' => $newID, 'imgID' => $key));
+				}
+				else
+				{
+					$ownerID = $this->_db->fetchOne('SELECT userID FROM announcements WHERE ID = ?', $ann->ID);
+					
+					if($user->getUserID() != $ownerID)
+						throw new Exception('You cannot edit this announcement.');
+					
+					$this->_db->update('announcements',
+						array(
+							'title' => $ann -> title,
+							'content' => $ann -> content),
+						'ID = ' . $ann->ID);
+					
+					$this->_db->delete('attributes_values', 'annID = ' . $ann->ID);
+					foreach($ann->attributes as $key => $att)
+						$this->_db->insert('attributes_values', array('annID' => $ann->ID, ($attMapper->getByID($key)->getTypeString() . 'Value') => $att));
+					
+					$this->_db->delete('announcement_images', 'annID = ' . $ann->ID);
+					foreach($ann->images as $key => $img)
+						$this->_db->insert('announcement_images', array('annID' => $ann->ID, 'imgID' => $key));
+				}
 			}
 		
 		public function delete($id)
@@ -101,16 +143,20 @@ class Application_Model_AnnouncementsMapper
 				if(!preg_match('/^[0-9]+$/', $id)) {
 					throw new Exception('Invalid Announcement ID.');
 				}
+				
 				$userModel = Zend_Registry::get('userModel');
-				if(!$userModel -> isLoggedIn()) {
+				$owner = $this->_db->fetchOne('SELECT userID FROM announcements WHERE ID = ?', $id);
+
+				if(!$userModel -> isLoggedIn() || $owner != $userModel->getUserID()) {
 					throw new Exception('You don\'t have permission to delete that announcement.');
 				}
-				$out = $this -> _db -> delete('announcements', 'ID = ' . $id . ' AND userID = ' . $userModel -> getUserID());
-				if($out == '1') {
-					throw new Exception('Announcement deleted.');
-				} else {
-					throw new Exception('Could not delete announcement.');
+
+				$images = $this->_db->fetchCol('SELECT imgID from announcement_images WHERE annID = ?', $id);
+				if(count($images) > 0)
+				{
+					$this->_db->delete('images', 'ID IN(' . implode(', ', $images) . ')');
 				}
+				
+				$this -> _db -> delete('announcements', 'ID = ' . $id);
 			}
 	}
-
