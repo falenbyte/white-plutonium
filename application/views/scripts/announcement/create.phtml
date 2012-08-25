@@ -13,14 +13,18 @@
 			echo 'Krok 2.: uzupełnij treść ogłoszenia';
 			break;
 		
-		case 3:
+		case 2:
 			echo 'Krok 3.: załaduj zdjęcia';
+			break;
+		
+		case 3:
+			echo 'Gratulacje! Dodałeś ogłoszenie.';
 			break;
 	}
 	echo '</h1>';
 ?>
 
-<form method="post" action="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'create')); ?>">
+<form method="post" enctype="multipart/form-data" action="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'create')); ?>">
 	<?php if($this->stage == 0): ?>
 		Wybierz kategorię: <select name="catID">
 		<?php
@@ -45,10 +49,9 @@
 	<?php endif; ?>
 
 	<?php if($this->stage == 1): ?>
-		Kategoria: <?php echo strtolower($this->category->name); ?>
 		<input type="hidden" name="catID" value="<?php echo $_POST['catID'] ?>" />
 
-		<br /><label for="ann_title">Tytuł ogłoszenia: </label>
+		<label for="ann_title">Tytuł ogłoszenia: </label>
 		<input type="text" name="title" id="ann_title" value="<?php echo (isset($_POST['title']) ? $_POST['title'] : '' ); ?>" />
 
 		<br /><label for="ann_content">Treść ogłoszenia:</label>
@@ -70,6 +73,7 @@
 					case '2':
 						echo '<br /><label for="att' . $att->ID . '">' . $att->name . ': </label>' .
 							'<select id="att' . $att->ID . '" name="' . $att->ID . '">';
+						echo '<option value="">Nieokreślone</option>';
 						foreach($att->options as $oid => $oname)
 							echo '<option value="' . $oid . '"' . 
 								(isset($_POST[$att->ID]) && $_POST[$att->ID] == $oid ? ' selected' : '' ) . '>' .
@@ -92,7 +96,36 @@
 	<?php endif; ?>
 	
 	<?php if($this->stage == 2): ?>
-	Stage 2
+		<input type="hidden" name="catID" value="<?php echo $_POST['catID'] ?>" />
+		<input type="hidden" name="title" value="<?php echo $_POST['title'] ?>" />
+		<input type="hidden" name="content" value="<?php echo $_POST['content'] ?>" />
+		<?php
+			foreach($_POST as $key => $value)
+			{
+				if(preg_match('/^[0-9]+$/', $key) && $value != '')
+					echo sprintf('<input type="hidden" name="%s" value="%s" />', $key, $value);
+			}
+		?>
+			
+		<?php foreach($images as $id => $name): ?>
+			<input type="hidden" name="images[<? echo $id; ?>]" value="<?php echo $name; ?>" />
+			<div class="image">
+				<div class="image_wrapper_outer"><div class="image_wrapper">
+					<img src="<?php echo $this->baseUrl('images/' . $name); ?>" />
+				</div></div>
+				<input type="checkbox" name="images_to_delete[]" value="<?php echo $id; ?>" id="imgdel<?php echo $id; ?>" />
+				<label for="imgdel<?php echo $id; ?>"> Usuń obrazek</label>
+			</div>
+		<?php endforeach; ?>
+		
+		<?php if(count($images) > 0) echo '<input type="submit" value="Wykonaj" />'; ?>
+		
+		<br /><br />
+		<label for="uploadInput">Wybierz pliki zdjęć: </label>
+		<input type="hidden" name="MAX_FILE_SIZE" value="500000" />
+		<input type="file" name="uploaded[]" id="uploadInput" multiple />
+		<br /><input type="submit" value="Wykonaj" />
+		<br /><br /><input type="submit" name="finish" value="Gotowe" />
 	<?php endif; ?>
 </form>
 </div>

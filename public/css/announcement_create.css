@@ -4,3 +4,38 @@ div#ann_create_content h1
 		font-size: 20px;
 		font-weight: normal;
 	}
+
+div.image
+	{
+		padding: 10px;
+		margin: 10px 0 10px 0;
+		height: 100px;
+		
+		border: 1px solid rgb(240, 240, 240);
+		border-radius: 10px;
+	}
+
+div.image_wrapper_outer
+	{
+		width: 100px;
+		height: 100px;
+		float: left;
+		margin: 0 10px 0 0;
+	}
+
+div.image_wrapper
+	{
+		width: 100px;
+		height: 100px;
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+	}
+
+div.image img
+	{
+		max-width: 100px;
+		max-height: 100px;
+		
+		border-radius: 10px;
+	}

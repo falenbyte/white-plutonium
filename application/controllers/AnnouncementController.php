@@ -21,7 +21,7 @@ class AnnouncementController extends Zend_Controller_Action {
 	}
     
     public function createAction()
-		{
+		{	
 			$catMapper = new Application_Model_CategoriesMapper();
 			$attMapper = new Application_Model_AttributesMapper();
 			$user = Zend_Registry::get('userModel');
@@ -88,8 +88,37 @@ class AnnouncementController extends Zend_Controller_Action {
 				}
 				else
 				{
-					// tutaj jeszcze rozgałęzienie na obrazki oraz zapis i przekierowanie
-					$this->view->stage = 2; // dodawanie obrazków
+					if(!isset($_POST['finish']))
+					{
+						$this->view->stage = 2; // dodawanie obrazków
+						$images = (isset($_POST['images']) ? $_POST['images'] : array());
+						
+						//przekaż modelowi obrazków tablice images_to_delete z id obrazkow do usuniecia
+						
+						if(isset($_POST['images_to_delete']))
+						{
+							foreach($images as $id => $name)
+							{
+								if(in_array($id, $_POST['images_to_delete']))
+									unset($images[$id]);
+							}
+						}
+						
+						// wrzuć nowe obrazki i dodaj do images
+					}
+					else
+					{
+						$this->view->stage = 3; // koniec, sukces, wyświetl link do ogłoszenia
+						try
+						{
+							// zapis
+						}
+						catch(Exception $e)
+						{
+							$this->view->stage = 4; //nieudany zapis, zmieniamy stage
+							$this->view->message = $e->getMessage();
+						}
+					}
 				}
 			}
 			
