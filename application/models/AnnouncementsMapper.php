@@ -61,10 +61,29 @@ class Application_Model_AnnouncementsMapper
 				return $anns;
 			}
 			
+		public function getListByIDs($list) {
+			if(!is_array($list)) {
+				throw new Exception('Wrong parameter.');
+			}
+			foreach($list as $id) {
+				if(!preg_match('/^[0-9]+$/', $id)) {
+					throw new Exception('One of supplied ID\'s is wrong');
+				}
+			}
+			$result = $this -> _db -> fetchAll('SELECT * FROM announcements WHERE ID IN(' . implode(', ', $list) . ')', null, Zend_Db::FETCH_ASSOC);
+			if($result === false) {
+				return null;
+			}
+			/*foreach($result as $row) {
+				$return[$row['ID']] = $row;
+			}*/
+			return $result;
+		}
+			
 		public function save(Application_Model_Announcement $ann)
 			{
 				$data = array(
-						'ID' => is_numeric($ann -> ID) ? $ann -> ID : null,
+						'ID' => preg_match('/^[0-9]+$/', $ann -> ID) ? $ann -> ID : null,
 						'catID' => $ann -> catID,
 						'userID' => $ann -> userID === false? null : $ann -> userID,
 						'title' => $ann -> title,
