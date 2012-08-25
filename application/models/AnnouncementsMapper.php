@@ -104,7 +104,7 @@ class Application_Model_AnnouncementsMapper
 							'title' => $ann -> title,
 							'content' => $ann -> content,
 							'date' => time(),
-							'expires' => time()+(60*60*24*7),
+							'expires' => time()+(60*60*24*7)
 						));
 					
 					$newID = $this->_db->lastInsertId('announcements', 'ID');
