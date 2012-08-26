@@ -1,3 +1,119 @@
-<div id="view-content">
+<div id="ann_create_content">
+<?php
+	$this->stylesheets = array('announcement_create.css');
+
+	echo '<h1>';
+	switch($this->stage)
+	{
+		case 1:
+			echo 'Edycja ogłoszenia';
+			break;
+		
+		case 2:
+			echo 'Edytuj zdjęcia';
+			break;
+		
+		case 3:
+			echo 'Edycja powiodła się.';
+			break;
+		
+		case 4:
+			echo 'Edycja ogłoszenia powiodła się.';
+			break;
+	}
+	echo '</h1>';
+?>
+
+<form method="post" enctype="multipart/form-data" action="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'edit')); ?>">
+	<input type="hidden" name="id" value="<?php echo $this->annID; ?>" />
+	<?php if($this->stage == 1): ?>
+
+		<label for="ann_title">Tytuł ogłoszenia: </label>
+		<input type="text" name="title" id="ann_title" value="<?php echo $this->annTitle; ?>" />
+
+		<br /><label for="ann_content">Treść ogłoszenia:</label>
+		<br /><textarea name="content" rows="15" cols="60" id="ann_content"><?php echo $this->annContent; ?></textarea>
+
+		<?php
+			foreach($this->attributes as $att)
+			{
+				switch($att->type)
+				{
+					case '0':
+					case '1':
+					case '4':
+						echo '<br /><label for="att' . $att->ID . '">' . $att->name . ': </label>' .
+							'<input type="text" id="att' . $att->ID . '" name="' . $att->ID . '" value="' .
+							(isset($this->annAttributes[$att->ID]) ? $this->annAttributes[$att->ID] : '') . '" />';
+						break;
+					
+					case '2':
+						echo '<br /><label for="att' . $att->ID . '">' . $att->name . ': </label>' .
+							'<select id="att' . $att->ID . '" name="' . $att->ID . '">';
+						echo '<option value="">Nieokreślone</option>';
+						foreach($att->options as $oid => $oname)
+							echo '<option value="' . $oid . '"' . 
+								(isset($this->annAttributes[$att->ID]) && $this->annAttributes[$att->ID] == $oid ? ' selected' : '' ) . '>' .
+								$oname . '</option>';
+						echo '</select>';
+						break;
+					
+					case '3':
+						echo '<br /><input type="checkbox" id="att' . $att->ID . '" value="1" name="' . $att->ID . '"' .
+							(isset($this->annAttributes[$att->ID]) ? ' checked' : '') . ' />' .
+							'<label for="att' . $att->ID . '"> ' . $att->name . '</label>';
+						break;
+				}
+			}
+		?>
+
+		<br /><input type="submit" name="done" value="Dalej" /><br />
+		
+		<?php foreach($this->messages as $msg) echo $msg . '<br />'; ?>
+	<?php endif; ?>
+	
+	<?php if($this->stage == 2): ?>
+		<input type="hidden" name="done" />
+		<input type="hidden" name="title" value="<?php echo $_POST['title'] ?>" />
+		<input type="hidden" name="content" value="<?php echo $_POST['content'] ?>" />
+		<?php
+			foreach($_POST as $key => $value)
+			{
+				if(preg_match('/^[0-9]+$/', $key) && $value != '')
+					echo sprintf('<input type="hidden" name="%s" value="%s" />', $key, $value);
+			}
+		?>
+			
+		<?php foreach($this->images as $id => $name): ?>
+			<input type="hidden" name="images[<?php echo $id; ?>]" value="<?php echo $name; ?>" />
+			<div class="image">
+				<div class="image_wrapper_outer"><div class="image_wrapper">
+					<img src="<?php echo $this->baseUrl('imgs/' . $name); ?>" />
+				</div></div>
+				<input type="checkbox" name="images_to_delete[]" value="<?php echo $id; ?>" id="imgdel<?php echo $id; ?>" />
+				<label for="imgdel<?php echo $id; ?>"> Usuń obrazek</label>
+			</div>
+		<?php endforeach; ?>
+		
+		<?php if(count($images) > 0) echo '<input type="submit" value="Wykonaj" />'; ?>
+		
+		<br /><br />
+		<label for="uploadInput">Wybierz pliki zdjęć: </label>
+		<input type="hidden" name="MAX_FILE_SIZE" value="500000" />
+		<input type="file" name="uploaded[]" id="uploadInput" multiple />
+		<br /><input type="submit" value="Wykonaj" />
+		<br /><br /><input type="submit" name="finish" value="Gotowe" />
+	<?php endif; ?>
+</form>
+
+<?php if($this->stage == 3): ?>
+	Link do Twojego ogłoszenia:
+	<a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'index')) . '?id=' . $this->annID; ?>">
+	<?php echo $this->url(array('controller'=>'announcement', 'action'=>'index')) . '?id=' . $this->annID; ?></a>
+<?php endif; ?>
+
+<?php if($this->stage == 4): ?>
+	Opis błędu: <?php echo $this->message; ?>
+<?php endif; ?>
 
 </div>

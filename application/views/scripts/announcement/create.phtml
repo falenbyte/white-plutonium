@@ -111,11 +111,11 @@
 			}
 		?>
 			
-		<?php foreach($images as $id => $name): ?>
-			<input type="hidden" name="images[<? echo $id; ?>]" value="<?php echo $name; ?>" />
+		<?php foreach($this->images as $id => $name): ?>
+			<input type="hidden" name="images[<?php echo $id; ?>]" value="<?php echo $name; ?>" />
 			<div class="image">
 				<div class="image_wrapper_outer"><div class="image_wrapper">
-					<img src="<?php echo $this->baseUrl('images/' . $name); ?>" />
+					<img src="<?php echo $this->baseUrl('imgs/' . $name); ?>" />
 				</div></div>
 				<input type="checkbox" name="images_to_delete[]" value="<?php echo $id; ?>" id="imgdel<?php echo $id; ?>" />
 				<label for="imgdel<?php echo $id; ?>"> Usuń obrazek</label>
