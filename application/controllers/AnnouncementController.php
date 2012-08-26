@@ -91,12 +91,15 @@ class AnnouncementController extends Zend_Controller_Action {
 					if(!isset($_POST['finish']))
 					{
 						$this->view->stage = 2; // dodawanie obrazków
+						
 						$images = (isset($_POST['images']) ? $_POST['images'] : array());
 						
-						//przekaż modelowi obrazków tablice images_to_delete z id obrazkow do usuniecia
+						$imagesModel = new Application_Model_Images();
 						
 						if(isset($_POST['images_to_delete']))
 						{
+							$imagesModel->deleteImages($_POST['images_to_delete'], $this->view->baseUrl('imgs/'));
+							
 							foreach($images as $id => $name)
 							{
 								if(in_array($id, $_POST['images_to_delete']))
@@ -104,14 +107,37 @@ class AnnouncementController extends Zend_Controller_Action {
 							}
 						}
 						
-						// wrzuć nowe obrazki i dodaj do images
+						if(is_array($_FILES['uploaded']))
+						{
+							$uploaded = $imagesModel->saveImages($_FILES['uploaded']['tmp_name'], $_FILES['uploaded']['size'],
+								$this->view->baseUrl('imgs/'));
+						}
+						
+						$images = array_merge($images, $uploaded);
 					}
 					else
 					{
 						$this->view->stage = 3; // koniec, sukces, wyświetl link do ogłoszenia
 						try
 						{
-							// zapis
+							$annObj = new Application_Model_Announcement();
+							$annObj->ID = 0;
+							$annObj->userID = $user->getUserID();
+							$annObj->catID = $_POST['catID'];
+							$annObj->title = $_POST['title'];
+							$annObj->content = $_POST['content'];
+							$annObj->images = (isset($_POST['images']) ? $_POST['images'] : array());
+							
+							foreach($_POST as $key => $value)
+							{
+								if(preg_match('/^[0-9]+$/', $key))
+									$atts[$key] = $value;
+							}
+							
+							$annObj->attributes = $atts;
+							
+							$annMapper = new Application_Model_AnnouncementsMapper();
+							$this->view->createdID = $annMapper->save($annObj);
 						}
 						catch(Exception $e)
 						{
@@ -121,27 +147,6 @@ class AnnouncementController extends Zend_Controller_Action {
 					}
 				}
 			}
-			
-			
-			/*$this -> view -> selectCategory = (!isset($_GET['category_id']));
-			if(isset($_POST['title'], $_POST['content'], $_GET['category_id'])) {
-				try {
-					$ann = new Application_Model_Announcement();
-					$ann -> ID = null;
-					$ann -> title = $_POST['title'];
-					$ann -> content = $_POST['content'];
-					$ann -> catID = $_GET['category_id'];
-					$ann -> userID = Zend_Registry::get('userModel') -> getUserID();
-					$mapper = new Application_Model_AnnouncementsMapper();
-					$mapper -> save($ann);
-					$this -> view -> message = "Announcement created.";
-					$this -> view -> onlyMessage = true;
-				} catch(Exception $e) {
-					$this -> view -> message = $e -> getMessage();
-				}
-			}
-			$mapper = new Application_Model_CategoriesMapper();
-			$this -> view -> categories = $mapper -> getAllSubCategories();*/
 		}
     
     public function editAction() {

@@ -20,6 +20,10 @@
 		case 3:
 			echo 'Gratulacje! Dodałeś ogłoszenie.';
 			break;
+		
+		case 4:
+			echo 'Utworzenie ogłoszenia nie powiodło się.';
+			break;
 	}
 	echo '</h1>';
 ?>
@@ -128,4 +132,15 @@
 		<br /><br /><input type="submit" name="finish" value="Gotowe" />
 	<?php endif; ?>
 </form>
+
+<?php if($this->stage == 3): ?>
+	Link do Twojego ogłoszenia:
+	<a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'index')) . '?id=' . $this->createdID; ?>">
+	<?php echo $this->url(array('controller'=>'announcement', 'action'=>'index')) . '?id=' . $this->createdID; ?></a>
+<?php endif; ?>
+
+<?php if($this->stage == 4): ?>
+	Opis błędu: <?php echo $this->message; ?>
+<?php endif; ?>
+
 </div>

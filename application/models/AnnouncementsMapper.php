@@ -113,10 +113,12 @@ class Application_Model_AnnouncementsMapper
 					$newID = $this->_db->lastInsertId('announcements', 'ID');
 					
 					foreach($ann->attributes as $key => $att)
-						$this->_db->insert('attributes_values', array('annID' => $newID, ($attMapper->getByID($key)->getTypeString() . 'Value') => $att));
+						$this->_db->insert('attributes_values', array('annID' => $newID, 'attID'=>$key, ($attMapper->getByID($key)->getTypeString() . 'Value') => $att));
 					
 					foreach($ann->images as $key => $img)
 						$this->_db->insert('announcement_images', array('annID' => $newID, 'imgID' => $key));
+					
+					return $newID;
 				}
 				else
 				{
@@ -133,7 +135,7 @@ class Application_Model_AnnouncementsMapper
 					
 					$this->_db->delete('attributes_values', 'annID = ' . $ann->ID);
 					foreach($ann->attributes as $key => $att)
-						$this->_db->insert('attributes_values', array('annID' => $ann->ID, ($attMapper->getByID($key)->getTypeString() . 'Value') => $att));
+						$this->_db->insert('attributes_values', array('annID' => $ann->ID, 'attID'=>$key, ($attMapper->getByID($key)->getTypeString() . 'Value') => $att));
 					
 					$this->_db->delete('announcement_images', 'annID = ' . $ann->ID);
 					foreach($ann->images as $key => $img)
@@ -156,7 +158,7 @@ class Application_Model_AnnouncementsMapper
 
 				$images = $this->_db->fetchCol('SELECT imgID from announcement_images WHERE annID = ?', $id);
 				if(count($images) > 0)
-				{
+				{	
 					$this->_db->delete('images', 'ID IN(' . implode(', ', $images) . ')');
 				}
 				
