@@ -160,6 +160,7 @@ class AnnouncementController extends Zend_Controller_Action {
     		}
     		$mapper = new Application_Model_AnnouncementsMapper();
     		$mapper -> delete($_GET['id']);
+  			throw new Exception('Announcement deleted.');
     	} catch(Exception $e) {
     		$this -> view -> message = $e -> getMessage();
     	}

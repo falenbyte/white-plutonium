@@ -151,7 +151,9 @@ class Application_Model_AnnouncementsMapper
 				
 				$userModel = Zend_Registry::get('userModel');
 				$owner = $this->_db->fetchOne('SELECT userID FROM announcements WHERE ID = ?', $id);
-				
+				if($owner === false) {
+					throw new Exception('Announcement with this ID does not exists.');
+				}
 				if(!$userModel -> isAdmin() && (!$userModel -> isLoggedIn() || $owner != $userModel->getUserID())) {
 					throw new Exception('You don\'t have permission to delete that announcement.');
 				}
