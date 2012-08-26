@@ -1,26 +1,39 @@
 <div id="view-content">
 	<style type="text/css">
-		.treeBox {
+		.category_box {
 			padding: 10px;
 			margin: 5px;
 			float: left;
 			width: 180px;
-			border: 1px solid black;
-			border-radius: 5px;
 		}
 		
-		.boxList {
-			margin-left: 20px;
+		.category_box img {
+			width: 24px;
+			height: 24px;
+			margin-right: 5px;
+		}
+		
+		.category_box h3 {
+			margin-bottom: 5px;
+		}
+		
+		.category_box ul {
+			list-style: none;
+			margin-left: 10px;
 		}
 	</style>
 	<?php foreach($this -> mainCategories as $mainCategory): ?>
-		<div class="treeBox">
-		<a href="<?php echo $this->url(array('controller'=>'search')) . '?cat=' . $mainCategory -> ID; ?>"><?php echo $mainCategory -> name; ?></a>
-		<ul class="boxList">
-		<?php if(is_array($this -> subCategories[$mainCategory -> ID])):
+		<div class="category_box">
+			<h3>
+				<a href="<?php echo $this -> url(array('controller' => 'search', 'action' => 'index')) . '?cat=' . $mainCategory -> ID; ?>"><img src="/imgs/default.png"></a>
+				<a href="<?php echo $this -> url(array('controller' => 'search', 'action' => 'index')) . '?cat=' . $mainCategory -> ID; ?>"><?php echo $mainCategory -> name; ?></a>
+			</h3>
+			<ul>
+			<?php if(is_array($this -> subCategories[$mainCategory -> ID])):
 			foreach($this -> subCategories[$mainCategory -> ID] as $category): ?>
-			<li><a href="<?php echo $this->url(array('controller'=>'search')) . '?cat=' . $category -> ID; ?>"><?php echo $category -> name; ?></a></li>
-		<?php endforeach; endif; ?>
-		</ul></div>
+				<li><a href="<?php echo $this -> url(array('controller'=>'search', 'action' => 'index')) . '?cat=' . $category -> ID; ?>"><?php echo $category -> name; ?></a></li>
+			<?php endforeach; endif; ?>
+			</ul>
+		</div>
 	<?php endforeach; ?>
 </div>

@@ -1,4 +1,4 @@
-<!--
+<?php /*
 	Elementy layoutu (właściwości obiektu view):
 		- siteTitle - tytuł strony, dodawany po myślniku do "Ogłoszenia" (np. "Ogłoszenia - konto użytkownika")
 		- stylesheets - tablica nazw dodatkowych plików css (muszą być w folderze public/css), potrzebnych danemu widokowi (np. array('account.css', 'foo.css'))
@@ -6,49 +6,57 @@
 		- footerContent - treść do wyświetlenia w stopce (nie mam jeszcze pomysłu co powinno się tam znaleźć :>)
 		
 		Prócz tego oczywiście wyświetlana jest zawartość widoku.
--->
+*/ ?>
 
 <!DOCTYPE html>
 <html>
-
-<head>
-	<meta charset="utf-8" />
-	<title>Ogłoszenia - <?php echo $this->siteTitle; ?></title>
-	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('css/main.css'); ?>" />
-	<script type="text/javascript" src="<?php echo $this->baseUrl('js/main.js'); ?>"></script>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Ogłoszenia <?php if(isset($this -> siteTitle)) echo '- ' . $this -> siteTitle; ?></title>
+		<link rel="stylesheet" type="text/css" href="<?php echo $this -> baseUrl('css/main.css'); ?>" />
+		<script type="text/javascript" src="<?php echo $this -> baseUrl('js/main.js'); ?>"></script>
 	
-	<?php if(is_array($this -> stylesheets)): foreach($this->stylesheets as $stylesheet): ?>
-	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('css/' . $stylesheet); ?>" />
-	<?php endforeach; endif; ?>
+		<?php if(is_array($this -> stylesheets)): foreach($this -> stylesheets as $stylesheet): ?>
+		<link rel="stylesheet" type="text/css" href="<?php echo $this -> baseUrl('css/' . $stylesheet); ?>" />
+		<?php endforeach; endif; ?>
 	
-	<?php if(is_array($this -> scripts)): foreach($this->scripts as $script): ?>
-	<script type="text/javascript" src="<?php echo $this->baseUrl('js/' . $script); ?>"></script>
-	<?php endforeach; endif; ?>
-</head>
-
-<body>
-	<div id="site_title"><a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'index')); ?>">Ogłoszenia</a></div>
-	
-	<div id="top_menu">
-		<ul>
-			<li class="f_left"><a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'index')); ?>">Strona główna</a></li>
-			<li class="f_left"><a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'create')); ?>">Dodaj ogłoszenie</a></li>
-			<?php echo $this->userMenu(); ?>
-		</ul>
-	</div>
-
-	<div id="main">
-		<div id="sidebar">
-			<h1>Szukaj</h1>
-			<div id="sidebar_content"><?php echo $this->searchForm(); ?></div>
+		<?php if(is_array($this -> scripts)): foreach($this -> scripts as $script): ?>
+		<script type="text/javascript" src="<?php echo $this -> baseUrl('js/' . $script); ?>"></script>
+		<?php endforeach; endif; ?>
+	</head>
+	<body>
+		<div id="main">
+			<div id="header">
+				<a href="<?php echo $this -> url(array('controller' => 'index', 'action' => 'index')); ?>">Ogłoszenia</a>
+			</div>
+			<div id="bar">
+				<div id="bar_top">
+					<ul>
+						<li class="tab"><a href="<?php echo $this -> url(array('controller' => 'index', 'action' => 'index')); ?>">Strona główna</a></li>
+						<li class="tab"><a href="<?php echo $this -> url(array('controller' => 'announcement', 'action' => 'create')); ?>">Dodaj ogłoszenie</a></li>
+						<?php if(Zend_Registry::get('userModel') -> isLoggedIn()): ?>
+						<li class="tab"><a href="<?php echo $this -> url(array('controller' => 'watchlist', 'action' => 'index')); ?>">Obserwowane</a></li>
+						<?php endif; ?>
+						<?php echo $this -> userMenu(); ?>
+					</ul>
+				</div>
+				<div id="bar_bottom"></div>
+			</div>
+			<div class="breadcrumbs">
+				
+			</div>
+			<div id="body">
+				<div id="sidebar">
+					<h2 id="sidebar_title">Szukaj:</h2>
+					<?php echo $this -> searchForm(); ?>
+				</div>
+				<div id="content">
+					<?php echo $this -> layout() -> content; ?>
+				</div>
+			</div>
+			<div id="footer">
+				<?php echo $this -> footerContent; ?>
+			</div>
 		</div>
-		
-		<div id="main_content"><?php echo $this->layout()->content; ?></div>
-		
-		<div id="footer">
-			<div id="footer_content"><?php echo $this->footerContent; ?></div>
-		</div>
-	</div>
-</body>
-
+	</body>
 </html>

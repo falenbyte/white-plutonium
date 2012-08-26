@@ -9,10 +9,7 @@
 
 <?php if(count($this->anns) == 0): ?>
 Żadne ogłoszenia nie pasują do podanych kryteriów.
-<?php endif; ?>
-
-<?php if(is_array($this->anns)):
-foreach($this->anns as $announcement): ?>
+<?php else: foreach($this->anns as $announcement): ?>
 <div class="announcement">
 	<div class="ann_img_wrapper"><div class="ann_img">
 		<img src="<?php echo $this->baseUrl('imgs/' . (count($announcement->images) ? reset($announcement->images) : 'default.png')); ?>" />

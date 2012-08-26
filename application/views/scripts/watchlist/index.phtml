@@ -1,10 +1,15 @@
+<?php $this->stylesheets = array('search.css'); ?>
 <div id="view-content">
 	<?php if(isset($this -> message)) echo $this -> message; ?>
 	<?php if(is_array($this -> announcements)): 
-	foreach($this -> announcements as $ann): ?>
-		<div class="announcement">
-		<h1><a href="<?php echo $this -> url(array('controller' => 'announcement', 'action' => 'index')) . '?id=' . $ann -> ID; ?>"><?php echo $ann -> title; ?></a></h1>
-		<a href="<?php echo $this->url(array('controller' => 'watchlist', 'action' => 'remove')) . '?id=' . $ann -> ID; ?>">Usuń z listy</a>
-		</div>
+	foreach($this -> announcements as $announcement): ?>
+	<div class="announcement">
+	<div class="ann_img_wrapper"><div class="ann_img">
+		<img src="<?php echo $this->baseUrl('imgs/' . (count($announcement->images) ? reset($announcement->images) : 'default.png')); ?>" />
+	</div></div>
+	<h1><a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'index')) . '?id=' . $announcement->ID; ?>"><?php echo $announcement->title; ?></a></h1>
+	<a href="<?php echo $this->url(array('controller' => 'watchlist', 'action' => 'remove')) . '?id=' . $announcement -> ID; ?>">Usuń z listy</a>
+	</div>
 	<?php endforeach; endif; ?>
+</div>
 </div>
