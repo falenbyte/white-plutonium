@@ -101,23 +101,20 @@ class Application_Form_Search
 				switch($type)
 				{
 					case 'text':
-						$elStr = sprintf('%s: <input name="%s" type="text" value="%s" />',
+						$elStr = sprintf('<div class="search"><div class="search_label">%s:</div><div class="search_input"><input name="%s" type="text" value="%s" /></div></div>',
 							$label,
 							$name,
 							$value);
 						break;
 					
 					case 'category':
-						$elStr = sprintf('%s: <select name="%s">', $label, $name);
+						$elStr = sprintf('<div class="search"><div class="search_label">%s:</div><div class="search_input"><select name="%s">', $label, $name);
 						$elStr .= '<option value="all"' . ($value == 'all' ? ' selected' : '') . '>Wszystkie</option>';
 						foreach($options as $ckey => $cat)
 						{
 							if(is_null($cat->parentID))
 							{
-								$elStr .= sprintf('<option value="%s"%s>%s</option>',
-									$ckey,
-									($ckey == $value ? ' selected' : ''),
-									$cat->name);
+								$elStr .= sprintf('<optgroup label="%s">', $cat -> name);
 								
 								foreach($options as $chckey => $chcat)
 								{
@@ -126,12 +123,14 @@ class Application_Form_Search
 										$elStr .= sprintf('<option value="%s"%s>%s</option>',
 											$chckey,
 											($chckey == $value ? ' selected' : ''),
-											'&gt&gt' . $chcat->name);
+											$chcat->name);
 									}
 								}
+								
+								$elStr .= '</optgroup>';
 							}
 						}
-						$elStr .= '</select>';
+						$elStr .= '</select></div></div>';
 						break;
 					
 					case 'hidden':
@@ -141,7 +140,7 @@ class Application_Form_Search
 						break;
 					
 					case 'minmax':
-						$elStr = sprintf('%s: od: <input name="%s[min]" size="3" type="text" value="%s"> do: <input name="%s[max]" size="3" type="text" value="%s">',
+						$elStr = sprintf('<div class="search"><div class="search_label">%s:</div><div class="search_input"><input name="%s[min]" size="3" type="text" value="%s"> do: <input name="%s[max]" size="3" type="text" value="%s"></div></div>',
 							$label,
 							$name,
 							(isset($value['min']) ? $value['min'] : ''),
@@ -150,7 +149,7 @@ class Application_Form_Search
 						break;
 					
 					case 'multiselect':
-						$elStr = sprintf('%s: <select name="%s[]" multiple>', $label, $name);
+						$elStr = sprintf('<div class="search"><div class="search_label">%s:</div><div class="search_input"><select name="%s[]" multiple>', $label, $name);
 						foreach($options as $oid => $oname)
 						{
 							$elStr .= sprintf('<option value="%s"%s>%s</option>',
@@ -158,11 +157,11 @@ class Application_Form_Search
 								(in_array($oid, $value) ? ' selected' : ''),
 								$oname);
 						}
-						$elStr .= '</select>';
+						$elStr .= '</select></div></div>';
 						break;
 					
 					case 'checkbox':
-						$elStr = sprintf('<input name="%s" type="checkbox" value="1" id="%s"%s /><label for="%s">%s</label>',
+						$elStr = sprintf('<div class="search"><input name="%s" type="checkbox" value="1" id="%s"%s /><label for="%s">&nbsp;%s</label></div>',
 							$name,
 							'check' . $name,
 							($value == '1' ? ' checked' : ''),
@@ -171,7 +170,7 @@ class Application_Form_Search
 						break;
 					
 					case 'select':
-						$elStr = sprintf('%s: <select name="%s">', $label, $name);
+						$elStr = sprintf('<div class="search"><div class="search_label">%s:</div><div class="search_input"><select name="%s"></div></div>', $label, $name);
 						foreach($options as $okey => $oname)
 						{
 							$elStr .= sprintf('<option value="%s"%s>%s</option>',

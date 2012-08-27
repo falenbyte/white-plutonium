@@ -76,7 +76,7 @@ class DatabaseController extends Zend_Controller_Action
     	$list[] = array('attributes', array('null', '"Forma zatrudnienia"', '2', '""', 'null', 'null')); //28 <-
     	
     	//attributes_options - nieruchomosci - rodzaj
-    	$list[] = array('attributes_options', array('null', '2', '"Biro"'));
+    	$list[] = array('attributes_options', array('null', '2', '"Biuro"'));
     	$list[] = array('attributes_options', array('null', '2', '"Dom"'));
     	$list[] = array('attributes_options', array('null', '2', '"Działka"'));
     	$list[] = array('attributes_options', array('null', '2', '"Lokal"'));

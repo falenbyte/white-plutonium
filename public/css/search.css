@@ -38,3 +38,15 @@ div.announcement img {
 	max-height: 100px;
 	border-radius: 10px;
 }
+
+div.search {
+	clear: both;
+}
+
+div.search_label {
+	float: left;
+}
+
+div.search_input {
+	float: right;
+}
