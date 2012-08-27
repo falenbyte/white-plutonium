@@ -17,7 +17,7 @@
 			$passwordConfirm -> setLabel('Potwierdź:');
 			$form -> addElement($passwordConfirm);
 			$captcha = new Zend_Captcha_Image();
-			$captcha -> setFont('arial.ttf');
+			$captcha -> setFont('../public/fonts/PT.ttf');
 			$captchaID = $captcha -> generate();
 			$captchaImage = new Zend_Form_Element_Image('captcha');
 			$captchaImage -> setImage($this -> baseUrl($captcha -> getImgUrl() . $captchaID . '.png'));
