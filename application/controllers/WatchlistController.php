@@ -3,7 +3,7 @@
 class WatchlistController extends Zend_Controller_Action {
 
 	private $_watchlistModel;
-	
+
 	public function init() {
 		try {
 			$this -> _watchlistModel = new Application_Model_Watchlist();
@@ -22,7 +22,7 @@ class WatchlistController extends Zend_Controller_Action {
 			$this -> view -> announcements = $ann;
 		}
 	}
-	
+
 	public function addAction() {
 		try {
 			$this -> _watchlistModel -> add($_GET['id']);
@@ -31,7 +31,7 @@ class WatchlistController extends Zend_Controller_Action {
 			$this -> view -> message = $e -> getMessage();
 		}
 	}
-	
+
 	public function removeAction() {
 		$this -> _watchlistModel -> remove($_GET['id']);
 		$this -> _redirect('watchlist');

@@ -58,7 +58,7 @@ class Application_Model_User {
 	private function makePasswordHash($password, $salt) {
 		return md5($password . $salt);
 	}
-	
+
 	private function generateSalt() {
 		mt_srand(microtime(true) * 10000);
 		return md5(mt_rand(0, mt_getrandmax()) * 51539607551); //Bardzo losowo wybrana przezemnie liczba pierwsza
@@ -102,9 +102,9 @@ class Application_Model_User {
 			throw new Exception('Could not send email. Try again later.');
 		}
 		$this -> db -> query('INSERT INTO user_activation_keys VALUES(null, ?, ?, ?)', $queryData);
-		
+
 	}
-	
+
 	public function activateAccount($key) {
 		if(!preg_match('/^[a-zA-Z0-9]{32}$/', $key)) {
 			throw new Exception('Supplied key is invalid.');

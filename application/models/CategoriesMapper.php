@@ -12,12 +12,12 @@ class Application_Model_CategoriesMapper {
 		$result = $this -> _db -> fetchAll('SELECT * FROM categories', null, Zend_Db::FETCH_ASSOC);
 		return $this -> _convert($result);
 	}
-	
+
 	public function getAllSubCategories() {
 		$result = $this -> _db -> fetchAll('SELECT * FROM categories WHERE parentID IS NOT NULL', null, Zend_Db::FETCH_ASSOC);
 		return $this -> _convert($result);
 	}
-	
+
 	public function getMain() {
 		$result = $this -> _db -> fetchAll('SELECT * FROM categories WHERE parentID IS NULL', null, Zend_Db::FETCH_ASSOC);
 		return $this -> _convert($result);
@@ -38,7 +38,7 @@ class Application_Model_CategoriesMapper {
 		$result = $this -> _db -> fetchAll('SELECT * FROM categories WHERE parentID = ?', $catID, Zend_Db::FETCH_ASSOC);
 		return $this -> _convert($result);
 	}
-	
+
 	private function _convert($result) {
 		foreach($result as $row) {
 			$categories[$row['ID']] = new Application_Model_Category($row);

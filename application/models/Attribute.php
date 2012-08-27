@@ -1,19 +1,19 @@
 <?php
 
 class Application_Model_Attribute extends Application_Model_AbstractDataStorage {
-	
+
 	protected function initVariableList() {
 		$this -> variablesList = array('ID', 'name', 'type', 'options', 'unit', 'min', 'max');
 	}
-	
+
 	public function addOption($id, $name) {
 		if(preg_match('/^[0-9]+$/', $id)) {
-				$this -> data['options'][$id] = $name;
+			$this -> data['options'][$id] = $name;
 		} else {
 			throw new Exception('Trying to add option with wrong ID.');
 		}
 	}
-	
+
 	public function validateValue($value) {
 		switch($this -> data['type']) {
 			case '0':
@@ -28,7 +28,7 @@ class Application_Model_Attribute extends Application_Model_AbstractDataStorage 
 				return (is_numeric($value) && ($this -> data['min'] === null || floatval($value) >= floatval($this -> data['min'])) && ($this -> data['max'] === null || floatval($value) <= floatval($this -> data['max'])));
 		}
 	}
-	
+
 	public function getTypeString() {
 		switch($this -> data['type']) {
 			case '0':
@@ -46,30 +46,30 @@ class Application_Model_Attribute extends Application_Model_AbstractDataStorage 
 
 	public function getString($value) {
 		$result = $this->name . ': ';
-		
+
 		switch($this->data['type'])
 		{
 			case '0':
 				$result .= $value . ' ' . $this->unit;
 				break;
-			
+					
 			case '1':
 				$result .= $value;
 				break;
-			
+					
 			case '2':
 				$result .= $this->options[$value];
 				break;
-			
+					
 			case '3':
 				$result .= ($value == '1' ? 'tak' : 'nie');
 				break;
-			
+					
 			case '4':
 				$result .= $value . ' ' . $this->unit;
 				break;
 		}
-		
+
 		return $result;
 	}
 

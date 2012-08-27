@@ -3,11 +3,11 @@
 class AccountController  extends Zend_Controller_Action{
 
 	private $user;
-	
+
 	public function init() {
 		$this -> user = Zend_Registry::get('userModel');
-    }
-	
+	}
+
 	public function indexAction() {
 		if(!$this -> user -> isLoggedIn()) {
 			$this -> _redirect('account/login');
@@ -56,7 +56,7 @@ class AccountController  extends Zend_Controller_Action{
 			}
 		}
 	}
-	
+
 	public function activateAction() {
 		try {
 			if(!isset($_GET['key'])) {
