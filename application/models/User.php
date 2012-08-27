@@ -91,13 +91,18 @@ class Application_Model_User {
 		$userID = $this -> db -> lastInsertId();
 		$activationKey = $this -> generateSalt();
 		$queryData = array($userID, $activationKey, time()+(60*60*24));
-		$this -> db -> query('INSERT INTO user_activation_keys VALUES(null, ?, ?, ?)', $queryData);
 		//send email
-		$mail = new Zend_Mail();
-		$mail->setBodyText('To activate account go to /account/activate?key=' . $activationKey);
-		$mail->addTo($email, 'Recipient');
-		$mail->setSubject('Activation key');
-		$mail->send();
+		try {
+			$mail = new Zend_Mail();
+			$mail->setBodyText('To activate account go to /account/activate?key=' . $activationKey);
+			$mail->addTo($email, 'Recipient');
+			$mail->setSubject('Activation key');
+			$mail->send();
+		} catch(Exception $e) {
+			throw new Exception('Could not send email. Try again later.');
+		}
+		$this -> db -> query('INSERT INTO user_activation_keys VALUES(null, ?, ?, ?)', $queryData);
+		
 	}
 	
 	public function activateAccount($key) {
@@ -156,12 +161,16 @@ class Application_Model_User {
 		}
 		$key = $this -> generateSalt();
 		$queryData = array($userData['ID'], $key, time() + (60 * 60 * 24));
+		try {
+			$mail = new Zend_Mail();
+			$mail->setBodyText('To change password go to /account/change_lost_password?key=' . $key);
+			$mail->addTo($userData['email'], 'Recipient');
+			$mail->setSubject('Password reset key');
+			$mail->send();
+		} catch(Exception $e) {
+			throw new Exception('Could not send email. Try again later.');
+		}
 		$this -> db -> query('INSERT INTO lost_password_keys VALUES(null, ?, ?, ?)', $queryData);
-		$mail = new Zend_Mail();
-		$mail->setBodyText('To change password go to /account/change_lost_password?key=' . $key);
-		$mail->addTo($userData['email'], 'Recipient');
-		$mail->setSubject('Password reset key');
-		$mail->send();
 	}
 
 	public function isAdmin() {
