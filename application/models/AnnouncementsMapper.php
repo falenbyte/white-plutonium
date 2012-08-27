@@ -79,6 +79,9 @@ class Application_Model_AnnouncementsMapper
 		}
 		foreach($result as $row) {
 			$return[$row['ID']] = new Application_Model_Announcement($row);
+			$return[$row['ID']] -> images = $this->_db->fetchPairs('SELECT images.ID, images.name FROM images ' .
+					'JOIN announcement_images ON (images.ID = announcement_images.imgID) WHERE announcement_images.annID = ?',
+					$row['ID']);
 		}
 		return $return;
 	}
