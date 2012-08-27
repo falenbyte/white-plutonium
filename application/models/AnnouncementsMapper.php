@@ -42,25 +42,25 @@ class Application_Model_AnnouncementsMapper
 		foreach($result as $row)
 		{
 			$ann = new Application_Model_Announcement($row);
-				
+
 			$attValues = $this->_db->fetchAll('SELECT attID, intValue, textValue, floatValue FROM attributes_values WHERE annID = ?',
 					$ann->ID, Zend_Db::FETCH_ASSOC);
-				
+
 			foreach($attValues as $att)
 				$attributes[$att['attID']] = $att[$attDefs[$att['attID']]->getTypeString() . 'Value'];
-				
+
 			$ann->attributes = $attributes;
-				
+
 			$ann->images = $this->_db->fetchPairs('SELECT images.ID, images.name FROM images ' .
 					'JOIN announcement_images ON (images.ID = announcement_images.imgID) WHERE announcement_images.annID = ?',
 					$ann->ID);
-				
+
 			$anns[] = $ann;
 		}
 
 		return $anns;
 	}
-		
+
 	public function getListByIDs($list) {
 		if(!is_array($list)) {
 			throw new Exception('Wrong parameter.');
@@ -82,7 +82,7 @@ class Application_Model_AnnouncementsMapper
 		}
 		return $return;
 	}
-		
+
 	public function save(Application_Model_Announcement $ann)
 	{
 		$user = Zend_Registry::get('userModel');
@@ -109,34 +109,34 @@ class Application_Model_AnnouncementsMapper
 							'date' => time(),
 							'expires' => time()+(60*60*24*7)
 					));
-				
+
 			$newID = $this->_db->lastInsertId('announcements', 'ID');
-				
+
 			foreach($ann->attributes as $key => $att)
 				$this->_db->insert('attributes_values', array('annID' => $newID, 'attID'=>$key, ($attMapper->getByID($key)->getTypeString() . 'Value') => $att));
-				
+
 			foreach($ann->images as $key => $img)
 				$this->_db->insert('announcement_images', array('annID' => $newID, 'imgID' => $key));
-				
+
 			return $newID;
 		}
 		else
 		{
 			$ownerID = $this->_db->fetchOne('SELECT userID FROM announcements WHERE ID = ?', $ann->ID);
-				
+
 			if($user->getUserID() != $ownerID)
 				throw new Exception('You cannot edit this announcement.');
-				
+
 			$this->_db->update('announcements',
 					array(
 							'title' => $ann -> title,
 							'content' => $ann -> content),
 					'ID = ' . $ann->ID);
-				
+
 			$this->_db->delete('attributes_values', 'annID = ' . $ann->ID);
 			foreach($ann->attributes as $key => $att)
 				$this->_db->insert('attributes_values', array('annID' => $ann->ID, 'attID'=>$key, ($attMapper->getByID($key)->getTypeString() . 'Value') => $att));
-				
+
 			$this->_db->delete('announcement_images', 'annID = ' . $ann->ID);
 			foreach($ann->images as $key => $img)
 				$this->_db->insert('announcement_images', array('annID' => $ann->ID, 'imgID' => $key));

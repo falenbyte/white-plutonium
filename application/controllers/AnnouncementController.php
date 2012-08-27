@@ -15,7 +15,7 @@ class AnnouncementController extends Zend_Controller_Action {
 		$this -> onlyMessage = false;
 		$announcementMapper = new Application_Model_AnnouncementsMapper();
 		$this -> view -> announcement = $announcementMapper -> getByID($_GET['id']);
-		 
+
 		$attMapper = new Application_Model_AttributesMapper();
 		$this->view->attributes = $attMapper->getByCategoryID($this -> view -> announcement->catID);
 	}
@@ -26,7 +26,7 @@ class AnnouncementController extends Zend_Controller_Action {
 		$attMapper = new Application_Model_AttributesMapper();
 		$user = Zend_Registry::get('userModel');
 		$subCats = $catMapper->getAllSubCategories();
-			
+
 		if(!$user->isLoggedIn())
 			$this->_redirect('account');
 		else if(!isset($_POST['catID'])
@@ -55,7 +55,7 @@ class AnnouncementController extends Zend_Controller_Action {
 								$messages[] = 'Musisz podać tytuł ogłoszenia.';
 							}
 							break;
-								
+
 						case 'content':
 							if($value == '')
 							{
@@ -63,7 +63,7 @@ class AnnouncementController extends Zend_Controller_Action {
 								$messages[] = 'Musisz podać treść ogłoszenia.';
 							}
 							break;
-								
+
 						default:
 							if(preg_match('/^[0-9]+$/', $key))
 							{
@@ -99,7 +99,7 @@ class AnnouncementController extends Zend_Controller_Action {
 					if(isset($_POST['images_to_delete']))
 					{
 						$imagesModel->deleteImages($_POST['images_to_delete'], '../public/imgs/');
-							
+
 						foreach($images as $id => $name)
 						{
 							if(in_array($id, $_POST['images_to_delete']))
@@ -110,7 +110,7 @@ class AnnouncementController extends Zend_Controller_Action {
 					{
 						$uploaded = $imagesModel->saveImages($_FILES['uploaded']['tmp_name'], $_FILES['uploaded']['size'],
 								'../public/imgs/');
-							
+
 						$images = $images + $uploaded;
 					}
 
@@ -128,15 +128,15 @@ class AnnouncementController extends Zend_Controller_Action {
 						$annObj->title = $_POST['title'];
 						$annObj->content = $_POST['content'];
 						$annObj->images = (isset($_POST['images']) ? $_POST['images'] : array());
-							
+
 						foreach($_POST as $key => $value)
 						{
 							if(preg_match('/^[0-9]+$/', $key))
 								$atts[$key] = $value;
 						}
-							
+
 						$annObj->attributes = $atts;
-							
+
 						$annMapper = new Application_Model_AnnouncementsMapper();
 						$this->view->createdID = $annMapper->save($annObj);
 					}
@@ -156,14 +156,14 @@ class AnnouncementController extends Zend_Controller_Action {
 		$attMapper = new Application_Model_AttributesMapper();
 		$annMapper = new Application_Model_AnnouncementsMapper();
 		$user = Zend_Registry::get('userModel');
-			
+
 		if(isset($_GET['id']) && preg_match('/^[0-9]+$/', $_GET['id']))
 			$ann = $annMapper->getByID($_GET['id']);
 		else if(isset($_POST['id']) && preg_match('/^[0-9]+$/', $_POST['id']))
 			$ann = $annMapper->getByID($_POST['id']);
 		else
 			$this->_redirect('index');
-			
+
 		if(!$user->isLoggedIn())
 			$this->_redirect('account');
 		else if(isset($ann) && $user->getUserID() == $ann->userID)
@@ -193,7 +193,7 @@ class AnnouncementController extends Zend_Controller_Action {
 					$attributes[$aid] = $_POST[$aid];
 				else if(isset($ann->attributes[$aid]) && !isset($_POST['done']))
 					$attributes[$aid] = $ann->attributes[$aid];
-					
+
 				if(isset($attributes[$aid]) && $attributes[$aid] != '' && !$attDefs[$aid]->validateValue($attributes[$aid]))
 				{
 					$valid = false;
@@ -226,7 +226,7 @@ class AnnouncementController extends Zend_Controller_Action {
 					if(isset($_POST['images_to_delete']))
 					{
 						$imagesModel->deleteImages($_POST['images_to_delete'], '../public/imgs/');
-							
+
 						foreach($images as $id => $name)
 						{
 							if(in_array($id, $_POST['images_to_delete']))
@@ -238,8 +238,8 @@ class AnnouncementController extends Zend_Controller_Action {
 					{
 						$uploaded = $imagesModel->saveImages($_FILES['uploaded']['tmp_name'], $_FILES['uploaded']['size'],
 								'../public/imgs/');
-							
-						$images = array_merge($images, $uploaded);
+
+						$images = $images + $uploaded;
 					}
 
 					$this->view->images = $images;
@@ -254,13 +254,13 @@ class AnnouncementController extends Zend_Controller_Action {
 						$ann->title = $_POST['title'];
 						$ann->content = $_POST['content'];
 						$ann->images = (isset($_POST['images']) ? $_POST['images'] : array());
-							
+
 						foreach($_POST as $key => $value)
 						{
 							if(preg_match('/^[0-9]+$/', $key))
 								$atts[$key] = $value;
 						}
-							
+
 						$ann->attributes = $atts;
 						$annMapper->save($ann);
 					}

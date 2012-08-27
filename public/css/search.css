@@ -1,7 +1,7 @@
 div.announcement {
 	padding: 10px;
 	margin: 10px 0px;
-	height: 100px;
+	height: 120px;
 	border: 2px solid #BBBBBB;
 	border-radius: 5px;
 	background-color: #DFDFDF;
@@ -55,4 +55,9 @@ div.search_input {
 
 div.search_input select {
 	width: 190px;
+}
+
+div.ann_links {
+	padding-top: 5px;
+	clear: both;
 }
