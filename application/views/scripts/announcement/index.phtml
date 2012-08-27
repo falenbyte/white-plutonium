@@ -4,24 +4,24 @@
 		<h1 class="ann_title"><?php echo $this -> announcement -> title; ?></h1>
 		<p class="date"><?php echo date('d-m-Y H:i:s', $this -> announcement -> date); ?></p>
 		<p class="content"><?php echo $this -> announcement -> content; ?></p>
-		
+
 		<?php if(is_array($this->announcement->attributes)):
 		foreach($this->announcement->attributes as $akey => $aval): ?>
 		<?php echo $this->attributes[$akey]->getString($aval); ?><br />
 		<?php endforeach; endif; ?>
-		
+
 		<div class="images">
 		<?php if(is_array($this -> announcement -> images)):
 		foreach($this -> announcement -> images as $image): ?>
-			<a href="<?php echo $this->baseUrl('imgs/' . $image); ?>">
-			<img src="<?php echo $this->baseUrl('imgs/' . $image); ?>" style="max-width: 250px; max-height: 250px;" />
+			<a href="<?php echo $this->baseUrl('imgs/' . $image); ?>" target="blank">
+			<img src="<?php echo $this->baseUrl('imgs/' . $image); ?>" class="ann_image" />
 			</a>
 		<?php endforeach; endif; ?>
 		</div>
-		
+
 		<?php if($this->announcement->userID == Zend_Registry::get('userModel')->getUserID()): ?>
 		<a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'edit')) . '?id=' . $this->announcement->ID; ?>">Edytuj</a> |
 		<a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'delete')) . '?id=' . $this->announcement->ID; ?>">Usuń</a>
 		<?php endif; ?>
-		
+
 <?php endif; ?>

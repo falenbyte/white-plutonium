@@ -25,11 +25,11 @@ class Application_Model_Images
 
 		foreach($names as $key => $name)
 		{
-				
+
 			if($name != '' && $sizes[$key] <= 500000 && getimagesize($name) !== false)
 			{
 
-				$newName = substr(time() . md5(basename($name)), 0, 26) . '.jpg';
+				$newName = substr(time() . '_' . md5(basename($name)), 0, 26) . '.jpg';
 				if(move_uploaded_file($name, $dir . $newName))
 				{
 					$this->_db->insert('images', array('name'=>$newName));
