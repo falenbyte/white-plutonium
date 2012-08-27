@@ -5,11 +5,13 @@
 	$this->stylesheets = array('search.css');
 ?>
 
-<?php echo $this->pageSwitcher(); ?>
+
 
 <?php if(count($this->anns) == 0): ?>
 Żadne ogłoszenia nie pasują do podanych kryteriów.
-<?php else: foreach($this->anns as $announcement): ?>
+<?php else: ?>
+<h2>Wyniki wyszukiwania:</h2>
+<?php foreach($this->anns as $announcement): ?>
 <div class="announcement">
 	<div class="ann_img_wrapper"><div class="ann_img">
 		<img src="<?php echo $this->baseUrl('imgs/' . (count($announcement->images) ? reset($announcement->images) : 'default.png')); ?>" />
@@ -24,3 +26,5 @@
 	<?php endif; ?>
 </div>
 <?php endforeach; endif; ?>
+
+<?php echo $this->pageSwitcher(); ?>

@@ -3,7 +3,7 @@
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 
 	protected function _initConfiguration() {
-		error_reporting(E_ALL ^ E_NOTICE);
+		error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 		date_default_timezone_set('Europe/Paris');
 	}
 	
@@ -19,7 +19,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		//Globalny dostęp do bazy danych
 		$dbConfig = new Zend_Config_Ini('../application/local_db_config.ini', 'database_config');
 		$db = Zend_Db::factory($dbConfig -> database);
-		$db -> query('SET NAMES utf8');
 		$db -> query('SET CHARACTER SET utf8');
 		Zend_Registry::set('db', $db);
 	}

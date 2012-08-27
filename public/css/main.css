@@ -18,6 +18,7 @@ body {
 	font-family: PTSans, Verdana, Tahoma;
 	font-size: 14px;
 	color: #A37E6B;
+	overflow-y: scroll;
 }
 
 a {
@@ -96,13 +97,13 @@ li.f_right {
 
 #body {
 	width: 960px;
-	margin-top: 10px;
+	margin-top: 5px;
 }
 
 #sidebar {
 	float: left;
 	width: 200px;
-	margin-right: 10px;
+	margin-right: 5px;
 	font-size: 12px;
 }
 
@@ -116,13 +117,26 @@ li.f_right {
 	background-color: #AAAAAA;
 }
 
+.advert_place {
+	width: 190px;
+	height: 100px;
+	float: left;
+	border: 1px solid #CCCCCC;
+	text-align: center;
+	padding-top: 100px;
+	margin-bottom: 5px;
+}
+
 #content {
 	float: left;
-	width: 750px;
+	width: 743px;
+	padding: 5px;
+	border: 1px solid #CCCCCC;
 }
 
 div.page_switcher {
 	padding: 10px 0px;
+	margin-left: 680px;
 	border-radius: 10px;
 	border: 1px solid #DDDDDD;
 	margin-bottom: 10px;
@@ -138,4 +152,9 @@ div.page_switcher a {
 
 div.page_switcher a:hover {
 	background-color: #CCCCCC;
+}
+
+#search_bar {
+	margin: 5px;
+	margin-bottom: 10px;
 }

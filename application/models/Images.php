@@ -25,8 +25,10 @@ class Application_Model_Images
 				
 				foreach($names as $key => $name)
 				{
-					if($name != '' && $sizes['$key'] <= 500000 && getimagesize($name) !== false)
+					
+					if($name != '' && $sizes[$key] <= 500000 && getimagesize($name) !== false)
 					{
+						
 						$newName = time() . md5(basename($name)) . '.jpg';
 						if(move_uploaded_file($name, $dir . $newName))
 						{

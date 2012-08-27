@@ -42,13 +42,21 @@
 				</div>
 				<div id="bar_bottom"></div>
 			</div>
-			<div class="breadcrumbs">
-				
+			<div id="search_bar">
+				<form action="<?php echo $this -> url(array('controller' => 'search', 'action' => 'index')); ?>" method="GET">
+					<label for="keywords">Wyszukaj ogłoszenie: </label><input name="keywords" type="text" value="">
+					<input name="send" type="submit" value="Szukaj">
+				</form>
 			</div>
 			<div id="body">
 				<div id="sidebar">
+					<?php if($this -> searchPage): ?>
 					<h2 id="sidebar_title">Szukaj:</h2>
 					<?php echo $this -> searchForm(); ?>
+					<br>
+					<?php endif; ?>
+					<div class="advert_place">Miejsce na twoją reklamę!</div>
+					<div class="advert_place">Miejsce na twoją reklamę!</div>
 				</div>
 				<div id="content">
 					<?php echo $this -> layout() -> content; ?>

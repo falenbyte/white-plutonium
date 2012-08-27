@@ -106,7 +106,7 @@ class AnnouncementController extends Zend_Controller_Action {
 									unset($images[$id]);
 							}
 						}
-						
+						var_dump($_FILES);
 						if(is_array($_FILES['uploaded']))
 						{
 							$uploaded = $imagesModel->saveImages($_FILES['uploaded']['tmp_name'], $_FILES['uploaded']['size'],

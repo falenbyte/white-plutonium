@@ -5,6 +5,7 @@
 			margin: 5px;
 			float: left;
 			width: 180px;
+			border: 1px solid #D0D0D0;
 		}
 		
 		.category_box img {
@@ -25,7 +26,7 @@
 	<?php foreach($this -> mainCategories as $mainCategory): ?>
 		<div class="category_box">
 			<h3>
-				<a href="<?php echo $this -> url(array('controller' => 'search', 'action' => 'index')) . '?cat=' . $mainCategory -> ID; ?>"><img src="/imgs/default.png"></a>
+				<a href="<?php echo $this -> url(array('controller' => 'search', 'action' => 'index')) . '?cat=' . $mainCategory -> ID; ?>"><img src="<?php echo $this -> baseUrl(file_exists('images/ico/' . $mainCategory -> ID . '.gif') ? '/images/ico/' . $mainCategory -> ID . '.gif' : '/imgs/default.png'); ?>"></a>
 				<a href="<?php echo $this -> url(array('controller' => 'search', 'action' => 'index')) . '?cat=' . $mainCategory -> ID; ?>"><?php echo $mainCategory -> name; ?></a>
 			</h3>
 			<ul>

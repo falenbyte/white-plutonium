@@ -75,11 +75,11 @@ class Application_Form_Search
 				}
 				
 				$options = Zend_Registry::get('options');
-				$this->_addElement('Ogłoszeń na stronę', 'per_page', 'select', (isset($params['per_page']) ? $params['per_page'] : $options['defaultAnnsPerPage']), array('25'=>'25', '50'=>'50', '100'=>'100'))
-					->_addElement('Sortuj według', 'order_by', 'select', (isset($params['order_by']) ? $params['order_by'] : 'date'), array_merge(array('date'=>'Data', 'expires'=>'Koniec'), $orderOptions))
-					->_addElement('Jak', 'dir', 'select', (isset($params['dir']) ? $params['dir'] : 'desc'), array('asc'=>'Rosnąco', 'desc'=>'Malejąco'))
-					->_addElement('', 'send', 'submit', 'Szukaj')
-					->_addElement('', 'form_type', 'hidden', ($basic ? 'basic' : 'spec'));
+				//$this -> _addElement('Ogłoszeń na stronę', 'per_page', 'select', (isset($params['per_page']) ? $params['per_page'] : $options['defaultAnnsPerPage']), array('25'=>'25', '50'=>'50', '100'=>'100'));
+				//$this -> _addElement('Sortuj według', 'order_by', 'select', (isset($params['order_by']) ? $params['order_by'] : 'date'), array_merge(array('date'=>'Data', 'expires'=>'Koniec'), $orderOptions));
+				//$this -> _addElement('Jak', 'dir', 'select', (isset($params['dir']) ? $params['dir'] : 'desc'), array('asc'=>'Rosnąco', 'desc'=>'Malejąco'));
+				$this -> _addElement('', 'send', 'submit', 'Szukaj');
+				$this -> _addElement('', 'form_type', 'hidden', ($basic ? 'basic' : 'spec'));
 				
 				if(isset($params['user_id']))
 					$this->_addElement('', 'user_id', 'hidden', $params['user_id']);
@@ -141,7 +141,7 @@ class Application_Form_Search
 						break;
 					
 					case 'minmax':
-						$elStr = sprintf('%s: od: <input name="%s[min]" type="text" value="%s"> do: <input name="%s[max]" type="text" value="%s">',
+						$elStr = sprintf('%s: od: <input name="%s[min]" size="3" type="text" value="%s"> do: <input name="%s[max]" size="3" type="text" value="%s">',
 							$label,
 							$name,
 							(isset($value['min']) ? $value['min'] : ''),
