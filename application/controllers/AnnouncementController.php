@@ -98,7 +98,7 @@ class AnnouncementController extends Zend_Controller_Action {
 						
 						if(isset($_POST['images_to_delete']))
 						{
-							$imagesModel->deleteImages($_POST['images_to_delete'], $this->view->baseUrl('imgs/'));
+							$imagesModel->deleteImages($_POST['images_to_delete'], '../public/imgs/');
 							
 							foreach($images as $id => $name)
 							{
@@ -106,13 +106,12 @@ class AnnouncementController extends Zend_Controller_Action {
 									unset($images[$id]);
 							}
 						}
-						var_dump($_FILES);
 						if(is_array($_FILES['uploaded']))
 						{
 							$uploaded = $imagesModel->saveImages($_FILES['uploaded']['tmp_name'], $_FILES['uploaded']['size'],
-								$this->view->baseUrl('imgs/'));
+								'../public/imgs/');
 							
-							$images = array_merge($images, $uploaded);
+							$images = $images + $uploaded;
 						}
 						
 						$this->view->images = $images;
@@ -226,7 +225,7 @@ class AnnouncementController extends Zend_Controller_Action {
 						
 						if(isset($_POST['images_to_delete']))
 						{
-							$imagesModel->deleteImages($_POST['images_to_delete'], $this->view->baseUrl('imgs/'));
+							$imagesModel->deleteImages($_POST['images_to_delete'], '../public/imgs/');
 							
 							foreach($images as $id => $name)
 							{
@@ -238,7 +237,7 @@ class AnnouncementController extends Zend_Controller_Action {
 						if(is_array($_FILES['uploaded']))
 						{
 							$uploaded = $imagesModel->saveImages($_FILES['uploaded']['tmp_name'], $_FILES['uploaded']['size'],
-								$this->view->baseUrl('imgs/'));
+								'../public/imgs/');
 							
 							$images = array_merge($images, $uploaded);
 						}
