@@ -158,3 +158,13 @@ div.page_switcher a:hover {
 	margin: 5px;
 	margin-bottom: 10px;
 }
+
+#footer {
+	width: 960px;
+	height: 26px;
+	text-align: center;
+	padding-top: 10px;
+	border: 1px solid #CCCCCC;
+	clear: both;
+	margin: 15px 0px;
+}

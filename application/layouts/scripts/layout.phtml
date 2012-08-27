@@ -4,7 +4,7 @@
 		- stylesheets - tablica nazw dodatkowych plików css (muszą być w folderze public/css), potrzebnych danemu widokowi (np. array('account.css', 'foo.css'))
 		- scripts - jak wyżej, tyle że pliki z kodem JavaScript. Muszą być w folderze public/js
 		- footerContent - treść do wyświetlenia w stopce (nie mam jeszcze pomysłu co powinno się tam znaleźć :>)
-		
+
 		Prócz tego oczywiście wyświetlana jest zawartość widoku.
 */ ?>
 
@@ -15,11 +15,11 @@
 		<title>Ogłoszenia <?php if(isset($this -> siteTitle)) echo '- ' . $this -> siteTitle; ?></title>
 		<link rel="stylesheet" type="text/css" href="<?php echo $this -> baseUrl('css/main.css'); ?>" />
 		<script type="text/javascript" src="<?php echo $this -> baseUrl('js/main.js'); ?>"></script>
-	
+
 		<?php if(is_array($this -> stylesheets)): foreach($this -> stylesheets as $stylesheet): ?>
 		<link rel="stylesheet" type="text/css" href="<?php echo $this -> baseUrl('css/' . $stylesheet); ?>" />
 		<?php endforeach; endif; ?>
-	
+
 		<?php if(is_array($this -> scripts)): foreach($this -> scripts as $script): ?>
 		<script type="text/javascript" src="<?php echo $this -> baseUrl('js/' . $script); ?>"></script>
 		<?php endforeach; endif; ?>
@@ -55,7 +55,7 @@
 						if(is_null($cat->parentID))
 						{
 							$elStr .= sprintf('<optgroup label="%s">', $cat -> name);
-					
+
 							foreach($categories as $chckey => $chcat)
 							{
 								if($chcat->parentID == $ckey)
@@ -66,7 +66,7 @@
 											$chcat->name);
 								}
 							}
-					
+
 							$elStr .= '</optgroup>';
 						}
 					}
@@ -92,7 +92,7 @@
 				</div>
 			</div>
 			<div id="footer">
-				<?php echo $this -> footerContent; ?>
+				Copyright &copy; 2012
 			</div>
 		</div>
 	</body>

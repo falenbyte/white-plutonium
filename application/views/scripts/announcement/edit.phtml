@@ -8,15 +8,15 @@
 		case 1:
 			echo 'Edycja ogłoszenia';
 			break;
-		
+
 		case 2:
 			echo 'Edytuj zdjęcia';
 			break;
-		
+
 		case 3:
 			echo 'Edycja powiodła się.';
 			break;
-		
+
 		case 4:
 			echo 'Edycja ogłoszenia powiodła się.';
 			break;
@@ -29,12 +29,12 @@
 	<?php if($this->stage == 1): ?>
 
 		<label for="ann_title">Tytuł ogłoszenia: </label>
-		<input type="text" name="title" id="ann_title" value="<?php echo $this->annTitle; ?>" />
+		<br /><input type="text" name="title" size="60" id="ann_title" value="<?php echo $this->annTitle; ?>" />
 
 		<br /><label for="ann_content">Treść ogłoszenia:</label>
 		<br /><textarea name="content" rows="15" cols="60" id="ann_content"><?php echo $this->annContent; ?></textarea>
-
-		<?php
+		<div id="attributes">
+			<?php
 			foreach($this->attributes as $att)
 			{
 				switch($att->type)
@@ -42,36 +42,36 @@
 					case '0':
 					case '1':
 					case '4':
-						echo '<br /><label for="att' . $att->ID . '">' . $att->name . ': </label>' .
-							'<input type="text" id="att' . $att->ID . '" name="' . $att->ID . '" value="' .
-							(isset($this->annAttributes[$att->ID]) ? $this->annAttributes[$att->ID] : '') . '" />';
+						echo '<div class="att"><div class="att_label">' . $att->name . ':</div><div class="att_input">' .
+								'<input type="text" size="6" id="att' . $att->ID . '" name="' . $att->ID . '" value="' .
+								(isset($_POST[$att->ID]) ? $_POST[$att->ID] : '' ) . '" /></div></div>';
 						break;
-					
+
 					case '2':
-						echo '<br /><label for="att' . $att->ID . '">' . $att->name . ': </label>' .
-							'<select id="att' . $att->ID . '" name="' . $att->ID . '">';
+						echo '<div class="att"><div class="att_label">' . $att->name . ':</div><div class="att_input">' .
+								'<select id="att' . $att->ID . '" name="' . $att->ID . '">';
 						echo '<option value="">Nieokreślone</option>';
 						foreach($att->options as $oid => $oname)
-							echo '<option value="' . $oid . '"' . 
-								(isset($this->annAttributes[$att->ID]) && $this->annAttributes[$att->ID] == $oid ? ' selected' : '' ) . '>' .
-								$oname . '</option>';
-						echo '</select>';
+							echo '<option value="' . $oid . '"' .
+							(isset($_POST[$att->ID]) && $_POST[$att->ID] == $oid ? ' selected' : '' ) . '>' .
+							$oname . '</option>';
+						echo '</select></div></div>';
 						break;
-					
+
 					case '3':
-						echo '<br /><input type="checkbox" id="att' . $att->ID . '" value="1" name="' . $att->ID . '"' .
-							(isset($this->annAttributes[$att->ID]) ? ' checked' : '') . ' />' .
-							'<label for="att' . $att->ID . '"> ' . $att->name . '</label>';
+						echo '<div class="att"><input type="checkbox" id="att' . $att->ID . '" value="1" name="' . $att->ID . '"' .
+								(isset($_POST[$att->ID]) ? ' checked' : '') . ' />' .
+										'<label for="att' . $att->ID . '"> ' . $att->name . '</label></div>';
 						break;
 				}
 			}
-		?>
-
+			?>
+		</div>
 		<br /><input type="submit" name="done" value="Dalej" /><br />
-		
+
 		<?php foreach($this->messages as $msg) echo $msg . '<br />'; ?>
 	<?php endif; ?>
-	
+
 	<?php if($this->stage == 2): ?>
 		<input type="hidden" name="done" />
 		<input type="hidden" name="title" value="<?php echo $_POST['title'] ?>" />
@@ -83,7 +83,7 @@
 					echo sprintf('<input type="hidden" name="%s" value="%s" />', $key, $value);
 			}
 		?>
-			
+
 		<?php foreach($this->images as $id => $name): ?>
 			<input type="hidden" name="images[<?php echo $id; ?>]" value="<?php echo $name; ?>" />
 			<div class="image">
@@ -94,9 +94,9 @@
 				<label for="imgdel<?php echo $id; ?>"> Usuń obrazek</label>
 			</div>
 		<?php endforeach; ?>
-		
+
 		<?php if(count($images) > 0) echo '<input type="submit" value="Wykonaj" />'; ?>
-		
+
 		<br /><br />
 		<label for="uploadInput">Wybierz pliki zdjęć: </label>
 		<input type="hidden" name="MAX_FILE_SIZE" value="500000" />

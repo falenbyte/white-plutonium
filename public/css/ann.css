@@ -1,25 +1,19 @@
-h1.ann_title
-	{
-		margin: 10px 0 0 0;
-		
-		font-size: 30px;
-		font-weight: normal;
-	}
+h1.ann_title {
+	margin: 10px 0 0 0;
+	font-size: 30px;
+	font-weight: normal;
+}
 
-p.date
-	{
-		margin: 0 0 10px 0;
-		
-		font-size: 12px;
-		color: rgb(80, 80, 80);
-	}
+p.date {
+	margin: 0 0 10px 0;
+	font-size: 12px;
+	color: rgb(80, 80, 80);
+}
 
-p.content
-	{
+p.content {
 	
-	}
+}
 
-div.images
-	{
-		padding: 10px;
-	}
+div.images {
+	padding: 10px;
+}
