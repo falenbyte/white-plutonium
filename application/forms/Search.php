@@ -22,9 +22,9 @@ class Application_Form_Search
 		else
 		{
 			$atts = $this->_attMapper->getByCategoryID($params['cat']);
-				
+
 			$this->_addElement('', 'cat', 'hidden', $params['cat']);
-				
+
 			foreach($atts as $id => $att)
 			{
 				switch($att->type)
@@ -32,23 +32,23 @@ class Application_Form_Search
 					case '0':
 						$this->_addElement($att->name, $id, 'minmax', (isset($params[$id]) && is_array($params[$id]) ? $params[$id] : array()));
 						break;
-							
+
 					case '1':
 						$this->_addElement($att->name, $id . '[]', 'text', (isset($params[$id]) && is_array($params[$id]) ? $params[$id][0] : ''));
 						break;
-							
+
 					case '2':
 						$this->_addElement($att->name, $id, 'multiselect', (isset($params[$id]) && is_array($params[$id]) ? $params[$id] : array('0')), array_merge(array('0'=>'Brak'), $att->options));
 						break;
-							
+
 					case '3':
 						$this->_addElement($att->name, $id . '[]', 'checkbox', (isset($params[$id]) ? $params[$id][0] : '0'));
 						break;
-							
+
 					case '4':
 						$this->_addElement($att->name, $id, 'minmax', (isset($params[$id]) && is_array($params[$id]) ? $params[$id] : array()));
 						break;
-							
+
 					default:
 						break;
 				}
@@ -102,12 +102,12 @@ class Application_Form_Search
 		switch($type)
 		{
 			case 'text':
-				$elStr = sprintf('<div class="search"><div class="search_label">%s:</div><div class="search_input"><input name="%s" type="text" value="%s" /></div></div>',
+				$elStr = sprintf('<div class="search"><div class="search_label">%s:</div><div class="search_input"><input name="%s" type="text" style="width: 190px;" value="%s" /></div></div>',
 				$label,
 				$name,
 				$value);
 				break;
-					
+
 			case 'category':
 				$elStr = sprintf('<div class="search"><div class="search_label">%s:</div><div class="search_input"><select name="%s">', $label, $name);
 				$elStr .= '<option value="all"' . ($value == 'all' ? ' selected' : '') . '>Wszystkie</option>';
@@ -133,13 +133,13 @@ class Application_Form_Search
 				}
 				$elStr .= '</select></div></div>';
 				break;
-					
+
 			case 'hidden':
 				$elStr = sprintf('<input name="%s" type="hidden" value="%s" />',
 				$name,
 				$value);
 				break;
-					
+
 			case 'minmax':
 				$elStr = sprintf('<div class="search"><div class="search_label">%s:</div><div class="search_input"><input name="%s[min]" size="3" type="text" value="%s"> do: <input name="%s[max]" size="3" type="text" value="%s"></div></div>',
 				$label,
@@ -148,7 +148,7 @@ class Application_Form_Search
 				$name,
 				(isset($value['max']) ? $value['max'] : ''));
 				break;
-					
+
 			case 'multiselect':
 				$elStr = sprintf('<div class="search"><div class="search_label">%s:</div><div class="search_input"><select name="%s[]" multiple>', $label, $name);
 				foreach($options as $oid => $oname)
@@ -160,7 +160,7 @@ class Application_Form_Search
 				}
 				$elStr .= '</select></div></div>';
 				break;
-					
+
 			case 'checkbox':
 				$elStr = sprintf('<div class="search"><input name="%s" type="checkbox" value="1" id="%s"%s /><label for="%s">&nbsp;%s</label></div>',
 				$name,
@@ -169,7 +169,7 @@ class Application_Form_Search
 				'check' . $name,
 				$label);
 				break;
-					
+
 			case 'select':
 				$elStr = sprintf('<div class="search"><div class="search_label">%s:</div><div class="search_input"><select name="%s"></div></div>', $label, $name);
 				foreach($options as $okey => $oname)
@@ -181,9 +181,9 @@ class Application_Form_Search
 				}
 				$elStr .= '</select>';
 				break;
-					
+
 			case 'submit':
-				$elStr = sprintf('<input name="%s" type="submit" value="%s" />',
+				$elStr = sprintf('<div class="search"><input name="%s" type="submit" value="%s" /></div>',
 				$name,
 				$value);
 				break;

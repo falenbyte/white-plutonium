@@ -17,7 +17,7 @@ class Application_Model_AttributesMapper {
 			}
 		}
 		if(isset($optionsList)) {
-			$options = $this -> _db -> fetchAll('SELECT * FROM attributes_options WHERE attID IN (?)', implode(',', $optionsList), Zend_Db::FETCH_ASSOC);
+			$options = $this -> _db -> fetchAll('SELECT * FROM attributes_options WHERE attID IN (' . implode(',', $optionsList) . ')', null, Zend_Db::FETCH_ASSOC);
 			foreach($options as $option) {
 				$attributes[$option['attID']] -> addOption($option['ID'], $option['option']);
 			}
@@ -38,7 +38,7 @@ class Application_Model_AttributesMapper {
 			}
 		}
 		if(isset($optionsList)) {
-			$options = $this -> _db -> fetchAll('SELECT * FROM attributes_options WHERE attID IN (?)', implode(',', $optionsList), Zend_Db::FETCH_ASSOC);
+			$options = $this -> _db -> fetchAll('SELECT * FROM attributes_options WHERE attID IN (' . implode(',', $optionsList) . ')', null, Zend_Db::FETCH_ASSOC);
 			foreach($options as $option) {
 				$attributes[$option['attID']] -> addOption($option['ID'], $option['option']);
 			}
