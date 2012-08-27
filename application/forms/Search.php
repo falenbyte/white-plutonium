@@ -59,17 +59,18 @@ class Application_Form_Search
 				
 				if($properChildCategory)
 				{
-					foreach($atts as $id => $att)
-					{
-						switch($att->type)
+					if(!empty($atts)) {
+						foreach($atts as $id => $att)
 						{
-							case '0':
-							case '4':
-								$orderOptions[$id] = $att->name;
-								break;
-							
-							default:
-								break;
+							switch($att->type)
+							{
+								case '0':
+								case '4':
+									$orderOptions[$id] = $att->name;
+									break;
+								default:
+									break;
+							}
 						}
 					}
 				}

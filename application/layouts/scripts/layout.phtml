@@ -42,6 +42,7 @@
 				</div>
 				<div id="bar_bottom"></div>
 			</div>
+			<?php if(!$this -> searchPage): ?>
 			<div id="search_bar">
 				<form action="<?php echo $this -> url(array('controller' => 'search', 'action' => 'index')); ?>" method="GET">
 					<label for="keywords">Wyszukaj ogłoszenie: </label><input name="keywords" type="text" value="">
@@ -75,6 +76,7 @@
 					<input name="send" type="submit" value="Szukaj">
 				</form>
 			</div>
+			<?php endif; ?>
 			<div id="body">
 				<div id="sidebar">
 					<?php if($this -> searchPage): ?>

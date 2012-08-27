@@ -17,7 +17,7 @@ class Application_Model_Attribute extends Application_Model_AbstractDataStorage 
 	public function validateValue($value) {
 		switch($this -> data['type']) {
 			case '0':
-				return (preg_match('/^[0-9]+$/', $value) && intval($value) >= intval($this -> data['min']) && intval($value) <= intval($this -> data['max']));
+				return (preg_match('/^[0-9]+$/', $value) && ($this -> data['min'] === null || intval($value) >= intval($this -> data['min'])) && ($this -> data['max'] === null || intval($value) <= intval($this -> data['max'])));
 			case '1':
 				return is_string($value);
 			case '2':
@@ -25,7 +25,7 @@ class Application_Model_Attribute extends Application_Model_AbstractDataStorage 
 			case '3':
 				return ($value === '0' || $value === '1');
 			case '4':
-				return (is_numeric($value) && floatval($value) >= floatval($this -> data['min']) && floatval($value) <= floatval($this -> data['max']));
+				return (is_numeric($value) && ($this -> data['min'] === null || floatval($value) >= floatval($this -> data['min'])) && ($this -> data['max'] === null || floatval($value) <= floatval($this -> data['max'])));
 		}
 	}
 	

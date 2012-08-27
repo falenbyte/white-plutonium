@@ -3,7 +3,7 @@
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 
 	protected function _initConfiguration() {
-		error_reporting(getenv('APPLICATION_ENV') == 'production' ? E_ALL ^ E_NOTICE ^ E_WARNING : E_ALL);
+		error_reporting(getenv('APPLICATION_ENV') == 'production' ? E_ALL ^ E_NOTICE ^ E_WARNING : E_ALL ^ E_NOTICE);
 		date_default_timezone_set('Europe/Paris');
 	}
 	
