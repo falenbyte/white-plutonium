@@ -1,15 +1,18 @@
-<?php $this->stylesheets = array('ann.css'); ?>
+<?php $this->stylesheets = array('ann.css', 'search.css'); ?>
 <?php echo $this -> message; ?>
 <?php if(!$this -> onlyMessage): ?>
 		<h1 class="ann_title"><?php echo $this -> announcement -> title; ?></h1>
 		<p class="date"><?php echo date('d-m-Y H:i:s', $this -> announcement -> date); ?></p>
-		<p class="content"><?php echo $this -> announcement -> content; ?></p>
-
-		<?php if(is_array($this->announcement->attributes)):
-		foreach($this->announcement->attributes as $akey => $aval): ?>
-		<?php echo $this->attributes[$akey]->getString($aval); ?><br />
-		<?php endforeach; endif; ?>
-
+		<?php if(is_array($this->announcement->attributes)): ?>
+		<table class="attributes">
+			<?php
+			foreach($this->announcement->attributes as $akey => $aval) {
+				echo $this->attributes[$akey]->getString($aval);
+			}
+			?>
+		</table><br>
+		<?php endif; ?>
+		<p class="content"><?php echo str_replace("\n", '<br>', $this -> announcement -> content); ?></p>
 		<div class="images">
 		<?php if(is_array($this -> announcement -> images)):
 		foreach($this -> announcement -> images as $image): ?>

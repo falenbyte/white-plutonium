@@ -7,6 +7,7 @@ class AnnouncementController extends Zend_Controller_Action {
 	}
 
 	public function indexAction() {
+		$this -> view -> searchForm = true;
 		if(!isset($_GET['id']) || !preg_match('/^[0-9]+$/', $_GET['id']) ) {
 			$this -> message = "Missing or wrong ID.";
 			$this -> onlyMessage = true;
@@ -15,7 +16,7 @@ class AnnouncementController extends Zend_Controller_Action {
 		$this -> onlyMessage = false;
 		$announcementMapper = new Application_Model_AnnouncementsMapper();
 		$this -> view -> announcement = $announcementMapper -> getByID($_GET['id']);
-
+		$_GET['cat'] = $this -> view -> announcement -> catID;
 		$attMapper = new Application_Model_AttributesMapper();
 		$this->view->attributes = $attMapper->getByCategoryID($this -> view -> announcement->catID);
 	}
