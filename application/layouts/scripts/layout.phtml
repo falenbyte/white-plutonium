@@ -42,13 +42,10 @@
 				</div>
 				<div id="bar_bottom"></div>
 			</div>
+			<?php if(!$this -> searchPage): ?>
 			<div id="search_bar">
 				<form action="<?php echo $this -> url(array('controller' => 'search', 'action' => 'index')); ?>" method="GET">
-					<?php if(!$this -> searchPage): ?>
 					<label for="keywords">Wyszukaj ogłoszenie: </label><input name="keywords" type="text" value="">
-					<?php else: ?>
-					Zmień kategorię:
-					<?php endif; ?>
 					<?php //temporary solution
 					$catMapper = new Application_Model_CategoriesMapper();
 					$categories = $catMapper -> getAll();
@@ -76,9 +73,10 @@
 					$elStr .= '</select>';
 					echo $elStr;
 					?>
-					<input name="send" type="submit" value="<?php echo (!$this -> searchPage) ? 'Szukaj' : 'Zmień'; ?>">
+					<input name="send" type="submit" value="Szukaj">
 				</form>
 			</div>
+			<?php endif; ?>
 			<div id="body">
 				<div id="sidebar">
 					<?php if($this -> searchPage): ?>

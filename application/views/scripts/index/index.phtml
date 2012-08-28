@@ -31,7 +31,7 @@
 		<div class="category_box">
 			<h3>
 				<img src="<?php echo $this -> baseUrl(file_exists('images/ico/' . $mainCategory -> ID . '.gif') ? '/images/ico/' . $mainCategory -> ID . '.gif' : '/imgs/default.png'); ?>">
-				<?php echo $mainCategory -> name; if($part != 0) echo ' cd.'; ?>
+				<a href="<?php echo $this -> url(array('controller'=>'search', 'action' => 'index')) . '?cat=' . $mainCategory -> ID; ?>"><?php echo $mainCategory -> name; if($part != 0) echo ' cd.'; ?></a>
 			</h3>
 			<ul>
 			<?php foreach($catPart as $category): ?>
