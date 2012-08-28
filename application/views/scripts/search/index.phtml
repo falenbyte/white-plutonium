@@ -31,7 +31,7 @@
 	</div>
 	<?php endif; ?>
 	<div class="ann_content">
-		<?php echo strlen($announcement->content) > 255 ? substr($announcement->content, 0, 255) . '...' : $announcement->content; ?>
+		<?php echo strlen($announcement->content) > 255 ? substr(strip_tags($announcement->content), 0, 255) . '...' : $announcement->content; ?>
 	</div>
 	<div class="ann_links"><a href="<?php echo $this -> url(array('controller' => 'watchlist', 'action' => 'add')) . '?id=' . $announcement -> ID; ?>">Dodaj do obserwowanych</a>
 		<?php if($announcement->userID == Zend_Registry::get('userModel')->getUserID()): ?>

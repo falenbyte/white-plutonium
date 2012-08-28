@@ -23,6 +23,7 @@ class AnnouncementController extends Zend_Controller_Action {
 
 	public function createAction()
 	{
+		$this -> view -> scripts = array('/ckeditor/ckeditor.js');
 		$catMapper = new Application_Model_CategoriesMapper();
 		$attMapper = new Application_Model_AttributesMapper();
 		$user = Zend_Registry::get('userModel');
@@ -153,6 +154,7 @@ class AnnouncementController extends Zend_Controller_Action {
 
 	public function editAction()
 	{
+		$this -> view -> scripts = array('/ckeditor/ckeditor.js');
 		$catMapper = new Application_Model_CategoriesMapper();
 		$attMapper = new Application_Model_AttributesMapper();
 		$annMapper = new Application_Model_AnnouncementsMapper();

@@ -31,8 +31,11 @@
 		<label for="ann_title">Tytuł ogłoszenia: </label>
 		<br /><input type="text" name="title" size="60" id="ann_title" value="<?php echo $this->annTitle; ?>" />
 
-		<br /><label for="ann_content">Treść ogłoszenia:</label>
-		<br /><textarea name="content" rows="15" cols="60" id="ann_content"><?php echo $this->annContent; ?></textarea>
+		<br /><label for="content">Treść ogłoszenia:</label>
+		<br /><textarea name="ann_content" rows="15" cols="60" id="ann_content"><?php echo $this->annContent; ?></textarea>
+		<script type="text/javascript">
+			CKEDITOR.replace( 'ann_content', { toolbar:'Basic', language:'pl' } );
+		</script>
 		<div id="attributes">
 			<?php
 			foreach($this->attributes as $att)

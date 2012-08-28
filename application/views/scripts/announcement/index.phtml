@@ -12,7 +12,7 @@
 			?>
 		</table><br>
 		<?php endif; ?>
-		<p class="content"><?php echo str_replace("\n", '<br>', $this -> announcement -> content); ?></p>
+		<p class="content"><?php echo $this -> announcement -> content; ?></p>
 		<div class="images">
 		<?php if(is_array($this -> announcement -> images)):
 		foreach($this -> announcement -> images as $image): ?>
