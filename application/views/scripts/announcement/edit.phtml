@@ -44,7 +44,7 @@
 					case '4':
 						echo '<div class="att"><div class="att_label">' . $att->name . ':</div><div class="att_input">' .
 								'<input type="text" size="6" id="att' . $att->ID . '" name="' . $att->ID . '" value="' .
-								(isset($_POST[$att->ID]) ? $_POST[$att->ID] : '' ) . '" /></div></div>';
+								(isset($this->annAttributes[$att->ID]) ? $this->annAttributes[$att->ID] : '' ) . '" /></div></div>';
 						break;
 
 					case '2':
@@ -53,14 +53,14 @@
 						echo '<option value="">Nieokreślone</option>';
 						foreach($att->options as $oid => $oname)
 							echo '<option value="' . $oid . '"' .
-							(isset($_POST[$att->ID]) && $_POST[$att->ID] == $oid ? ' selected' : '' ) . '>' .
+							(isset($this->annAttributes[$att->ID]) && $this->annAttributes[$att->ID] == $oid ? ' selected' : '' ) . '>' .
 							$oname . '</option>';
 						echo '</select></div></div>';
 						break;
 
 					case '3':
 						echo '<div class="att"><input type="checkbox" id="att' . $att->ID . '" value="1" name="' . $att->ID . '"' .
-								(isset($_POST[$att->ID]) ? ' checked' : '') . ' />' .
+								(isset($this->annAttributes[$att->ID]) ? ' checked' : '') . ' />' .
 										'<label for="att' . $att->ID . '"> ' . $att->name . '</label></div>';
 						break;
 				}
