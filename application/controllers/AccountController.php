@@ -7,7 +7,7 @@ class AccountController  extends Zend_Controller_Action{
 
 	public function init() {
 		$this -> _user = Zend_Registry::get('userModel');
-		$this -> _messages = Zend_Registry::get('messages');
+		$this -> _messages = Zend_Registry::get('messages') -> account;
 	}
 
 	public function indexAction() {
