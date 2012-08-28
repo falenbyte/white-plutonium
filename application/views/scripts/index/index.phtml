@@ -35,7 +35,7 @@
 			</h3>
 			<ul>
 			<?php foreach($catPart as $category): ?>
-				<li><a href="<?php echo $this -> url(array('controller'=>'search', 'action' => 'index')) . '?cat=' . $category -> ID; ?>"><?php echo $category -> name; ?></a></li>
+				<li><a href="<?php echo $this -> url(array('controller'=>'search', 'action' => 'index')) . '?cat=' . $category -> ID; ?>"><?php echo $category -> name; ?></a><?php echo ' ' . (isset($this -> count[$category -> ID]) ? '(' . $this -> count[$category -> ID]['count'] . ')' : '(0)'); ?></li>
 			<?php endforeach; ?>
 			</ul>
 		</div>

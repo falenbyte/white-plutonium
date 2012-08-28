@@ -55,7 +55,6 @@
 						if(is_null($cat->parentID))
 						{
 							$elStr .= sprintf('<optgroup label="%s">', $cat -> name);
-
 							foreach($categories as $chckey => $chcat)
 							{
 								if($chcat->parentID == $ckey)
@@ -66,7 +65,6 @@
 											$chcat->name);
 								}
 							}
-
 							$elStr .= '</optgroup>';
 						}
 					}
@@ -84,8 +82,8 @@
 					<?php echo $this -> searchForm(); ?>
 					<br>
 					<?php endif; ?>
-					<div class="advert_place">Miejsce na twoją reklamę!</div>
-					<div class="advert_place">Miejsce na twoją reklamę!</div>
+					<div class="advert_place"></div>
+					<div class="advert_place"></div>
 				</div>
 				<div id="content">
 					<?php echo $this -> layout() -> content; ?>

@@ -15,6 +15,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		Zend_Session::start();
 	}
 
+	protected function _initMessages() {
+		$messages = new Zend_Config_Ini('../application/messages.ini', 'messages');
+		Zend_Registry::set('messages', $messages);
+	}
+
 	protected function _initDB() {
 		//Globalny dostęp do bazy danych
 		$dbConfig = new Zend_Config_Ini('../application/local_db_config.ini', 'database_config');

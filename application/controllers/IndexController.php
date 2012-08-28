@@ -18,6 +18,7 @@ class IndexController extends Zend_Controller_Action
 		}
 		$this -> view -> mainCategories = $mainCategories;
 		$this -> view -> subCategories = $subCategories;
+		$this -> view -> count = $categoriesMapper -> countAll();
 	}
 
 

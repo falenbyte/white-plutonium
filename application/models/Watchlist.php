@@ -4,11 +4,13 @@ class Application_Model_Watchlist {
 	private $_db;
 	private $_userID;
 	private $_userModel;
+	private $_messages;
 
 	public function __construct() {
 		$this -> _userModel = Zend_Registry::get('userModel');
+		$this -> _messages = Zend_Registry::get('messagse') -> watchlist;
 		if(!$this -> _userModel -> isLoggedIn()) {
-			throw new Exception('User is not logged in.');
+			throw new Exception($this -> _messages -> notLoggedIn);
 		}
 		$this -> _userID = $this -> _userModel -> getUserID();
 		$this -> _db = Zend_Registry::get('db');
@@ -16,7 +18,7 @@ class Application_Model_Watchlist {
 
 	public function fetch($offset, $limit) {
 		if(!preg_match('/^[0-9]+$/', $offset) || !preg_match('/^[0-9]$/', $limit)) {
-			throw new Exception('Wrong parameters.');
+			throw new Exception($this -> _messages -> wrongParameters);
 		}
 		$queryData = array($this -> _userID, $offset, $limit);
 		return $this -> _db -> fetchCol('SELECT annID FROM watched WHERE userID = ? LIMIT ?, ?', $queryData);
@@ -28,22 +30,22 @@ class Application_Model_Watchlist {
 
 	public function add($annID) {
 		if(!preg_match('/^[0-9]+$/', $annID)) {
-			throw new Exception('Wrong announcement ID.');
+			throw new Exception($this -> _messages -> invalidAnnID);
 		}
 		$result = $this -> _db -> fetchRow('SELECT ID FROM announcements WHERE ID = ?', $annID);
 		if($result === false) {
-			throw new Exception('Announcement with this ID does not exists.');
+			throw new Exception($this -> _messages -> annDoesNotExists);
 		}
 		$result = $this -> _db -> fetchRow('SELECT userID FROM watched WHERE annID = ? AND userID = ?', array($annID, $this -> _userID));
 		if($result !== false) {
-			throw new Exception('Announcement is already on your watchlist');
+			throw new Exception($this -> _messages -> alreadyAdded);
 		}
 		$this -> _db -> insert('watched', array('annID' => $annID, 'userID' => $this -> _userID));
 	}
 
 	public function remove($annID) {
 		if(!preg_match('/^[0-9]+$/', $annID)) {
-			throw new Exception('Wrong announcement ID.');
+			throw new Exception($this -> _messages -> invalidAnnID);
 		}
 		$this -> _db -> delete('watched', 'annID = ' . $annID . ' AND userID = ' . $this -> _userID);
 	}

@@ -3,16 +3,18 @@
 class Application_Model_AnnouncementsMapper
 {
 	private $_db;
+	private $_messages;
 
 	public function __construct()
 	{
-		$this->_db = Zend_Registry::get('db');
+		$this -> _db = Zend_Registry::get('db');
+		$this -> _messages = Zend_Registry::get('messages') -> annMapper;
 	}
 
 	public function getByID($id)
 	{
 		if(!preg_match('/^[0-9]+$/', $id))
-			throw new Exception('Invalid announcement ID.');
+			throw new Exception($this -> _messages -> invalidID);
 
 		$ann = new Application_Model_Announcement($this->_db->fetchRow('SELECT * FROM announcements WHERE ID = ?', $id, Zend_Db::FETCH_ASSOC));
 
@@ -63,14 +65,14 @@ class Application_Model_AnnouncementsMapper
 
 	public function getListByIDs($list) {
 		if(!is_array($list)) {
-			throw new Exception('Wrong parameter.');
+			throw new Exception($this -> _messages -> wrongParameter);
 		}
 		if(empty($list)) {
 			return null;
 		}
 		foreach($list as $id) {
 			if(!preg_match('/^[0-9]+$/', $id)) {
-				throw new Exception('One of supplied ID\'s is wrong');
+				throw new Exception($this -> _messages -> invalidID);
 			}
 		}
 		$result = $this -> _db -> fetchAll('SELECT * FROM announcements WHERE ID IN (' . implode(', ', $list) . ')', null, Zend_Db::FETCH_ASSOC);
@@ -90,7 +92,7 @@ class Application_Model_AnnouncementsMapper
 	{
 		$user = Zend_Registry::get('userModel');
 		if(!$user->isLoggedIn())
-			throw new Exception('You cannot create/edit an announcement.');
+			throw new Exception($this -> _messages -> notLoggedIn);
 
 		if(!preg_match('/^[0-9]+$/', $ann->ID)
 				|| $ann->ID == 0
@@ -128,7 +130,7 @@ class Application_Model_AnnouncementsMapper
 			$ownerID = $this->_db->fetchOne('SELECT userID FROM announcements WHERE ID = ?', $ann->ID);
 
 			if($user->getUserID() != $ownerID)
-				throw new Exception('You cannot edit this announcement.');
+				throw new Exception($this -> _messages -> cannotEdit);
 
 			$this->_db->update('announcements',
 					array(
@@ -149,16 +151,16 @@ class Application_Model_AnnouncementsMapper
 	public function delete($id)
 	{
 		if(!preg_match('/^[0-9]+$/', $id)) {
-			throw new Exception('Invalid Announcement ID.');
+			throw new Exception($this -> _messages -> invalidID);
 		}
 
 		$userModel = Zend_Registry::get('userModel');
 		$owner = $this->_db->fetchOne('SELECT userID FROM announcements WHERE ID = ?', $id);
 		if($owner === false) {
-			throw new Exception('Announcement with this ID does not exists.');
+			throw new Exception($this -> _messages -> annDoesNotExists);
 		}
 		if(!$userModel -> isAdmin() && (!$userModel -> isLoggedIn() || $owner != $userModel->getUserID())) {
-			throw new Exception('You don\'t have permission to delete that announcement.');
+			throw new Exception($this -> _messages -> cannotDelete);
 		}
 
 		$images = $this->_db->fetchCol('SELECT imgID from announcement_images WHERE annID = ?', $id);

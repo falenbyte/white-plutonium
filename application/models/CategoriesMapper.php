@@ -3,9 +3,11 @@
 class Application_Model_CategoriesMapper {
 
 	private $_db;
+	private $_messages;
 
 	public function __construct() {
 		$this -> _db = Zend_Registry::get('db');
+		$this -> _messages = Zend_Registry::get('messages') -> catMapper;
 	}
 
 	public function getAll() {
@@ -23,9 +25,13 @@ class Application_Model_CategoriesMapper {
 		return $this -> _convert($result);
 	}
 
+	public function countAll() {
+		return $this -> _db -> fetchAssoc('SELECT catID, count(*) AS `count` FROM announcements GROUP BY catID');
+	}
+
 	public function getByID($catID) {
 		if(!preg_match('/^[0-9]+$/', $catID)) {
-			throw new Exception('Supplied category ID is invalid.');
+			throw new Exception($this -> _messages -> invalidID);
 		}
 		$result = $this -> _db -> fetchRow('SELECT * FROM categories WHERE ID = ?', $catID, Zend_Db::FETCH_ASSOC);
 		return new Application_Model_Category($result);
@@ -33,7 +39,7 @@ class Application_Model_CategoriesMapper {
 
 	public function getChildren($catID) {
 		if(!preg_match('/^[0-9]+$/', $catID)) {
-			throw new Exception('Supplied category ID is invalid.');
+			throw new Exception($this -> _messages -> invalidID);
 		}
 		$result = $this -> _db -> fetchAll('SELECT * FROM categories WHERE parentID = ?', $catID, Zend_Db::FETCH_ASSOC);
 		return $this -> _convert($result);

@@ -2,8 +2,10 @@
 
 class AnnouncementController extends Zend_Controller_Action {
 
-	public function init() {
+	private $_messages;
 
+	public function init() {
+		$this -> _messages = Zend_Registry::get('messages') -> announcement;
 	}
 
 	public function indexAction() {
@@ -280,11 +282,11 @@ class AnnouncementController extends Zend_Controller_Action {
 	public function deleteAction() {
 		try {
 			if(!isset($_GET['id'])) {
-				throw new Exception('Missing announcemnet ID');
+				throw new Exception($this -> _messages -> missingID);
 			}
 			$mapper = new Application_Model_AnnouncementsMapper();
 			$mapper -> delete($_GET['id']);
-			throw new Exception('Announcement deleted.');
+			throw new Exception($this -> _messages -> deleted);
 		} catch(Exception $e) {
 			$this -> view -> message = $e -> getMessage();
 		}
