@@ -3,7 +3,7 @@
 class Application_Model_Attribute extends Application_Model_AbstractDataStorage {
 
 	protected function initVariableList() {
-		$this -> variablesList = array('ID', 'name', 'type', 'options', 'unit', 'min', 'max');
+		$this -> variablesList = array('ID', 'name', 'type', 'options', 'unit', 'min', 'max', 'main');
 	}
 
 	public function addOption($id, $name) {
@@ -52,19 +52,19 @@ class Application_Model_Attribute extends Application_Model_AbstractDataStorage 
 			case '0':
 				$result .= $value . ' ' . $this->unit;
 				break;
-					
+
 			case '1':
 				$result .= $value;
 				break;
-					
+
 			case '2':
 				$result .= $this->options[$value];
 				break;
-					
+
 			case '3':
 				$result .= ($value == '1' ? 'tak' : 'nie');
 				break;
-					
+
 			case '4':
 				$result .= $value . ' ' . $this->unit;
 				break;

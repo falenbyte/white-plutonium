@@ -29,8 +29,7 @@ class Application_Model_AttributesMapper {
 		if(!preg_match('/^[0-9]+$/', $catID)) {
 			throw new Exception('Supplied category ID is invalid.');
 		}
-		$attributesList = $this -> _db -> fetchCol('SELECT attID FROM categories_attributes WHERE catID = ?', $catID);
-		$result = $this -> _db -> fetchAll('SELECT * FROM attributes WHERE ID IN (' . implode(',', $attributesList) . ')', null, Zend_Db::FETCH_ASSOC);
+		$result = $this -> _db -> fetchAll('SELECT ID, name, type, unit, min, max, main FROM attributes AS att, categories_attributes AS cat WHERE att.ID = cat.attID AND cat.catID = ?', $catID, Zend_Db::FETCH_ASSOC);
 		foreach($result as $row) {
 			$attributes[$row['ID']] = new Application_Model_Attribute($row);
 			if($row['type'] == '2') {

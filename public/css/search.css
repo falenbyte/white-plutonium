@@ -1,7 +1,7 @@
 div.announcement {
 	padding: 10px;
 	margin: 10px 0px;
-	height: 120px;
+	min-height: 100px;
 	border: 2px solid #BBBBBB;
 	border-radius: 5px;
 	background-color: #DFDFDF;
@@ -13,7 +13,6 @@ div.announcement:hover {
 }
 
 div.announcement h1 {
-	margin: 10px 0px;
 	font-size: 20px;
 	font-weight: normal;
 }
@@ -60,4 +59,14 @@ div.search_input select {
 div.ann_links {
 	padding-top: 5px;
 	clear: both;
+}
+
+div.ann_attributes {
+	margin-bottom: 5px;
+}
+
+div.ann_attribute {
+	display: inline;
+	margin-right: 10px;
+	white-space: nowrap;
 }
