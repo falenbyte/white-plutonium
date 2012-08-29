@@ -37,6 +37,7 @@ div.image img {
 	width: 200px;
 	padding: 5px;
 	border: 1px solid #C0C0C0;
+	float: left;
 }
 
 div.att {
@@ -55,4 +56,15 @@ div.att_input {
 
 div.att_input select {
 	width: 190px;
+}
+
+div.login_form {
+	float: left;
+	margin: 25px 0px 0px 140px;
+}
+
+div.login_form label {
+	display: block;
+	float: left;
+	width: 50px;
 }

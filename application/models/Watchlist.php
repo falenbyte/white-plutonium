@@ -8,7 +8,7 @@ class Application_Model_Watchlist {
 
 	public function __construct() {
 		$this -> _userModel = Zend_Registry::get('userModel');
-		$this -> _messages = Zend_Registry::get('messagse') -> watchlist;
+		$this -> _messages = Zend_Registry::get('messages') -> watchlist;
 		if(!$this -> _userModel -> isLoggedIn()) {
 			throw new Exception($this -> _messages -> notLoggedIn);
 		}

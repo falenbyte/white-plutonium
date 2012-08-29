@@ -31,9 +31,7 @@ class AnnouncementController extends Zend_Controller_Action {
 		$user = Zend_Registry::get('userModel');
 		$subCats = $catMapper->getAllSubCategories();
 
-		if(!$user->isLoggedIn())
-			$this->_redirect('account');
-		else if(!isset($_POST['catID'])
+		if(!isset($_POST['catID'])
 				|| !preg_match('/^[0-9]+$/', $_POST['catID'])
 				|| is_null($catMapper->getByID($_POST['catID'])->parentID))
 		{
@@ -83,12 +81,29 @@ class AnnouncementController extends Zend_Controller_Action {
 				}
 			}
 
+			$userModel = Zend_Registry::get('userModel');
+			$this -> view -> loggedIn = $userModel -> isLoggedIn();
+			if(!$userModel -> isLoggedIn()) {
+				if(isset($_POST['username'], $_POST['password'])) {
+					try {
+						$userModel -> login($_POST['username'], $_POST['password'], false);
+					} catch(Exception $e) {
+						$valid = false;
+						$messages[] = $e -> getMessage();
+					}
+				} else {
+					$valid = false;
+				}
+			}
+
 			if(!$valid)
 			{
 				$this->view->stage = 1; // ustawianie treści ogłoszenia
 				$this->view->category = $catMapper->getByID($_POST['catID']);
 				$this->view->attributes = $attMapper->getByCategoryID($_POST['catID']);
 				$this->view->messages = $messages;
+
+
 			}
 			else
 			{

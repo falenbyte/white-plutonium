@@ -4,15 +4,19 @@
 		<h1 class="ann_title"><?php echo $this -> announcement -> title; ?></h1>
 		<p class="date"><?php echo date('d-m-Y H:i:s', $this -> announcement -> date); ?></p>
 		<?php if(is_array($this->announcement->attributes)): ?>
-		<table class="attributes">
-			<?php
-			foreach($this->announcement->attributes as $akey => $aval) {
-				echo $this->attributes[$akey]->getString($aval);
-			}
-			?>
-		</table><br>
 		<?php endif; ?>
-		<p class="content"><?php echo $this -> announcement -> content; ?></p>
+		<div class="attributes">
+			<table class="attributes">
+				<?php
+				foreach($this->announcement->attributes as $akey => $aval) {
+					echo $this->attributes[$akey]->getString($aval);
+				}
+				?>
+			</table>
+		</div>
+		<div class="content">
+			<?php echo $this -> announcement -> content; ?>
+		</div>
 		<div class="images">
 		<?php if(is_array($this -> announcement -> images)):
 		foreach($this -> announcement -> images as $image): ?>

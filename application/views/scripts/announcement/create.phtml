@@ -59,7 +59,7 @@
 		<br /><input type="text" name="title" size="60" id="ann_title" value="<?php echo (isset($_POST['title']) ? $_POST['title'] : '' ); ?>" />
 
 		<br /><label for="content">Treść ogłoszenia:</label>
-		<br /><textarea name="ann_content" rows="15" cols="60" id="ann_content"><?php echo (isset($_POST['content']) ? $_POST['content'] : '' ); ?></textarea>
+		<br /><textarea name="content" rows="15" cols="60" id="ann_content"><?php echo (isset($_POST['content']) ? $_POST['content'] : '' ); ?></textarea>
 		<script type="text/javascript">
 			CKEDITOR.replace( 'ann_content', { toolbar:'Basic', language:'pl' } );
 		</script>
@@ -96,8 +96,19 @@
 				}
 			}
 			?>
+
 		<div class="att"><input type="submit" value="Dalej" /></div>
 		</div>
+		<?php if(!$this -> loggedIn): ?>
+		<div class="login_form">
+		Aby dodać zaproszenie musisz być zalogowany.<br>
+		<label for="username">Login: </label><input type="text" name="username"><br>
+		<label for="password">Hasło: </label><input type="password" name="password"><br>
+		Poniższe linki otworzą się w nowych zakładkach,<br>więc nie stracisz tego co już napisałeś.<br>
+		<a href="<?php echo $this -> url(array('controller' => 'account', 'action' => 'register')); ?>" target="_new">Rejestracja</a> |
+		<a href="<?php echo $this -> url(array('controller' => 'account', 'action' => 'lost_password')); ?>" target="_new">Zgubiłem hasło</a>
+		</div>
+		<?php endif; ?>
 		<?php foreach($this->messages as $msg) echo $msg . '<br />'; ?>
 	<?php endif; ?>
 
