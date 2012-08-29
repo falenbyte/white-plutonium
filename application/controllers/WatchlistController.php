@@ -18,9 +18,11 @@ class WatchlistController extends Zend_Controller_Action {
 		$ann = $annMapper -> getListByIDs($watchedList);
 		if($ann === null) {
 			$this -> view -> message = 'Brak obserwowanych ogłoszeń.';
-		} else {
-			$this -> view -> announcements = $ann;
+			return;
 		}
+		$attMapper = new Application_Model_AttributesMapper();
+		$this -> view -> atts = $attMapper -> getAll(true);
+		$this -> view -> announcements = $ann;
 	}
 
 	public function addAction() {

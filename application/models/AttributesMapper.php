@@ -10,8 +10,8 @@ class Application_Model_AttributesMapper {
 		$this -> _messages = Zend_Registry::get('messages') -> attMapper;
 	}
 
-	public function getAll() {
-		$result = $this -> _db -> fetchAll('SELECT * FROM attributes', null, Zend_Db::FETCH_ASSOC);
+	public function getAll($onlyMain = false) {
+		$result = $this -> _db -> fetchAll('SELECT ID, name, type, unit, min, max, main FROM attributes AS att, categories_attributes AS cat WHERE att.ID = cat.attID' . ($onlyMain === true ? ' AND cat.main = 1' : ''), null, Zend_Db::FETCH_ASSOC);
 		foreach($result as $row) {
 			$attributes[$row['ID']] = new Application_Model_Attribute($row);
 			if($row['type'] == '2') {
@@ -27,11 +27,11 @@ class Application_Model_AttributesMapper {
 		return $attributes;
 	}
 
-	public function getByCategoryID($catID) {
+	public function getByCategoryID($catID, $onlyMain = false) {
 		if(!preg_match('/^[0-9]+$/', $catID)) {
 			throw new Exception($this -> _messages -> invalidID);
 		}
-		$result = $this -> _db -> fetchAll('SELECT ID, name, type, unit, min, max, main FROM attributes AS att, categories_attributes AS cat WHERE att.ID = cat.attID AND cat.catID = ?', $catID, Zend_Db::FETCH_ASSOC);
+		$result = $this -> _db -> fetchAll('SELECT ID, name, type, unit, min, max, main FROM attributes AS att, categories_attributes AS cat WHERE att.ID = cat.attID AND cat.catID = ?' . ($onlyMain === true ? ' AND cat.main = 1' : ''), $catID, Zend_Db::FETCH_ASSOC);
 		foreach($result as $row) {
 			$attributes[$row['ID']] = new Application_Model_Attribute($row);
 			if($row['type'] == '2') {
@@ -51,7 +51,7 @@ class Application_Model_AttributesMapper {
 		if(!preg_match('/^[0-9]+$/', $attID)) {
 			throw new Exception($this -> _messages -> invalidID);
 		}
-		$row = $this -> _db -> fetchRow('SELECT * FROM attributes WHERE ID = ?', $attID, Zend_Db::FETCH_ASSOC);
+		$row = $this -> _db -> fetchRow('SELECT ID, name, type, unit, min, max, main FROM attributes AS att, categories_attributes AS cat WHERE att.ID = cat.attID AND att.ID = ?', $attID, Zend_Db::FETCH_ASSOC);
 		$attribute = new Application_Model_Attribute($row);
 		if($row['type'] == '2') {
 			$options = $this -> _db -> fetchAll('SELECT * FROM attributes_options WHERE attID = ?', $attID, Zend_Db::FETCH_ASSOC);

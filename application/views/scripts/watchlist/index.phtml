@@ -8,6 +8,19 @@
 		<img src="<?php echo $this->baseUrl('imgs/' . (count($announcement->images) > 0 ? reset($announcement->images) : 'default.png')); ?>" />
 	</div></div>
 	<h1><a href="<?php echo $this->url(array('controller'=>'announcement', 'action'=>'index')) . '?id=' . $announcement->ID; ?>"><?php echo $announcement->title; ?></a></h1>
+	<?php if(is_array($this -> atts)): ?>
+	<div class="ann_attributes">
+		<?php
+		foreach($this -> atts as $att) {
+			if($att -> main == '1' && isset($announcement -> attributes[$att -> ID])) {
+				echo '<div class="ann_attribute">' .
+				$att -> name . ': ' . ($att -> type != 2 ? $announcement -> attributes[$att -> ID] : $att -> options[$announcement -> attributes[$att -> ID]]) . ($att -> unit != '' ? ' ' . $att -> unit : '').
+				'</div> ';
+			}
+		}
+		?>
+	</div>
+	<?php endif; ?>
 	<div><?php echo strlen($announcement->content) > 255 ? substr(strip_tags($announcement->content), 0, 255) . '...' : $announcement->content; ?></div>
 	<div class="ann_links">
 		<a href="<?php echo $this->url(array('controller' => 'watchlist', 'action' => 'remove')) . '?id=' . $announcement -> ID; ?>">Usuń z listy</a>

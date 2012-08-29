@@ -48,6 +48,7 @@ class Application_Model_AnnouncementsMapper
 			$attValues = $this->_db->fetchAll('SELECT attID, intValue, textValue, floatValue FROM attributes_values WHERE annID = ?',
 					$ann->ID, Zend_Db::FETCH_ASSOC);
 
+			$attributes = array();
 			foreach($attValues as $att)
 				$attributes[$att['attID']] = $att[$attDefs[$att['attID']]->getTypeString() . 'Value'];
 
@@ -79,13 +80,23 @@ class Application_Model_AnnouncementsMapper
 		if($result === false) {
 			return null;
 		}
+		$attMapper = new Application_Model_AttributesMapper();
+		$attDefs = $attMapper->getAll();
 		foreach($result as $row) {
-			$return[$row['ID']] = new Application_Model_Announcement($row);
-			$return[$row['ID']] -> images = $this->_db->fetchPairs('SELECT images.ID, images.name FROM images ' .
+			$ann = new Application_Model_Announcement($row);
+			$attValues = $this->_db->fetchAll('SELECT attID, intValue, textValue, floatValue FROM attributes_values WHERE annID = ?',
+					$ann->ID, Zend_Db::FETCH_ASSOC);
+			$attributes = array();
+			foreach($attValues as $att)
+				$attributes[$att['attID']] = $att[$attDefs[$att['attID']]->getTypeString() . 'Value'];
+			$ann->attributes = $attributes;
+
+			$ann -> images = $this->_db->fetchPairs('SELECT images.ID, images.name FROM images ' .
 					'JOIN announcement_images ON (images.ID = announcement_images.imgID) WHERE announcement_images.annID = ?',
 					$row['ID']);
+			$anns[] = $ann;
 		}
-		return $return;
+		return $anns;
 	}
 
 	public function save(Application_Model_Announcement $ann)
@@ -116,19 +127,22 @@ class Application_Model_AnnouncementsMapper
 					));
 
 			$newID = $this->_db->lastInsertId('announcements', 'ID');
+			if(is_array($ann -> attributes) && !empty($ann -> attributes)) {
+				foreach($ann->attributes as $key => $att) {
+					$this->_db->insert('attributes_values', array('annID' => $newID, 'attID'=>$key, ($attMapper->getByID($key)->getTypeString() . 'Value') => $att));
+				}
+			}
 
-			foreach($ann->attributes as $key => $att)
-				$this->_db->insert('attributes_values', array('annID' => $newID, 'attID'=>$key, ($attMapper->getByID($key)->getTypeString() . 'Value') => $att));
-
-			foreach($ann->images as $key => $img)
-				$this->_db->insert('announcement_images', array('annID' => $newID, 'imgID' => $key));
-
+			if(is_array($ann -> images) && !empty($ann -> images)) {
+				foreach($ann->images as $key => $img) {
+					$this->_db->insert('announcement_images', array('annID' => $newID, 'imgID' => $key));
+				}
+			}
 			return $newID;
 		}
 		else
 		{
 			$ownerID = $this->_db->fetchOne('SELECT userID FROM announcements WHERE ID = ?', $ann->ID);
-
 			if($user->getUserID() != $ownerID)
 				throw new Exception($this -> _messages -> cannotEdit);
 
@@ -139,12 +153,18 @@ class Application_Model_AnnouncementsMapper
 					'ID = ' . $ann->ID);
 
 			$this->_db->delete('attributes_values', 'annID = ' . $ann->ID);
-			foreach($ann->attributes as $key => $att)
-				$this->_db->insert('attributes_values', array('annID' => $ann->ID, 'attID'=>$key, ($attMapper->getByID($key)->getTypeString() . 'Value') => $att));
+			if(is_array($ann -> attributes) && !empty($ann -> attributes)) {
+				foreach($ann->attributes as $key => $att) {
+					$this->_db->insert('attributes_values', array('annID' => $ann->ID, 'attID'=>$key, ($attMapper->getByID($key)->getTypeString() . 'Value') => $att));
+				}
+			}
 
 			$this->_db->delete('announcement_images', 'annID = ' . $ann->ID);
-			foreach($ann->images as $key => $img)
-				$this->_db->insert('announcement_images', array('annID' => $ann->ID, 'imgID' => $key));
+			if(is_array($ann -> images) && !empty($ann -> images)) {
+				foreach($ann->images as $key => $img) {
+					$this->_db->insert('announcement_images', array('annID' => $ann->ID, 'imgID' => $key));
+				}
+			}
 		}
 	}
 

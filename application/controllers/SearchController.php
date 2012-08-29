@@ -33,7 +33,7 @@ class SearchController extends Zend_Controller_Action
 		$this->view->anns = $annMapper->getByFilters($filters);
 		if(isset($params['cat']) && preg_match('/^[0-9]+$/', $params['cat'])) {
 			$attMapper = new Application_Model_AttributesMapper();
-			$this -> view -> atts = $attMapper -> getByCategoryID($params['cat']);
+			$this -> view -> atts = $attMapper -> getByCategoryID($params['cat'], true);
 		}
 
 		//$this->view->message .= $filters->getQueryString();

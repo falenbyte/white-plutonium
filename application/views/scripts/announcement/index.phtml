@@ -3,8 +3,7 @@
 <?php if(!$this -> onlyMessage): ?>
 		<h1 class="ann_title"><?php echo $this -> announcement -> title; ?></h1>
 		<p class="date"><?php echo date('d-m-Y H:i:s', $this -> announcement -> date); ?></p>
-		<?php if(is_array($this->announcement->attributes)): ?>
-		<?php endif; ?>
+		<?php if(is_array($this->announcement->attributes) && !empty($this->announcement->attributes)): ?>
 		<div class="attributes">
 			<table class="attributes">
 				<?php
@@ -14,6 +13,7 @@
 				?>
 			</table>
 		</div>
+		<?php endif; ?>
 		<div class="content">
 			<?php echo $this -> announcement -> content; ?>
 		</div>
